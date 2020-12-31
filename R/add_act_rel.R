@@ -89,7 +89,12 @@ add_act_rel <- function(schedule, id, name, duration, relations_id=c(), dir="suc
         from = numeric(),
         to   = numeric(),
         type = character(),
-        lag = numeric()
+        lag = numeric(),
+        critical = logical(),
+        redundant = logical(),
+        ord = numeric(),
+        i_from = numeric(),
+        i_to = numeric()
       )
     }
     if(dir == "succ") {
@@ -100,7 +105,12 @@ add_act_rel <- function(schedule, id, name, duration, relations_id=c(), dir="suc
             from = id,
             to   = relations_id[i],
             type = "FS",
-            lag = 0
+            lag = 0,
+            critical = FALSE,
+            redundant = FALSE,
+            ord = NA,
+            i_from = NA,
+            i_to = NA
           )
         )
       }
@@ -112,7 +122,12 @@ add_act_rel <- function(schedule, id, name, duration, relations_id=c(), dir="suc
             from = relations_id[i],
             to   = id,
             type = "FS",
-            lag = 0
+            lag = 0,
+            critical = FALSE,
+            redundant = FALSE,
+            ord = NA,
+            i_from = NA,
+            i_to = NA
           )
         )
       }

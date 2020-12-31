@@ -3,7 +3,7 @@
 #' This function is for internal use! It calculates topological definitions
 #' that is necessary before critical path method.
 #'
-#' @param schedule
+#' @param schedule A Schecule object.
 #'
 #' @return schedule
 #'
@@ -14,32 +14,38 @@
 #' PMBOK
 #'
 topological_organization <- function(schedule) {
-
-
   if(schedule$info$has_any_relation) {
+    schedule$relations <- schedule$relations[order(schedule$relations$ord), ]
+
     # 1) Verify if type and lag is defined, if not, define it
     # TODO Por enquanto não está sendo feita essa verificação
     schedule$relations$type <- "FS"
-    schedule$relations$lag <- 0
   }
 
   # 2) Find starters activities
-  schedule$config$starters <- setdiff(schedule$activities$id, schedule$relations$to)
+  ids <- setdiff(schedule$activities$id, schedule$relations$to)
+  schedule$config$starters <- match(ids, schedule$activities$id)
 
   # 3) Find ends activities
-  schedule$config$ends <- setdiff(schedule$activities$id, schedule$relations$from)
+  ids <- setdiff(schedule$activities$id, schedule$relations$from)
+  schedule$config$ends <- match(ids, schedule$activities$id)
 
   # 4) Topological sorting
   if(nrow(schedule$relations) > 0) {
+
+    schedule$relations$i_from <- match(schedule$relations$from, schedule$activities$id)
+    schedule$relations$i_to <- match(schedule$relations$to, schedule$activities$id)
+
     g <- igraph::graph_from_data_frame(
       schedule$relations,
       TRUE,
       schedule$activities
     )
     ts <- as.numeric(igraph::topo_sort(g, "out"))
+
     topo_order <- order(
-      sapply(schedule$relations$from, function(a) which(ts == a)),
-      sapply(schedule$relations$to,   function(a) which(ts == a))
+      match(schedule$relations$from, ts),
+      match(schedule$relations$to, ts)
     )
     schedule$relations <- schedule$relations[topo_order,]
     rownames(schedule$relations) <- 1:nrow(schedule$relations)
@@ -53,8 +59,8 @@ topological_organization <- function(schedule) {
   # Forward calculate
   if(nrow(schedule$relations) > 0) {
     for(i in 1:nrow(schedule$relations)) {
-      from_id <- schedule$relations$from[i]
-      to_id <- schedule$relations$to[i]
+      from_id <- schedule$relations$i_from[i]
+      to_id <- schedule$relations$i_to[i]
       next_level <- schedule$activities$progr_level[from_id] + 1
       if(next_level > schedule$activities$progr_level[to_id]) {
         schedule$activities$progr_level[to_id] <- next_level
@@ -69,8 +75,8 @@ topological_organization <- function(schedule) {
   schedule$activities$regr_level <- schedule$info$max_level
   if(nrow(schedule$relations) > 0) {
     for(i in nrow(schedule$relations):1) {
-      from_id <- schedule$relations$from[i]
-      to_id <- schedule$relations$to[i]
+      from_id <- schedule$relations$i_from[i]
+      to_id <- schedule$relations$i_to[i]
       prev_level <- schedule$activities$regr_level[to_id] - 1
       if(prev_level < schedule$activities$regr_level[from_id]) {
         schedule$activities$regr_level[from_id] <- prev_level

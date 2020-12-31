@@ -85,32 +85,21 @@
 #'
 add_relation <- function(schedule, from_id, to_id, type="FS", lag=0) {
 
-  old_activities <- data.frame(
-    id        = schedule$activities$id,
-    name      = schedule$activities$name,
-    duration  = schedule$activities$duration
-  )
-
-  old_relations <- data.frame(
-    from = schedule$relations$from,
-    to   = schedule$relations$to,
-    type = schedule$relations$type,
-    lag  = schedule$relations$lag
-  )
+  old_relations <- schedule$relations
 
   new_relation = data.frame(
     from = from_id,
-    to   = to_id,
+    to = to_id,
     type = type,
-    lag  = lag
+    lag = lag,
+    critical = FALSE,
+    redudant = FALSE,
+    ord = nrow(old_relations) + 1,
+    i_from = NA,
+    i_to = NA
   )
 
-
-  schedule$activities <- old_activities
   schedule$relations <- rbind(old_relations, new_relation)
-
-  schedule$info$nr_activities <- nrow(schedule$activities)
-  schedule$info$has_any_activity <- TRUE
 
   schedule$info$nr_relations <- nrow(schedule$relations)
   schedule$info$has_any_relation <- TRUE

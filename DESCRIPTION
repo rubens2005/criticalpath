@@ -1,13 +1,13 @@
 Package: criticalpath
 Title: Critical Path Method
-Version: 0.0.0.9000
+Version: 0.0.0.9010
 Authors@R: 
     person(given = "First",
            family = "Last",
            role = c("aut", "cre"),
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Implements Critical Path Method
+Description: Implementation of Critical Path Method.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

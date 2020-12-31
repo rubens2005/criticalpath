@@ -21,7 +21,7 @@ vanhoucke_2009_p18 <- function() {
 
 test_that("Creating a schedule step-by-step, with activities and relations together", {
   schedule <- vanhoucke_2009_p18()
-  activities <- schedule$activities
+  activities <- schedule$activities[order(schedule$activities$id), ]
 
   expect_equal(schedule$info$duration, 16)
 

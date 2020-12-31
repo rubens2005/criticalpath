@@ -77,5 +77,3 @@ test_that("Add activities works, with mean duration equal SIX", {
   expect_equal(schedule$info$duration, 9)
 
 })
-
-

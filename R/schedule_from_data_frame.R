@@ -65,36 +65,36 @@
 #'
 schedule_from_data_frame <- function(activities, relations=NULL, title="", reference="") {
 
-  if(is.null(relations)) {
-    relations = data.frame(
-      from = c(),
-      to   = c(),
-      type = c(),
-      lag  = c()
+  schedule <- make_empty_schedule(title, reference)
+
+  for(i in 1:nrow(activities)) {
+    schedule = add_activity(
+      schedule,
+      activities$id[i],
+      activities$name[i],
+      activities$duration[i]
     )
   }
 
-  schedule <- list(
-    activities = activities,
-    relations = relations,
+  if(!is.null(relations) && nrow(relations) > 0) {
+    if(is.null(relations$type)) {
+      relations$type <- "FS"
+    }
+    if(is.null(relations$lag)) {
+      relations$lag <- 0
+    }
+    relations$critical <- FALSE
+    relations$redundant <- FALSE
+    for(i in 1:nrow(relations)) {
+      schedule = add_relation(
+        schedule,
+        relations$from[i],
+        relations$to[i],
+        relations$type[i],
+        relations$lag[i]
+      )
+    }
+  }
 
-    info = list(
-      title = title,
-      reference = reference,
-
-      nr_activities = nrow(activities),
-      has_any_activity = nrow(activities) > 0,
-
-      nr_relations = nrow(relations),
-      has_any_relation = nrow(relations) > 0
-    ),
-
-    config = list()
-  )
-
-  ## Topological organization
-  schedule <- topological_organization(schedule)
-
-  ## Critical Path
-  calculate_critical_path(schedule)
+  schedule
 }

@@ -7,7 +7,7 @@
 topological_organization(schedule)
 }
 \arguments{
-\item{schedule}{}
+\item{schedule}{A Schecule object.}
 }
 \value{
 schedule

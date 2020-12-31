@@ -87,30 +87,30 @@ test_that("Creating a schedule only with activities list, without relations", {
 })
 
 test_that("Schedule duration is 11", {
-  sch <- vanhoucke2014_project_1()
+  schedule <- vanhoucke2014_project_1()
 
-  expect_equal(sch$info$duration, 11)
+  expect_equal(schedule$info$duration, 11)
 })
 
 test_that("Schedule critical activities are identified", {
-  sch <- vanhoucke2014_project_1()
+  schedule <- vanhoucke2014_project_1()
 
-  critical_activities <- paste0(sch$activities$id[sch$activities$critical], collapse=",")
+  critical_activities <- paste0(schedule$activities$id[schedule$activities$critical], collapse=",")
   expected <- paste0(c(1, 2, 4, 11, 16), collapse = ",")
   expect_equal(critical_activities, expected)
 })
 
 test_that("Schedule NON critical activities are identified", {
-  sch <- vanhoucke2014_project_1()
+  schedule <- vanhoucke2014_project_1()
 
-  critical_activities <- paste0(sch$activities$id[!sch$activities$critical], collapse=",")
+  critical_activities <- paste0(schedule$activities$id[!schedule$activities$critical], collapse=",")
   expected <- paste0(c(3, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 17), collapse = ",")
   expect_equal(critical_activities, expected)
 })
 
 test_that("Early Start and Early Finish are correct!", {
-  sch <- vanhoucke2014_project_1()
-  act <- sch$activities
+  schedule <- vanhoucke2014_project_1()
+  act <- schedule$activities
 
   expect_equal(act$ES[1], 0)
   expect_equal(act$EF[1], 1)
@@ -166,8 +166,8 @@ test_that("Early Start and Early Finish are correct!", {
 })
 
 test_that("Late Start and Late Finish are correct!", {
-  sch <- vanhoucke2014_project_1()
-  act <- sch$activities
+  schedule <- vanhoucke2014_project_1()
+  act <- schedule$activities
 
   expect_equal(act$LS[1], 0)
   expect_equal(act$LF[1], 1)

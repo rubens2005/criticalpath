@@ -65,18 +65,26 @@
 #'
  add_activity <- function(schedule, id, name="", duration=0) {
 
-  old_activities <- data.frame(
-    id        = schedule$activities$id,
-    name      = schedule$activities$name,
-    duration  = schedule$activities$duration
-  )
+  old_activities <- schedule$activities
 
-  activities =   data.frame(
+  new_activity <- data.frame(
     id        = id,
     name      = ifelse(is.null(name), base::paste0("act", id), name),
-    duration  = ifelse(is.null(duration), 0, duration)
+    duration  = ifelse(is.null(duration), 0, duration),
+    milestone = FALSE,
+    critical = FALSE,
+    ES =  -Inf,
+    EF =  -Inf,
+    LS =  +Inf,
+    LF =  +Inf,
+    total_float = 0,
+    free_float = 0,
+    progr_level = -Inf,
+    regr_level = +Inf,
+    topo_float = 0
   )
-  schedule$activities <- rbind(old_activities, activities)
+
+  schedule$activities <- rbind(old_activities, new_activity)
 
   schedule$info$nr_activities <- nrow(schedule$activities)
   schedule$info$has_any_activity <- TRUE

@@ -100,8 +100,8 @@ calculate_critical_path <- function(schedule) {
       type <- rela$type[i]
       relation_type$forward[[type]](
         acts,
-        rela$from[i],
-        rela$to[i],
+        rela$i_from[i],
+        rela$i_to[i],
         rela$lag[i]
       )
     }
@@ -121,8 +121,8 @@ calculate_critical_path <- function(schedule) {
       type <- rela$type[i]
       relation_type$backward[[type]](
         acts,
-        rela$from[i],
-        rela$to[i],
+        rela$i_from[i],
+        rela$i_to[i],
         rela$lag[i]
       )
     }
@@ -139,7 +139,7 @@ calculate_critical_path <- function(schedule) {
       succesors <- rela[rela$from == from_id, ]
       if(nrow(succesors) > 0) {
         for(j in 1:nrow(succesors)) {
-          to_id <- succesors$to[j]
+          to_id <- succesors$i_to[j]
           ff <- acts$ES[to_id] - acts$EF[from_id]
           if(ff < acts$free_float[from_id]) {
             acts$free_float[from_id] <- ff
@@ -154,27 +154,12 @@ calculate_critical_path <- function(schedule) {
   acts$critical <- acts$total_float <= 0
 
   # Identify critical relation
-  rela$critical <- acts$critical[rela$from] & acts$critical[rela$to]
+  rela$critical <- acts$critical[rela$i_from] & acts$critical[rela$i_to]
 
 
   ###################
   schedule$activities <- acts
   schedule$relations <- rela
-
-
-  schedule_info(schedule)
-}
-
-#'
-#' schedule_info
-#'
-#' Colect schedule info
-#'
-#' @param schedule
-#'
-schedule_info <- function(schedule) {
-
-  schedule$info$something = "something else"
 
   schedule
 }

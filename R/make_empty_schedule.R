@@ -79,17 +79,30 @@
 make_empty_schedule <- function(title="", reference="") {
   schedule <- list(
 
-    activities =   data.frame(
-      id        = numeric(),
-      name      = character(),
-      duration  = c()
+    activities = data.frame(
+      id = numeric(),
+      name = character(),
+      duration = numeric(),
+      milestone = logical(),
+      critical = logical(),
+      ES = numeric(),
+      EF = numeric(),
+      LS = numeric(),
+      LF = numeric(),
+      total_float = numeric(),
+      free_float = numeric()
     ),
 
     relations = data.frame(
-      from = c(),
-      to   = c(),
+      from = numeric(),
+      to   = numeric(),
       type = character(),
-      lag = numeric()
+      lag = numeric(),
+      critical = logical(),
+      redundant = logical(),
+      ord = numeric(),
+      i_from = numeric(),
+      i_to = numeric()
     ),
 
     info = list(
