@@ -80,7 +80,7 @@ make_empty_schedule <- function(title="", reference="") {
   schedule <- list(
 
     activities = data.frame(
-      id = numeric(),
+      id = integer(),
       name = character(),
       duration = numeric(),
       milestone = logical(),
@@ -99,7 +99,6 @@ make_empty_schedule <- function(title="", reference="") {
       type = character(),
       lag = numeric(),
       critical = logical(),
-      redundant = logical(),
       ord = numeric(),
       i_from = numeric(),
       i_to = numeric()

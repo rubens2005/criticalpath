@@ -79,11 +79,17 @@
 #'
 add_act_rel <- function(schedule, id, name, duration, relations_id=c(), dir="succ") {
   assert_is_schedule(schedule)
+  assert_activity_id_is_valid(id)
+  assert_activity_id_does_not_exist(schedule, id)
 
   schedule <- add_activity(schedule, id, name, duration)
 
   n <- length(relations_id)
   if(n > 0) {
+    if(any(duplicated(relations_id))) {
+      stop("Must NOT EXISTS duplicated id in relations_id!")
+    }
+
     #1 Add temp relations
     if(is.null(schedule$config$temp_relations)) {
       schedule$config$temp_relations <- data.frame(

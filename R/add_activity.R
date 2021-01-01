@@ -65,8 +65,11 @@
 #'
  add_activity <- function(schedule, id, name="", duration=0) {
    assert_is_schedule(schedule)
+   assert_activity_id_is_valid(id)
+   assert_activity_id_does_not_exist(schedule, id)
 
-  old_activities <- schedule$activities
+   old_activities <- schedule$activities
+
 
   new_activity <- data.frame(
     id        = id,

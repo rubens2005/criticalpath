@@ -3,7 +3,7 @@
 #' Transform a Gantt matrix in x,y coordinates.
 #' Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
 #'
-#' @param ganttm A Gantt Matrix.
+#' @param gantt A Gantt Matrix.
 #'
 #' @return A matrix x, y and weight.
 #' @references DOCUMENTAÇÃO SOBRE O MÉTODO: livros, artigos ou sites.

@@ -4,10 +4,10 @@
 \alias{xy_gantt_matrix}
 \title{Transform a Gantt matrix in x,y coordinates}
 \usage{
-xy_gantt_matrix(ganttm)
+xy_gantt_matrix(gantt)
 }
 \arguments{
-\item{ganttm}{A Gantt Matrix.}
+\item{gantt}{A Gantt Matrix.}
 }
 \value{
 A matrix x, y and weight.

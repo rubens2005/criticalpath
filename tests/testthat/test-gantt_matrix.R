@@ -130,13 +130,23 @@ test_that("A,B,C", {
   schedule <- s0()
   expect_equal(schedule$info$duration, 4)
 
+  mtx <- base::matrix(
+    c(
+      1,1,1,0,
+      1,1,0,0,
+      1,1,1,1
+    ),
+    byrow = TRUE,
+    ncol = 4
+  )
+
   gantt <- gantt_matrix(schedule)
-  expect_true("Gantt" %in% class(gantt))
-  expect_true(identical(gantt[1,], c(1,1,1,0)))
-  expect_true(identical(gantt[2,], c(1,1,0,0)))
-  expect_true(identical(gantt[3,], c(1,1,1,1)))
+  expect_true(identical(gantt[1,], mtx[1,]))
+  expect_true(identical(gantt[2,], mtx[2,]))
+  expect_true(identical(gantt[3,], mtx[3,]))
 
   xygantt <- xy_gantt_matrix(gantt)
+  expect_equal(nrow(xygantt), sum(gantt))
 })
 
 test_that("A->B, C", {
@@ -147,6 +157,9 @@ test_that("A->B, C", {
   expect_true(identical(gantt[1,], c(1,1,1,0,0)))
   expect_true(identical(gantt[2,], c(0,0,0,1,1)))
   expect_true(identical(gantt[3,], c(1,1,1,1,0)))
+
+  xygantt <- xy_gantt_matrix(gantt)
+  expect_equal(nrow(xygantt), sum(gantt))
 })
 
 test_that("A->C, B", {
@@ -157,6 +170,9 @@ test_that("A->C, B", {
   expect_true(identical(gantt[1,], c(1,1,1,0,0,0,0)))
   expect_true(identical(gantt[2,], c(1,1,0,0,0,0,0)))
   expect_true(identical(gantt[3,], c(0,0,0,1,1,1,1)))
+
+  xygantt <- xy_gantt_matrix(gantt)
+  expect_equal(nrow(xygantt), sum(gantt))
 })
 
 test_that("A->B, A->C", {
@@ -167,6 +183,9 @@ test_that("A->B, A->C", {
   expect_true(identical(gantt[1,], c(1,1,1,0,0,0,0)))
   expect_true(identical(gantt[2,], c(0,0,0,1,1,0,0)))
   expect_true(identical(gantt[3,], c(0,0,0,1,1,1,1)))
+
+  xygantt <- xy_gantt_matrix(gantt)
+  expect_equal(nrow(xygantt), sum(gantt))
 })
 
 test_that("B->C, A", {
@@ -177,6 +196,9 @@ test_that("B->C, A", {
   expect_true(identical(gantt[1,], c(1,1,1,0,0,0)))
   expect_true(identical(gantt[2,], c(1,1,0,0,0,0)))
   expect_true(identical(gantt[3,], c(0,0,1,1,1,1)))
+
+  xygantt <- xy_gantt_matrix(gantt)
+  expect_equal(nrow(xygantt), sum(gantt))
 })
 
 test_that("A->B, B->C", {
@@ -187,6 +209,9 @@ test_that("A->B, B->C", {
   expect_true(identical(gantt[1,], c(1,1,1,0,0,0,0,0,0)))
   expect_true(identical(gantt[2,], c(0,0,0,1,1,0,0,0,0)))
   expect_true(identical(gantt[3,], c(0,0,0,0,0,1,1,1,1)))
+
+  xygantt <- xy_gantt_matrix(gantt)
+  expect_equal(nrow(xygantt), sum(gantt))
 })
 
 test_that("A->C, B->C", {
@@ -197,6 +222,9 @@ test_that("A->C, B->C", {
   expect_true(identical(gantt[1,], c(1,1,1,0,0,0,0)))
   expect_true(identical(gantt[2,], c(1,1,0,0,0,0,0)))
   expect_true(identical(gantt[3,], c(0,0,0,1,1,1,1)))
+
+  xygantt <- xy_gantt_matrix(gantt)
+  expect_equal(nrow(xygantt), sum(gantt))
 })
 
 test_that("A->B, A->C, B->C", {
@@ -207,4 +235,7 @@ test_that("A->B, A->C, B->C", {
   expect_true(identical(gantt[1,], c(1,1,1,0,0,0,0,0,0)))
   expect_true(identical(gantt[2,], c(0,0,0,1,1,0,0,0,0)))
   expect_true(identical(gantt[3,], c(0,0,0,0,0,1,1,1,1)))
+
+  xygantt <- xy_gantt_matrix(gantt)
+  expect_equal(nrow(xygantt), sum(gantt))
 })

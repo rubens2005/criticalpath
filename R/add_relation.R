@@ -86,6 +86,16 @@
 add_relation <- function(schedule, from_id, to_id, type="FS", lag=0) {
   assert_is_schedule(schedule)
 
+  assert_activity_id_is_valid(from_id)
+  assert_activity_id_exist(schedule, from_id)
+
+  assert_activity_id_is_valid(to_id)
+  assert_activity_id_exist(schedule, to_id)
+
+  if(is.na(match(type, c("FS", "FF", "SS", "SF" )))) {
+    stop("type must be FS, FF, SS or SF!")
+  }
+
   old_relations <- schedule$relations
 
   new_relation = data.frame(
@@ -94,7 +104,6 @@ add_relation <- function(schedule, from_id, to_id, type="FS", lag=0) {
     type = type,
     lag = lag,
     critical = FALSE,
-    redudant = FALSE,
     ord = nrow(old_relations) + 1,
     i_from = NA,
     i_to = NA
