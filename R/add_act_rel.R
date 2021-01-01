@@ -78,6 +78,7 @@
 #' schedule$activities
 #'
 add_act_rel <- function(schedule, id, name, duration, relations_id=c(), dir="succ") {
+  assert_is_schedule(schedule)
 
   schedule <- add_activity(schedule, id, name, duration)
 

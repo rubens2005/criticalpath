@@ -47,6 +47,8 @@
 #' topoi_la(schedule)
 #'
 topoi_la <- function(schedule) {
+  assert_is_schedule(schedule)
+
   max_level <- schedule$info$max_level
   nr_activities <- schedule$info$nr_activities
 

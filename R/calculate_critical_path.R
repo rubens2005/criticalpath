@@ -1,4 +1,5 @@
 calculate_critical_path <- function(schedule) {
+  assert_is_schedule(schedule)
 
   relation_type <- list(
 

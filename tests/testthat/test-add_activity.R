@@ -1,3 +1,8 @@
+test_that("Add activities does not works for a non Schedule object!", {
+  schedule <- list(any="thing")
+  expect_error(add_activity(schedule, 1))
+})
+
 test_that("Add activities works, with duration equal zero!", {
   schedule <- make_empty_schedule()
 

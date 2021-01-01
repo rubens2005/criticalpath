@@ -62,6 +62,8 @@
 #' message(paste("Now, schedule duration is", schedule$info$duration))
 #'
 change_durations <- function(schedule, durations) {
+  assert_is_schedule(schedule)
+
   schedule$activities$duration <- durations
   calculate_critical_path(schedule)
 }

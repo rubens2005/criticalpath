@@ -84,6 +84,7 @@
 #' sch$activities$name[sch$activities$critical]
 #'
 add_relation <- function(schedule, from_id, to_id, type="FS", lag=0) {
+  assert_is_schedule(schedule)
 
   old_relations <- schedule$relations
 

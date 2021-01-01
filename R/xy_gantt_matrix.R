@@ -55,10 +55,12 @@
 #' xygantt <- xy_gantt_matrix(gantt)
 #' #plot(xygantt[,1], -xygantt[,2])
 #'
-xy_gantt_matrix <- function(ganttm) {
-  qtdatvs <- nrow(ganttm)
-  pdur <- ncol(ganttm)
-  v <- as.numeric(t(ganttm))
+xy_gantt_matrix <- function(gantt) {
+  assert_is_gantt(gantt)
+
+  qtdatvs <- nrow(gantt)
+  pdur <- ncol(gantt)
+  v <- as.numeric(t(gantt))
   ii <- which(v > 0) - 1
   y <- floor(ii / pdur)
   x <- ii - y * pdur

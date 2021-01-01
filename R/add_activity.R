@@ -64,6 +64,7 @@
 #'
 #'
  add_activity <- function(schedule, id, name="", duration=0) {
+   assert_is_schedule(schedule)
 
   old_activities <- schedule$activities
 

@@ -14,6 +14,8 @@
 #' PMBOK
 #'
 topological_organization <- function(schedule) {
+  assert_is_schedule(schedule)
+
   if(schedule$info$has_any_relation) {
     schedule$relations <- schedule$relations[order(schedule$relations$ord), ]
 

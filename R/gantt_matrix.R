@@ -62,15 +62,22 @@
 #' #plot(s_curve, type="l", lwd=3)
 #'
 gantt_matrix <- function(schedule) {
+  assert_is_schedule(schedule)
+
+  if(schedule$info$duration == 0) {
+    stop("There is no Gantt Matrix for a schedule with zero duration!")
+  }
+
   atvs <- schedule$activities
   duration <- schedule$info$duration
   qtdatvs <- nrow(atvs)
-  ganttm <- matrix(rep(0, duration * qtdatvs), nrow=qtdatvs)
+  gantt <- matrix(rep(0, duration * qtdatvs), nrow=qtdatvs)
   for(i in 1:qtdatvs) {
     inicio <- atvs$ES[i] + 1
     termino <- atvs$EF[i]
-    ganttm[i, inicio:termino] <- 1
+    gantt[i, inicio:termino] <- 1
   }
 
-  ganttm
+  class(gantt) <- base::unique(c("Gantt", class(gantt)))
+  gantt
 }
