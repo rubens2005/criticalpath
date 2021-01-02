@@ -1,6 +1,6 @@
 test_that("Inconsistences are identified", {
   schedule <- make_empty_schedule(
-    "Fictitous Project Example",
+    "Fictitious Project Example",
     "VANHOUCKE, Mario. Measuring time: improving project performance using earned value management. Gent: Springer, 2009, p. 18"
   )
 
@@ -25,7 +25,7 @@ test_that("Inconsistences are identified", {
 
 test_that("Redundant relations are identified.", {
   schedule <- make_empty_schedule(
-    "Fictitous Project Example",
+    "Fictitious Project Example",
     "VANHOUCKE, Mario. Measuring time: improving project performance using earned value management. Gent: Springer, 2009, p. 18"
   )
 

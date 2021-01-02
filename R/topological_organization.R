@@ -18,10 +18,6 @@ topological_organization <- function(schedule) {
 
   if(schedule$info$has_any_relation) {
     schedule$relations <- schedule$relations[order(schedule$relations$ord), ]
-
-    # 1) Verify if type and lag is defined, if not, define it
-    # TODO Por enquanto não está sendo feita essa verificação
-    schedule$relations$type <- "FS"
   }
 
   # 2) Find starters activities

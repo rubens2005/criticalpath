@@ -109,8 +109,7 @@ calculate_critical_path <- function(schedule) {
   }
 
   # Calculate project duration
-  #TODO Put here the algorithm to calculate schedule duration!
-  schedule$info$duration <- max(acts$EF)
+  schedule$info$duration <- base::max(acts$EF) - base::min(acts$ES)
 
   # arrumarPeriodoDasAtividadesFinais
   acts$LF[schedule$config$ends] <- max(acts$EF)

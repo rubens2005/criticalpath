@@ -24,6 +24,12 @@ assert_is_gantt <- function(gantt) {
   }
 }
 
+get_activity <- function(schedule, id) {
+  assert_is_schedule(schedule)
+  assert_activity_id_exist(schedule, id)
+  schedule$activities[match(id, schedule$activities$id), ]
+}
+
 assert_activity_id_is_valid <- function(activity_id) {
   if(base::is.null(activity_id)) {
     stop("Activity id cannot be NULL!")
