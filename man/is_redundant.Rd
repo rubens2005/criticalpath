@@ -46,7 +46,26 @@ is_redundant(schedule, 6, 11) # TRUE
 
 }
 \references{
-DOCUMENTAÇÃO SOBRE O MÉTODO: livros, artigos ou sites.
+Csardi, G. & Nepusz, T. (2005).
+The Igraph Software Package for Complex Network Research.
+\emph{InterJournal}. Complex Systems. 1695.
+\href{https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research}{Article}
+/ \href{https://igraph.org/}{igraph}
+
+Vanhoucke, M. (2009) \emph{Measuring Time}:
+Improving Project Performance Using Earned Value Management.
+Springer-Verlag US.
+doi: \href{https://doi.org/10.1007/978-1-4419-1014-1}{10.1007/978-1-4419-1014-1}.
+
+Vanhoucke, M. (2013) \emph{Project Management with Dynamic Scheduling}:
+Baseline Scheduling, Risk Analysis and Project Control.
+Springer-Verlag Berlin Heidelberg.
+doi: \href{https://doi.org/10.1007/978-3-642-40438-2}{10.1007/978-3-642-40438-2}
+
+Vanhoucke, M. (2014) \emph{Integrated Project Management and Control}:
+First Comes the Theory, then the Practice.
+Springer International Publishing Switzerland.
+doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
 }
 \seealso{
 Creating a schedule:

@@ -7,11 +7,29 @@
 #'
 #' @return schedule
 #'
-#' @references Mario Vanhoucke
+#' @references
 #'
-#' Rubens Jose Rosa
+#' Csardi, G. & Nepusz, T. (2005).
+#' The Igraph Software Package for Complex Network Research.
+#' *InterJournal*. Complex Systems. 1695.
+#' [Article](https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research)
+#'  / [igraph](https://igraph.org/)
 #'
-#' PMBOK
+#' Vanhoucke, M. (2009) *Measuring Time*:
+#' Improving Project Performance Using Earned Value Management.
+#' Springer-Verlag US.
+#' doi: [10.1007/978-1-4419-1014-1](https://doi.org/10.1007/978-1-4419-1014-1).
+#'
+#' Vanhoucke, M. (2013) *Project Management with Dynamic Scheduling*:
+#' Baseline Scheduling, Risk Analysis and Project Control.
+#' Springer-Verlag Berlin Heidelberg.
+#' doi: [10.1007/978-3-642-40438-2](https://doi.org/10.1007/978-3-642-40438-2)
+#'
+#' Vanhoucke, M. (2014) *Integrated Project Management and Control*:
+#' First Comes the Theory, then the Practice.
+#' Springer International Publishing Switzerland.
+#' doi: [10.1007/978-3-319-04331-9](https://doi.org/10.1007/978-3-319-04331-9)
+#'
 #'
 topological_organization <- function(schedule) {
   assert_is_schedule(schedule)
@@ -84,22 +102,6 @@ topological_organization <- function(schedule) {
 
   # Topological Float is the diference between regressivel and progressive level
   schedule$activities$topo_float <- schedule$activities$regr_level - schedule$activities$progr_level
-
-
-  #TODO 6) Verify redundant relation (transitive)
-  # Existe um algoritmo que considera a matriz de relacionamentos
-  # Mas acredito que tem alguns erros. Desta forma, eu tenho certeza, apesar de lento.
-  # Para cada relação
-  #   guarda a relação corrente
-  #   tira a relação corrente do conjunto de próximos do nó from_id
-  #   Ou seja, cria um conjunto com todas as relações com from_id, menos a corrente
-  #   descobre todos os sucessores, diretos ou não, do nó from_id, até o final da rede
-  #   se o nó to_id da relação corrente aparecer no conjunto
-  #       marca a relação corrente como redundante TRUE
-  #   se não
-  #       marca a relação corrente como NÃO redundante FALSE
-  #   fim-se
-  # fim-para
 
   schedule
 }
