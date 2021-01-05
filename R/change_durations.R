@@ -88,4 +88,3 @@ change_durations <- function(schedule, durations) {
   schedule$activities$duration <- durations
   calculate_critical_path(schedule)
 }
-
