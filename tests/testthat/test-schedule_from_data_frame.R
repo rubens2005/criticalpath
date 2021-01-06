@@ -26,9 +26,9 @@ test_that("Creating a ONE activity schedule with ZERO duration", {
   )
 
   schedule <- schedule_from_data_frame(activities)
-  activities <- schedule$activities
+  activities <- schedule$activities_as_data_frame()
 
-  expect_equal(schedule$info$duration, 0)
+  expect_equal(schedule$duration, 0)
   expect_equal(activities$ES[1], 0)
   expect_equal(activities$EF[1], 0)
   expect_equal(activities$LS[1], 0)
@@ -44,9 +44,9 @@ test_that("Creating a schedule with ONE activity", {
   )
 
   schedule <- schedule_from_data_frame(activities)
-  activities <- schedule$activities
+  activities <- schedule$activities_as_data_frame()
 
-  expect_equal(schedule$info$duration, 3)
+  expect_equal(schedule$duration, 3)
   expect_equal(activities$ES[1], 0)
   expect_equal(activities$EF[1], 3)
   expect_equal(activities$LS[1], 0)
@@ -62,9 +62,9 @@ test_that("Creating a schedule only with activities list, without relations", {
   )
 
   schedule <- schedule_from_data_frame(activities)
-  activities <- schedule$activities
+  activities <- schedule$activities_as_data_frame()
 
-  expect_equal(schedule$info$duration, 4)
+  expect_equal(schedule$duration, 4)
 
   expect_equal(activities$ES[1], 0)
   expect_equal(activities$EF[1], 3)
@@ -89,13 +89,14 @@ test_that("Creating a schedule only with activities list, without relations", {
 test_that("Schedule duration is 11", {
   schedule <- vanhoucke2014_project_1()
 
-  expect_equal(schedule$info$duration, 11)
+  expect_equal(schedule$duration, 11)
 })
 
 test_that("Schedule critical activities are identified", {
   schedule <- vanhoucke2014_project_1()
 
-  critical_activities <- paste0(schedule$activities$id[schedule$activities$critical], collapse=",")
+  activities <- schedule$activities_as_data_frame()
+  critical_activities <- paste0(activities$id[activities$critical], collapse=",")
   expected <- paste0(c(1, 2, 4, 11, 16), collapse = ",")
   expect_equal(critical_activities, expected)
 })
@@ -103,14 +104,15 @@ test_that("Schedule critical activities are identified", {
 test_that("Schedule NON critical activities are identified", {
   schedule <- vanhoucke2014_project_1()
 
-  critical_activities <- paste0(schedule$activities$id[!schedule$activities$critical], collapse=",")
+  activities <- schedule$activities_as_data_frame()
+  non_critical_activities <- paste0(activities$id[!activities$critical], collapse=",")
   expected <- paste0(c(3, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 17), collapse = ",")
-  expect_equal(critical_activities, expected)
+  expect_equal(non_critical_activities, expected)
 })
 
 test_that("Early Start and Early Finish are correct!", {
   schedule <- vanhoucke2014_project_1()
-  act <- schedule$activities
+  act <- schedule$activities_as_data_frame()
 
   expect_equal(act$ES[1], 0)
   expect_equal(act$EF[1], 1)
@@ -167,7 +169,7 @@ test_that("Early Start and Early Finish are correct!", {
 
 test_that("Late Start and Late Finish are correct!", {
   schedule <- vanhoucke2014_project_1()
-  act <- schedule$activities
+  act <- schedule$activities_as_data_frame()
 
   expect_equal(act$LS[1], 0)
   expect_equal(act$LF[1], 1)
@@ -221,4 +223,3 @@ test_that("Late Start and Late Finish are correct!", {
   expect_equal(act$LF[17], 11)
 
 })
-

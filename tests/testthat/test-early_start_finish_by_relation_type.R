@@ -8,22 +8,22 @@ test_that("FS type | A_duration == B_duration | lag == 0", {
   b_id <- 33
   end_id <- 34
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(8, schedule$info$duration)
+  expect_equal(8, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -51,22 +51,22 @@ test_that("FS type | A_duration == B_duration | lag > 0", {
   b_id <- 38
   end_id <- 39
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(10, schedule$info$duration)
+  expect_equal(10, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -94,22 +94,22 @@ test_that("FS type | A_duration == B_duration | lag < 0", {
   b_id <- 43
   end_id <- 44
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(6, schedule$info$duration)
+  expect_equal(6, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -137,22 +137,22 @@ test_that("FS type | A_duration < B_duration | lag == 0", {
   b_id <- 81
   end_id <- 82
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(10, schedule$info$duration)
+  expect_equal(10, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -180,22 +180,22 @@ test_that("FS type | A_duration < B_duration | lag > 0", {
   b_id <- 86
   end_id <- 87
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(12, schedule$info$duration)
+  expect_equal(12, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -223,22 +223,22 @@ test_that("FS type | A_duration < B_duration | lag < 0", {
   b_id <- 91
   end_id <- 92
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(8, schedule$info$duration)
+  expect_equal(8, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -266,22 +266,22 @@ test_that("FS type | A_duration > B_duration | lag == 0", {
   b_id <- 97
   end_id <- 98
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(10, schedule$info$duration)
+  expect_equal(10, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -309,22 +309,22 @@ test_that("FS type | A_duration > B_duration | lag > 0", {
   b_id <- 102
   end_id <- 104
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(12, schedule$info$duration)
+  expect_equal(12, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -352,22 +352,22 @@ test_that("FS type | A_duration > B_duration | lag < 0", {
   b_id <- 107
   end_id <- 108
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FS", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FS", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(8, schedule$info$duration)
+  expect_equal(8, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -399,22 +399,22 @@ test_that("FF type | A_duration == B_duration | lag == 0", {
   b_id <- 114
   end_id <- 115
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(5, schedule$info$duration)
+  expect_equal(5, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -442,22 +442,22 @@ test_that("FF type | A_duration == B_duration | lag > 0", {
   b_id <- 119
   end_id <- 120
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(7, schedule$info$duration)
+  expect_equal(7, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -485,22 +485,22 @@ test_that("FF type | A_duration == B_duration | lag < 0", {
   b_id <- 124
   end_id <- 125
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(5, schedule$info$duration)
+  expect_equal(5, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -528,22 +528,22 @@ test_that("FF type | A_duration < B_duration | lag == 0", {
   b_id <- 130
   end_id <- 131
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(6, schedule$info$duration)
+  expect_equal(6, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -571,22 +571,22 @@ test_that("FF type | A_duration < B_duration | lag > 0", {
   b_id <- 135
   end_id <- 136
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(7, schedule$info$duration)
+  expect_equal(7, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -614,22 +614,22 @@ test_that("FF type | A_duration < B_duration | lag < 0", {
   b_id <- 140
   end_id <- 141
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(7, schedule$info$duration)
+  expect_equal(7, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -657,22 +657,22 @@ test_that("FF type | A_duration > B_duration | lag == 0", {
   b_id <- 146
   end_id <- 147
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(7, schedule$info$duration)
+  expect_equal(7, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -700,22 +700,22 @@ test_that("FF type | A_duration > B_duration | lag > 0", {
   b_id <- 151
   end_id <- 152
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(9, schedule$info$duration)
+  expect_equal(9, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -743,22 +743,22 @@ test_that("FF type | A_duration > B_duration | lag < 0", {
   b_id <- 156
   end_id <- 157
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "FF", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "FF", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(6, schedule$info$duration)
+  expect_equal(6, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -790,22 +790,22 @@ test_that("SS type | A_duration == B_duration | lag == 0", {
   b_id <- 163
   end_id <- 164
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(5, schedule$info$duration)
+  expect_equal(5, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -833,22 +833,22 @@ test_that("SS type | A_duration == B_duration | lag > 0", {
   b_id <- 168
   end_id <- 169
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(7, schedule$info$duration)
+  expect_equal(7, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -876,22 +876,22 @@ test_that("SS type | A_duration == B_duration | lag < 0", {
   b_id <- 173
   end_id <- 174
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(5, schedule$info$duration)
+  expect_equal(5, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -919,22 +919,22 @@ test_that("SS type | A_duration < B_duration | lag == 0", {
   b_id <- 179
   end_id <- 180
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(7, schedule$info$duration)
+  expect_equal(7, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -962,22 +962,22 @@ test_that("SS type | A_duration < B_duration | lag > 0", {
   b_id <- 184
   end_id <- 185
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(9, schedule$info$duration)
+  expect_equal(9, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1005,22 +1005,22 @@ test_that("SS type | A_duration < B_duration | lag < 0", {
   b_id <- 189
   end_id <- 190
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(6, schedule$info$duration)
+  expect_equal(6, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1048,22 +1048,22 @@ test_that("SS type | A_duration > B_duration | lag == 0", {
   b_id <- 195
   end_id <- 196
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(6, schedule$info$duration)
+  expect_equal(6, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1091,22 +1091,22 @@ test_that("SS type | A_duration > B_duration | lag > 0", {
   b_id <- 200
   end_id <- 201
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(7, schedule$info$duration)
+  expect_equal(7, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1134,22 +1134,22 @@ test_that("SS type | A_duration > B_duration | lag < 0", {
   b_id <- 205
   end_id <- 206
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SS", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SS", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(7, schedule$info$duration)
+  expect_equal(7, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1181,22 +1181,22 @@ test_that("SF type | A_duration == B_duration | lag == 0", {
   b_id <- 212
   end_id <- 213
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(6, schedule$info$duration)
+  expect_equal(6, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1224,22 +1224,22 @@ test_that("SF type | A_duration == B_duration | lag > 0", {
   b_id <- 217
   end_id <- 218
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(4, schedule$info$duration)
+  expect_equal(4, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1267,22 +1267,22 @@ test_that("SF type | A_duration == B_duration | lag < 0", {
   b_id <- 222
   end_id <- 223
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(8, schedule$info$duration)
+  expect_equal(8, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1310,22 +1310,22 @@ test_that("SF type | A_duration < B_duration | lag == 0", {
   b_id <- 228
   end_id <- 229
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(8, schedule$info$duration)
+  expect_equal(8, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1353,22 +1353,22 @@ test_that("SF type | A_duration < B_duration | lag > 0", {
   b_id <- 233
   end_id <- 234
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(6, schedule$info$duration)
+  expect_equal(6, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1396,22 +1396,22 @@ test_that("SF type | A_duration < B_duration | lag < 0", {
   b_id <- 238
   end_id <- 239
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 3)
-  schedule <- add_activity(schedule, b_id, "B", 5)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 3)
+  schedule$add_activity(b_id, "B", 5)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(10, schedule$info$duration)
+  expect_equal(10, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1439,22 +1439,22 @@ test_that("SF type | A_duration > B_duration | lag == 0", {
   b_id <- 244
   end_id <- 245
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", 0)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", 0)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(8, schedule$info$duration)
+  expect_equal(8, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1482,22 +1482,22 @@ test_that("SF type | A_duration > B_duration | lag > 0", {
   b_id <- 249
   end_id <- 250
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", 2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", 2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(6, schedule$info$duration)
+  expect_equal(6, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);
@@ -1525,22 +1525,22 @@ test_that("SF type | A_duration > B_duration | lag < 0", {
   b_id <- 254
   end_id <- 255
 
-  schedule <- make_empty_schedule()
-  schedule <- add_activity(schedule, begin_id, "Begin", 1)
-  schedule <- add_activity(schedule, a_id, "A", 5)
-  schedule <- add_activity(schedule, b_id, "B", 3)
-  schedule <- add_activity(schedule, end_id, "End", 1)
+  schedule <- Schedule$new()
+  schedule$add_activity(begin_id, "Begin", 1)
+  schedule$add_activity(a_id, "A", 5)
+  schedule$add_activity(b_id, "B", 3)
+  schedule$add_activity(end_id, "End", 1)
 
-  schedule <- add_relation(schedule, begin_id, a_id,   "FS", 0)
-  schedule <- add_relation(schedule, a_id,     b_id,   "SF", -2)
-  schedule <- add_relation(schedule, b_id,     end_id, "FS", 0)
+  schedule$add_relation(begin_id, a_id,   "FS", 0)
+  schedule$add_relation(a_id,     b_id,   "SF", -2)
+  schedule$add_relation(b_id,     end_id, "FS", 0)
 
-  begin_act <- get_activity(schedule, begin_id)
-  a_act     <- get_activity(schedule, a_id    )
-  b_act     <- get_activity(schedule, b_id    )
-  end_act   <- get_activity(schedule, end_id  )
+  begin_act <- schedule$get_activity(begin_id)
+  a_act     <- schedule$get_activity(a_id    )
+  b_act     <- schedule$get_activity(b_id    )
+  end_act   <- schedule$get_activity(end_id  )
 
-  expect_equal(10, schedule$info$duration)
+  expect_equal(10, schedule$duration)
 
   expect_equal(0, begin_act$ES);
   expect_equal(1, begin_act$EF);

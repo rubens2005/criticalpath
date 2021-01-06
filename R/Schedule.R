@@ -1,12 +1,12 @@
 #' R6 Class Representing a Schedule
 #'
+#' @description
 #' A schedule has activities and relations data-frames.
-#'
-#' @details
 #' With a Schedule, you can calculate the project critical path.
 #'
-#' @export
-#'
+#' @details
+#' Alguns detalhes a mais.
+#' Vamos ver no que vai dar.
 Schedule <- R6::R6Class("Schedule",
 
   private = list(
@@ -294,6 +294,9 @@ Schedule <- R6::R6Class("Schedule",
 
   active = list(
 
+
+    #' @field nr_activities
+    #' An integer value that indicate the quantity of activities in a schedule
     nr_activities = function(value) {
       if(missing(value)) {
         return(private$info$nr_activities)
@@ -301,6 +304,8 @@ Schedule <- R6::R6Class("Schedule",
       stop("Can't set `$nr_activities`", call. = FALSE)
     },
 
+    #' @field has_any_activity
+    #' A logical value that indicate if the schedule has some activity.
     has_any_activity = function(value) {
       if(missing(value)) {
         return(self$nr_activities > 0)
@@ -308,6 +313,8 @@ Schedule <- R6::R6Class("Schedule",
       stop("Can't set `$has_any_activity`", call. = FALSE)
     },
 
+    #' @field nr_relations
+    #' An integer value that indicate the quantity of relations (arcs) in a schedule
     nr_relations = function(value) {
       if(missing(value)) {
         return(private$info$nr_relations)
@@ -315,6 +322,8 @@ Schedule <- R6::R6Class("Schedule",
       stop("Can't set `$nr_relations`", call. = FALSE)
     },
 
+    #' @field has_any_relation
+    #' A logical value that indicate if the schedule has some relation.
     has_any_relation = function(value) {
       if(missing(value)) {
         return(private$info$has_any_relation)
@@ -322,6 +331,8 @@ Schedule <- R6::R6Class("Schedule",
       stop("Can't set `$has_any_relation`", call. = FALSE)
     },
 
+    #' @field duration
+    #' An integer value that indicate the duration in periods of a schedule
     duration = function(value) {
       if(base::missing(value)) {
         return(private$info$duration)
@@ -333,13 +344,18 @@ Schedule <- R6::R6Class("Schedule",
 
   public = list(
 
-#' New Schedule
-#'
-#' Create a new empty schedule.
-#'
-#' @param title title ...
-#' @param reference reference ...
-#' @return An Schedule object.
+    #' Make a new empty schedule
+    #'
+    #' @description
+    #' Make a schedule with no activities and no relations.
+    #' The activities and relations will be add in sequence.
+    #'
+    #' @param title A project title for identification.
+    #'
+    #' @param reference A reference from project origin,
+    #' for example, a book, a paper, a corporation, or nothing.
+    #'
+    #' @return A Schedule object with no activities and no relations
     initialize = function(title="", reference="") {
       private$activities <- data.frame(
         id = integer(),
@@ -388,16 +404,19 @@ Schedule <- R6::R6Class("Schedule",
     #' Add an activity to a schedule that must exist.
     #'
     #' @usage
-    #' add_activity(schedule, id, name="", duration=0)
+    #' Schedule$add_activity(id, name="", duration=0)
+    #'
     #' @param id
     #' Activity id. The id will be used to make relation between activities.
+    #'
     #' @param name
     #' The name of activity. The default is a empty string.
+    #'
     #' @param duration
     #' A number that represents the activity's duration.
     #' It must be equal or grater than zero. The default value is zero.
-    #' @return A Schedule object with an activity added and critical path calculated.
     #'
+    #' @return A Schedule object with an activity added and critical path calculated.
     add_activity = function(id, name="", duration=0) {
       assert_activity_id_is_valid(id)
       private$assert_activity_id_does_not_exist(id)
@@ -434,6 +453,41 @@ Schedule <- R6::R6Class("Schedule",
 
     },
 
+
+    #' Add a relation to a schedule.
+    #'
+    #' Add a relation to a schedule.
+    #' If type is not defined, it is assumed to be FS.
+    #' If lag is not defined, it is assumed to be zero.
+    #'
+    #' @usage
+    #' Schedule$add_relation(from_id, to_id, type, lag)
+    #'
+    #' @param from_id The id of predecessor activity.
+    #'
+    #' @param to_id The id of successor activity.
+    #'
+    #' @param type Specifies the type of relation between activities.
+    #' Its value may be: FS, FF, SS, SF, that means:
+    #'
+    #' FS: Finish-Start relation.
+    #' Activity to_id can only start after the finish of activity from_id.
+    #'
+    #' FF: Finish-Finish relation.
+    #' Activity to_id must finish together with activity from_id.
+    #'
+    #' SS: Start-Start relation.
+    #' Activity to_id must start together with activity from_id.
+    #'
+    #' SF: Start-Finish relation.
+    #' Activity to_id must finish when activity from_id starts.
+    #'
+    #' @param lag The time period between activities that the successor activity
+    #' must be advanced, or lated, after activity from_id.
+    #' The must be a integer, less than, equal or greater than zero.
+    #'
+    #' @return A Schedule object with a relation added and critical path calculated.
+    #'
     add_relation = function(from_id, to_id, type="FS", lag=0) {
       assert_activity_id_is_valid(from_id)
       private$assert_activity_id_exist(from_id)
@@ -470,6 +524,30 @@ Schedule <- R6::R6Class("Schedule",
       private$calculate_critical_path()
     },
 
+    #' Add an activity and her relations
+    #'
+    #' Add an activity and her relations to a schedule.
+    #'
+    #' @usage
+    #' Schedule$add_act_rel(id, name, duration, relations_id=c(), dir="succ")
+    #'
+    #' @param id
+    #' Activity id. The id will be used to make relation between activities.
+    #'
+    #' @param name
+    #' The name of activity.
+    #'
+    #' @param duration
+    #' A number that represents the activity's duration.
+    #' It must be equal or grater than zero.
+    #'
+    #' @param relations_id A vector of ids such that will be linked with activity id.
+    #' It may be a relations of successor or predecessors.
+    #'
+    #' @param dir Direction of relations_id: It may be "succ" or "pred".
+    #' If dir="succ" the relations_id will be the successor of tye activity.
+    #' If dir="pred" the relations_id will be the predecessor of the activity.
+    #'
     add_act_rel = function(id, name, duration, relations_id=c(), dir="succ") {
       self$add_activity(id, name, duration)
 
@@ -564,16 +642,42 @@ Schedule <- R6::R6Class("Schedule",
       }
     },
 
+
+    #' Print a description of the class
+    #' @usage
+    #' Schedule$print()
+    #'
+    #' @param ... Variable parameters
+    #'
     print = function(...) {
       cat("Schedule: \n")
       cat("      Title: ", private$info$title, "\n", sep = "")
       cat("  Reference: ", private$info$reference, "\n", sep = "")
     },
 
+
+    #' Activities as data.frame
+    #'
+    #' @usage
+    #' Schedule$activities_as_data_frame()
+    #'
+    #' @return A data frame with all activities listed.
     activities_as_data_frame = function() {
       private$activities[order(private$activities$id), ]
     },
 
+    #' List All Successors
+    #'
+    #' List all successors from an activity: direct or indirect successors.
+    #'
+    #' @usage
+    #' Schedule$all_successors(id, ign_to)
+    #'
+    #' @param id Activity id to listed
+    #'
+    #' @param ign_to An arc to be ignored: id -> ign_to
+    #'
+    #' @return A vector
     all_successors = function(id, ign_to=NULL) {
       private$assert_activity_id_exist(id)
       if(!is.null(ign_to)) {
@@ -596,6 +700,20 @@ Schedule <- R6::R6Class("Schedule",
       base::rev(base::unique(base::rev(a_list[-1])))
     },
 
+    #' List All Predecessors
+    #'
+    #' List all predecessors from an activity: direct or indirect predecessors.
+    #'
+    #' @usage
+    #' Schedule$all_predecessors(id, ign_from)
+    #'
+    #' @param schedule A schedule
+    #'
+    #' @param id Activity id to listed
+    #'
+    #' @param ign_from An arc to be ignored: ign_from -> id
+    #'
+    #' @return A vector
     all_predecessors = function(id, ign_from=NULL) {
       private$assert_activity_id_exist(id)
       if(!base::is.null(ign_from)) {
@@ -618,6 +736,14 @@ Schedule <- R6::R6Class("Schedule",
       rev(unique(rev(a_list[-1])))
     },
 
+    #' Change Activities Duration
+    #'
+    #' Change activities duration and calculate critical path.
+    #' This way is faster than creating a new schedule with new durations.
+    #'
+    #' @param new_durations A vector with new duration of activities.
+    #'
+    #' @return A Schedule object.
     change_durations = function(new_durations) {
       # verificar se os tamanhos são os mesmos
       # verificar se não tem nenhum NULL ou NA
@@ -625,11 +751,24 @@ Schedule <- R6::R6Class("Schedule",
       private$calculate_critical_path()
     },
 
+    #' Get a activity by id
+    #'
+    #' @param id An activity id as defined by the user
+    #'
+    #' @return A data-frame with one line
     get_activity = function(id) {
       private$assert_activity_id_exist(id)
       private$activities[match(id, private$activities$id), ]
     },
 
+    #' Gantt Matrix
+    #'
+    #' Create a matrix that represents a Gantt chart.
+    #'
+    #' @return A matrix where 1 indicate that an activity is in executions.
+    #' In this matrix, the rows represent activities.
+    #' Whereas the columns represent the activity execution period.
+    #'
     gantt_matrix = function() {
       if(self$duration == 0) {
         stop("There is no Gantt Matrix for a schedule with zero duration!")
@@ -649,6 +788,16 @@ Schedule <- R6::R6Class("Schedule",
       gantt
     },
 
+
+    #' Transform a Gantt matrix in x,y coordinates
+    #'
+    #' Transform a Gantt matrix in x,y coordinates.
+    #' Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
+    #'
+    #' @param gantt A Gantt Matrix.
+    #'
+    #' @return A matrix x, y and weight.
+    #'
     xy_gantt_matrix = function(gantt=NULL) {
       if(base::is.null(gantt)) {
         gantt <- self$gantt_matrix()
@@ -666,6 +815,20 @@ Schedule <- R6::R6Class("Schedule",
       base::matrix(c(x, y + 1, peso), ncol=3)
     },
 
+
+    #' Is an arc redundant
+    #'
+    #' Verify if an arc between two activities, id_from -> id_to, is redundant.
+    #' An arc A -> C is redundant if there are A -> B -> C relations.
+    #'
+    #'
+    #' @param schedule A Schedule.
+    #'
+    #' @param id_from Activity id from.
+    #'
+    #' @param id_to Activity id to.
+    #'
+    #' @return A logical TRUE if an arc is redundant; FALSE if not.
     is_redundant = function(id_from, id_to) {
       private$assert_activity_id_exist(id_from)
       private$assert_activity_id_exist(id_to)
@@ -675,6 +838,17 @@ Schedule <- R6::R6Class("Schedule",
       id_to %in% succ
     },
 
+    #' SP Serial or Parallel Topological Indicator
+    #'
+    #' It shows the closeness of a network to a serial or parallel graph (1, 20).
+    #'
+    #' As the network becomes serial, the SP increase, until one,
+    #' when the network totaly serial
+    #'
+    #' @usage
+    #' Schedule$topoi_sp()
+    #'
+    #' @return A number between 0 and 1, inclusive.
     topoi_sp = function() {
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
@@ -690,6 +864,16 @@ Schedule <- R6::R6Class("Schedule",
       ((max_level - 1) / (nr_act - 1))
     },
 
+    #' AD Activity Distribution Topological Indicator
+    #'
+    #' Measures the distribution of the activities over the levels (1, 20).
+    #'
+    #' @usage
+    #' Schedule$topoi_ad()
+    #'
+    #' @param schedule A Schedule object.
+    #'
+    #' @return A number between 0 and 1, inclusive.
     topoi_ad = function() {
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
@@ -711,6 +895,17 @@ Schedule <- R6::R6Class("Schedule",
       absolute_mean_deviation / (2 * (max_level - 1) * (wbar - 1));
     },
 
+    #' Length of Arcs Topological Indicator
+    #'
+    #' Measures the presence of long arcs based on the difference between
+    #' the progressive level of the end activity and the start node of each arc (relation) (1, 20).
+    #'
+    #' @usage
+    #' Schedule$topoi_la()
+    #'
+    #' @param schedule A Schedule object.
+    #'
+    #' @return A number between 0 and 1, inclusive.
     topoi_la = function() {
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
@@ -736,6 +931,14 @@ Schedule <- R6::R6Class("Schedule",
       (arcs_qty - nr_act + wi[1]) / (D - nr_act + wi[1])
     },
 
+    #' TF Topological Float Indicator
+    #'
+    #' Measures the topological float of each activity (1, 20).
+    #'
+    #' @usage
+    #' Schedule$topoi_tf()
+    #'
+    #' @return A number between 0 and 1, inclusive.
     topoi_tf = function() {
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
@@ -758,5 +961,3 @@ Schedule <- R6::R6Class("Schedule",
   lock_class = TRUE
 
 )
-
-

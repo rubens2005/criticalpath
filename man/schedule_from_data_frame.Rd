@@ -17,72 +17,8 @@ schedule_from_data_frame(activities, relations, title, reference)
 for example, a book, a paper, a corporation, or nothing.}
 }
 \value{
-A Schedule object with an activity added and critical path calculated.
+A Schedule object with an activities and relations.
 }
 \description{
 Create a schedule from data frames and apply Critical Path Method (CPM)
-}
-\examples{
-activities <- data.frame(
-  id        = 1:17,
-  name      = paste("a", as.character(1:17), sep=""),
-  duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
-)
-relations <- data.frame(
-  from = c(1, 1, 2, 2, 2, 3, 3, 3,  3,  4,  5,  6,  7,  8,  9,
-           10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15),
-  to   = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11, 12, 13, 14,
-           15, 16, 17, 16, 17, 16, 17, 16, 17, 16, 17)
-)
-schedule <- schedule_from_data_frame(
-  activities,
-  relations,
-  "Project 1: Cost Information System",
-  "VANHOUCKE, Mario. Integrated project management and control:
-    first comes the theory, then the practice. Gent: Springer, 2014, p. 6"
-)
-
-}
-\references{
-Csardi, G. & Nepusz, T. (2005).
-The Igraph Software Package for Complex Network Research.
-\emph{InterJournal}. Complex Systems. 1695.
-\href{https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research}{Article}
-/ \href{https://igraph.org/}{igraph}
-
-Vanhoucke, M. (2009) \emph{Measuring Time}:
-Improving Project Performance Using Earned Value Management.
-Springer-Verlag US.
-doi: \href{https://doi.org/10.1007/978-1-4419-1014-1}{10.1007/978-1-4419-1014-1}.
-
-Vanhoucke, M. (2013) \emph{Project Management with Dynamic Scheduling}:
-Baseline Scheduling, Risk Analysis and Project Control.
-Springer-Verlag Berlin Heidelberg.
-doi: \href{https://doi.org/10.1007/978-3-642-40438-2}{10.1007/978-3-642-40438-2}
-
-Vanhoucke, M. (2014) \emph{Integrated Project Management and Control}:
-First Comes the Theory, then the Practice.
-Springer International Publishing Switzerland.
-doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
-}
-\seealso{
-Creating a schedule:
-\code{\link[=schedule_from_data_frame]{schedule_from_data_frame()}}
-\code{\link[=make_empty_schedule]{make_empty_schedule()}}
-\code{\link[=add_activity]{add_activity()}}
-\code{\link[=add_relation]{add_relation()}}
-\code{\link[=add_act_rel]{add_act_rel()}}
-
-Changing the activities duration:
-\code{\link[=change_durations]{change_durations()}}
-
-Gantt Matrix:
-\code{\link[=gantt_matrix]{gantt_matrix()}}
-\code{\link[=xy_gantt_matrix]{xy_gantt_matrix()}}
-
-Topological indicators:
-\code{\link[=topoi_sp]{topoi_sp()}}
-\code{\link[=topoi_ad]{topoi_ad()}}
-\code{\link[=topoi_la]{topoi_la()}}
-\code{\link[=topoi_tf]{topoi_tf()}}
 }

@@ -21,13 +21,14 @@ vanhoucke2014_project_2 <- function() {
 test_that("Project 2: Schedule duration is 25", {
   sch <- vanhoucke2014_project_2()
 
-  expect_equal(sch$info$duration, 25)
+  expect_equal(sch$duration, 25)
 })
 
 test_that("Project 2: Schedule critical activities are identified", {
   sch <- vanhoucke2014_project_2()
 
-  critical_activities <- paste0(sch$activities$id[sch$activities$critical], collapse=",")
+  activities <- sch$activities_as_data_frame()
+  critical_activities <- paste0(activities$id[activities$critical], collapse=",")
   expected <- paste0(c(1,2,3,4,5,6,7,8,10,14,16), collapse = ",")
   expect_equal(critical_activities, expected)
 })
@@ -35,14 +36,15 @@ test_that("Project 2: Schedule critical activities are identified", {
 test_that("Project 2: Schedule NON critical activities are identified", {
   sch <- vanhoucke2014_project_2()
 
-  critical_activities <- paste0(sch$activities$id[!sch$activities$critical], collapse=",")
+  activities <- sch$activities_as_data_frame()
+  non_critical_activities <- paste0(activities$id[!activities$critical], collapse=",")
   expected <- paste0(c(9,11,12,13,15,17), collapse = ",")
-  expect_equal(critical_activities, expected)
+  expect_equal(non_critical_activities, expected)
 })
 
 test_that("Project 2: Early Start and Early Finish are correct!", {
   sch <- vanhoucke2014_project_2()
-  act <- sch$activities
+  act <- sch$activities_as_data_frame()
 
   expect_equal(act$ES[1], 0)
   expect_equal(act$EF[1], 1)
@@ -99,7 +101,7 @@ test_that("Project 2: Early Start and Early Finish are correct!", {
 
 test_that("Project 2: Late Start and Late Finish are correct!", {
   sch <- vanhoucke2014_project_2()
-  act <- sch$activities
+  act <- sch$activities_as_data_frame()
 
   expect_equal(act$LS[1], 0)
   expect_equal(act$LF[1], 1)
@@ -161,33 +163,35 @@ new_durations <- c(1,2,5, 4,3, 2,1, 5, 3,5,5,3,4, 2,1, 2,4)
 
 test_that("Project 2: Durations changed! Schedule duration is 28", {
   sch <- vanhoucke2014_project_2()
-  sch <- change_durations(sch, new_durations)
+  sch$change_durations(new_durations)
 
-  expect_equal(sch$info$duration, 31)
+  expect_equal(sch$duration, 31)
 })
 
 test_that("Project 2: Durations changed! Schedule critical activities are identified", {
   sch <- vanhoucke2014_project_2()
-  sch <- change_durations(sch, new_durations)
+  sch$change_durations(new_durations)
 
-  critical_activities <- paste0(sch$activities$id[sch$activities$critical], collapse=",")
-  expected <- paste0(c(1,2,3, 4,5, 8, 10,11, 14, 17), collapse = ",")
+  activities <- sch$activities_as_data_frame()
+  critical_activities <- base::paste0(activities$id[activities$critical], collapse=",")
+  expected <- base::paste0(c(1,2,3, 4,5, 8, 10,11, 14, 17), collapse = ",")
   expect_equal(critical_activities, expected)
 })
 
 test_that("Project 2: Durations changed! Schedule NON critical activities are identified", {
   sch <- vanhoucke2014_project_2()
-  sch <- change_durations(sch, new_durations)
+  sch$change_durations(new_durations)
 
-  critical_activities <- paste0(sch$activities$id[!sch$activities$critical], collapse=",")
+  activities <- sch$activities_as_data_frame()
+  non_critical_activities <- paste0(activities$id[!activities$critical], collapse=",")
   expected <- paste0(c(6,7, 9,12,13, 15,16), collapse = ",")
-  expect_equal(critical_activities, expected)
+  expect_equal(non_critical_activities, expected)
 })
 
 test_that("Project 2: Durations changed! Early Start and Early Finish are correct!", {
   sch <- vanhoucke2014_project_2()
-  sch <- change_durations(sch, new_durations)
-  act <- sch$activities
+  sch$change_durations(new_durations)
+  act <- sch$activities_as_data_frame()
 
   expect_equal(act$ES[1], 0)
   expect_equal(act$EF[1], 1)
@@ -244,8 +248,8 @@ test_that("Project 2: Durations changed! Early Start and Early Finish are correc
 
 test_that("Project 2: Durations changed! Late Start and Late Finish are correct!", {
   sch <- vanhoucke2014_project_2()
-  sch <- change_durations(sch, new_durations)
-  act <- sch$activities
+  sch$change_durations(new_durations)
+  act <- sch$activities_as_data_frame()
 
   expect_equal(act$LS[1], 0)
   expect_equal(act$LF[1], 1)

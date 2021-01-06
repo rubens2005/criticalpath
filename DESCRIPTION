@@ -1,14 +1,18 @@
 Package: criticalpath
-Title: Critical Path Method
+Title: An Implementation of the Critical Path Method
 Version: 0.0.0.9010
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Implementation of Critical Path Method.
-License: MIT + file LICENSE
+Authors@R: c(
+    person("Rubens", "Rosa", role=c("aut", "cre"), email = "rubens@rubensjoserosa.com"),
+    person("Marcos", "dos Santos", role="aut", email="marcosdossantos@ime.eb.br"),
+    person("Thiago", "Marques", role="aut", email="KKKKKKKKKKKKKK"))
+Ahthor: Rubens Jose Rosa [aut, cre],
+    Marcos dos Santos [aut],
+    Thiago Marques [aug]
+Maintainer: Rubens Jose Rosa <rubens@rubensjoserosa.com>
+Description: The goal of criticalpath is to calculate the project duration 
+    and to find its critical activities through application of Critical
+    Path Method to activities and precedence relation between them.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
