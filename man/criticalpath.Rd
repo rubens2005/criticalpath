@@ -3,29 +3,47 @@
 \docType{package}
 \name{criticalpath}
 \alias{criticalpath}
-\title{criticalpath:}
+\alias{CPM}
+\alias{cpm}
+\alias{critical}
+\alias{path}
+\title{criticalpath: Object Oriented Critical Path Method}
 \description{
-An Implementation of the Critical Path Method
+An object oriented implementation of the Critical Path Method in R with R6 library.
 }
 \details{
 The goal of this package is to calculate the project duration
 and to find its critical activities through application of Critical
 Path Method to activities and precedence relation between them.
 }
-\section{Something from somebody}{
+\section{Parameters calculated from CPM}{
 
-The foo functions ...fadsakl asdfklj
-asdflkajsdf
-asdfkjasdf
+
+Schedule duration:
+
+Critical Path
+
+Critical Activities
 }
 
-\section{Another section}{
+\section{Topological indicators}{
 
-lkkkkkk kkk
-rrrr
+
+SP
+
+DA
+
+CA
+
+TF
 }
 
-\section{Warning}{
+\section{What else ONE}{
+
+Do not operate heavy machinery within 8 hours of using this function.
+}
+
+\section{What else TWO}{
 
 Do not operate heavy machinery within 8 hours of using this function.
 }
@@ -51,4 +69,11 @@ Vanhoucke, M. (2014) \emph{Integrated Project Management and Control}:
 First Comes the Theory, then the Practice.
 Springer International Publishing Switzerland.
 doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
+}
+\seealso{
+\link{criticalpath}, \link{Schedule}.
+}
+\author{
+Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Marcos dos Santos, Thiago Marques
 }

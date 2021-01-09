@@ -21,7 +21,7 @@ vanhoucke_2009_p18 <- function() {
 
 test_that("Creating a schedule step-by-step, with activities and relations together", {
   schedule <- vanhoucke_2009_p18()
-  activities <- schedule$activities_as_data_frame()
+  activities <- schedule$as_data_frame()
 
   expect_equal(schedule$duration, 16)
 
@@ -103,7 +103,7 @@ test_that("Creating a schedule step-by-step, with activities and relations toget
 
 test_that("Creating a schedule step-by-step, with activities and relations together: float tests", {
   schedule <- vanhoucke_2009_p18()
-  activities <- schedule$activities_as_data_frame()
+  activities <- schedule$as_data_frame()
 
   expect_equal(activities$total_float[1], 0)
   expect_equal(activities$total_float[2], 0)
@@ -119,3 +119,6 @@ test_that("Creating a schedule step-by-step, with activities and relations toget
   expect_equal(activities$total_float[12], 0)
 
 })
+
+
+

@@ -12,7 +12,7 @@ Maintainer: Rubens Jose Rosa <rubens@rubensjoserosa.com>
 Description: The goal of criticalpath is to calculate the project duration 
     and to find its critical activities through application of Critical
     Path Method to activities and precedence relation between them.
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

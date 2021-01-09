@@ -10,7 +10,7 @@ s0 <- function() {
     to   = c()
   )
 
-  schedule_from_data_frame(activities, relations)
+  Schedule$new()$from_data_frame(activities, relations)
 }
 
 s1 <- function() {
@@ -25,7 +25,7 @@ s1 <- function() {
     to   = c(2)
   )
 
-  schedule_from_data_frame(activities, relations)
+  Schedule$new()$from_data_frame(activities, relations)
 }
 
 s2 <- function() {
@@ -40,7 +40,7 @@ s2 <- function() {
     to   = c(3)
   )
 
-  schedule_from_data_frame(activities, relations)
+  Schedule$new()$from_data_frame(activities, relations)
 }
 
 s3 <- function() {
@@ -55,7 +55,7 @@ s3 <- function() {
     to   = c(2, 3)
   )
 
-  schedule_from_data_frame(activities, relations)
+  Schedule$new()$from_data_frame(activities, relations)
 }
 
 s4 <- function() {
@@ -70,7 +70,7 @@ s4 <- function() {
     to   = c(3)
   )
 
-  schedule_from_data_frame(activities, relations)
+  Schedule$new()$from_data_frame(activities, relations)
 }
 
 s5 <- function() {
@@ -85,7 +85,7 @@ s5 <- function() {
     to   = c(2, 3)
   )
 
-  schedule_from_data_frame(activities, relations)
+  Schedule$new()$from_data_frame(activities, relations)
 }
 
 s6 <- function() {
@@ -100,7 +100,7 @@ s6 <- function() {
     to   = c(3, 3)
   )
 
-  schedule_from_data_frame(activities, relations)
+  Schedule$new()$from_data_frame(activities, relations)
 }
 
 s7 <- function() {
@@ -115,7 +115,7 @@ s7 <- function() {
     to   = c(2, 3, 3)
   )
 
-  schedule_from_data_frame(activities, relations)
+  Schedule$new()$from_data_frame(activities, relations)
 }
 
 test_that("There is no Gantt matrix for a schedule with zero duration!", {

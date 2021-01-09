@@ -2,30 +2,8 @@
 % Please edit documentation in R/Schedule.R
 \name{Schedule}
 \alias{Schedule}
+\alias{schedule}
 \title{R6 Class Representing a Schedule}
-\usage{
-Schedule$add_activity(id, name="", duration=0)
-
-Schedule$add_relation(from_id, to_id, type, lag)
-
-Schedule$add_act_rel(id, name, duration, relations_id=c(), dir="succ")
-
-Schedule$print()
-
-Schedule$activities_as_data_frame()
-
-Schedule$all_successors(id, ign_to)
-
-Schedule$all_predecessors(id, ign_from)
-
-Schedule$topoi_sp()
-
-Schedule$topoi_ad()
-
-Schedule$topoi_la()
-
-Schedule$topoi_tf()
-}
 \description{
 A schedule has activities and relations data-frames.
 With a Schedule, you can calculate the project critical path.
@@ -34,19 +12,54 @@ With a Schedule, you can calculate the project critical path.
 Alguns detalhes a mais.
 Vamos ver no que vai dar.
 }
+\section{More Information}{
+
+There is \strong{See Also} section in the end of this page for more informatio.
+}
+
+\references{
+Csardi, G. & Nepusz, T. (2005).
+The Igraph Software Package for Complex Network Research.
+\emph{InterJournal}. Complex Systems. 1695.
+\href{https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research}{Article}
+/ \href{https://igraph.org/}{igraph}
+
+Vanhoucke, M. (2009) \emph{Measuring Time}:
+Improving Project Performance Using Earned Value Management.
+Springer-Verlag US.
+doi: \href{https://doi.org/10.1007/978-1-4419-1014-1}{10.1007/978-1-4419-1014-1}.
+
+Vanhoucke, M. (2013) \emph{Project Management with Dynamic Scheduling}:
+Baseline Scheduling, Risk Analysis and Project Control.
+Springer-Verlag Berlin Heidelberg.
+doi: \href{https://doi.org/10.1007/978-3-642-40438-2}{10.1007/978-3-642-40438-2}
+
+Vanhoucke, M. (2014) \emph{Integrated Project Management and Control}:
+First Comes the Theory, then the Practice.
+Springer International Publishing Switzerland.
+doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
+}
+\seealso{
+Information about the package: \link{criticalpath},
+
+How to create a schedule from data frame: \link{from_data_frame}
+}
+\author{
+Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Marcos dos Santos, Thiago Marques
+}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{nr_activities}}{An integer value that indicate the quantity of activities in a schedule}
+\item{\code{nr_activities}}{Number of activities in a schedule as an integer value.}
 
-\item{\code{has_any_activity}}{A logical value that indicate if the schedule has some activity.}
+\item{\code{has_any_activity}}{A logical value that indicate if the schedule has any activity.}
 
-\item{\code{nr_relations}}{An integer value that indicate the quantity of relations (arcs) in a schedule}
+\item{\code{nr_relations}}{Number of relations (arcs) in a schedule as an integer value.}
 
-\item{\code{has_any_relation}}{A logical value that indicate if the schedule has some relation.}
+\item{\code{has_any_relation}}{A logical value that indicate if the schedule has any relation.}
 
-\item{\code{duration}}{An integer value that indicate the duration in periods of a schedule
-Make a new empty schedule}
+\item{\code{duration}}{An integer value that indicate the duration of a schedule.}
 }
 \if{html}{\out{</div>}}
 }
@@ -58,7 +71,7 @@ Make a new empty schedule}
 \item \href{#method-add_relation}{\code{Schedule$add_relation()}}
 \item \href{#method-add_act_rel}{\code{Schedule$add_act_rel()}}
 \item \href{#method-print}{\code{Schedule$print()}}
-\item \href{#method-activities_as_data_frame}{\code{Schedule$activities_as_data_frame()}}
+\item \href{#method-as_data_frame}{\code{Schedule$as_data_frame()}}
 \item \href{#method-all_successors}{\code{Schedule$all_successors()}}
 \item \href{#method-all_predecessors}{\code{Schedule$all_predecessors()}}
 \item \href{#method-change_durations}{\code{Schedule$change_durations()}}
@@ -70,6 +83,7 @@ Make a new empty schedule}
 \item \href{#method-topoi_ad}{\code{Schedule$topoi_ad()}}
 \item \href{#method-topoi_la}{\code{Schedule$topoi_la()}}
 \item \href{#method-topoi_tf}{\code{Schedule$topoi_tf()}}
+\item \href{#method-from_data_frame}{\code{Schedule$from_data_frame()}}
 \item \href{#method-clone}{\code{Schedule$clone()}}
 }
 }
@@ -78,7 +92,7 @@ Make a new empty schedule}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Make a schedule with no activities and no relations.
-The activities and relations will be add in sequence.
+The activities and relations will be added in sequence.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$new(title = "", reference = "")}\if{html}{\out{</div>}}
 }
@@ -95,15 +109,13 @@ for example, a book, a paper, a corporation, or nothing.}
 }
 \subsection{Returns}{
 A Schedule object with no activities and no relations
-Add an activity to a schedule
-
-Add an activity to a schedule that must exist.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_activity"></a>}}
 \if{latex}{\out{\hypertarget{method-add_activity}{}}}
 \subsection{Method \code{add_activity()}}{
+Add an activity to a schedule.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$add_activity(id, name = "", duration = 0)}\if{html}{\out{</div>}}
 }
@@ -111,9 +123,10 @@ Add an activity to a schedule that must exist.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{Activity id. The id will be used to make relation between activities.}
+\item{\code{id}}{Activity id that will be used to make
+relation between activities. It must be unique.}
 
-\item{\code{name}}{The name of activity. The default is a empty string.}
+\item{\code{name}}{The name of activity. The default is an empty string.}
 
 \item{\code{duration}}{A number that represents the activity's duration.
 It must be equal or grater than zero. The default value is zero.}
@@ -121,18 +134,17 @@ It must be equal or grater than zero. The default value is zero.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A Schedule object with an activity added and critical path calculated.
-Add a relation to a schedule.
-
-Add a relation to a schedule.
-If type is not defined, it is assumed to be FS.
-If lag is not defined, it is assumed to be zero.
+A Schedule object with an activity added and
+the critical path calculated.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_relation"></a>}}
 \if{latex}{\out{\hypertarget{method-add_relation}{}}}
 \subsection{Method \code{add_relation()}}{
+Add a relation to a schedule.
+If type is not defined, it is assumed to be FS.
+If lag is not defined, it is assumed to be zero.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$add_relation(from_id, to_id, type = "FS", lag = 0)}\if{html}{\out{</div>}}
 }
@@ -140,43 +152,42 @@ If lag is not defined, it is assumed to be zero.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{from_id}}{The id of predecessor activity.}
+\item{\code{from_id}}{The id of predecessor activity.
+Must exist a activity with from_id.}
 
-\item{\code{to_id}}{The id of successor activity.}
+\item{\code{to_id}}{The id of successor activity.
+Must exist a activity with to_id.}
 
 \item{\code{type}}{Specifies the type of relation between activities.
-Its value may be: FS, FF, SS, SF, that means:
+The default type is FS and its value may be: FS, FF, SS, SF, that means:
 
-FS: Finish-Start relation.
+\strong{FS:} Finish-Start relation.
 Activity to_id can only start after the finish of activity from_id.
 
-FF: Finish-Finish relation.
+\strong{FF:} Finish-Finish relation.
 Activity to_id must finish together with activity from_id.
 
-SS: Start-Start relation.
+\strong{SS:} Start-Start relation.
 Activity to_id must start together with activity from_id.
 
-SF: Start-Finish relation.
+\strong{SF:} Start-Finish relation.
 Activity to_id must finish when activity from_id starts.}
 
 \item{\code{lag}}{The time period between activities that the successor activity
 must be advanced, or lated, after activity from_id.
-The must be a integer, less than, equal or greater than zero.}
+It must be an integer, less than, equal or greater than zero.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A Schedule object with a relation added and critical path calculated.
-
-Add an activity and her relations
-
-Add an activity and her relations to a schedule.
+A Schedule object.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_act_rel"></a>}}
 \if{latex}{\out{\hypertarget{method-add_act_rel}{}}}
 \subsection{Method \code{add_act_rel()}}{
+Add an activity and her relations to a schedule.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$add_act_rel(id, name, duration, relations_id = c(), dir = "succ")}\if{html}{\out{</div>}}
 }
@@ -195,18 +206,20 @@ It must be equal or grater than zero.}
 It may be a relations of successor or predecessors.}
 
 \item{\code{dir}}{Direction of relations_id: It may be "succ" or "pred".
-If dir="succ" the relations_id will be the successor of tye activity.
-If dir="pred" the relations_id will be the predecessor of the activity.
-
-Print a description of the class}
+If dir="succ" the relations_id will be the successor of the activity.
+If dir="pred" the relations_id will be the predecessor of the activity.}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A Schedule object.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
+Print a description of the class
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$print(...)}\if{html}{\out{</div>}}
 }
@@ -214,32 +227,44 @@ Print a description of the class}
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{Variable parameters
-
-Activities as data.frame}
+\item{\code{...}}{Variable parameters}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+A Schedule object.
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-activities_as_data_frame"></a>}}
-\if{latex}{\out{\hypertarget{method-activities_as_data_frame}{}}}
-\subsection{Method \code{activities_as_data_frame()}}{
+\if{html}{\out{<a id="method-as_data_frame"></a>}}
+\if{latex}{\out{\hypertarget{method-as_data_frame}{}}}
+\subsection{Method \code{as_data_frame()}}{
+Returns the activities as data frame,
+the relation as data frame or both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$activities_as_data_frame()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$as_data_frame(what = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{what}}{Character constant, whether to return info about
+"activities", "relations" or "both". The default is "activities".}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
-A data frame with all activities listed.
-List All Successors
-
-List all successors from an activity: direct or indirect successors.
+A data frame with an activities or relations,
+or a list with two data frames named
+\code{activites} and \code{relations}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-all_successors"></a>}}
 \if{latex}{\out{\hypertarget{method-all_successors}{}}}
 \subsection{Method \code{all_successors()}}{
+List all successors from an activity:
+direct or indirect successors.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$all_successors(id, ign_to = NULL)}\if{html}{\out{</div>}}
 }
@@ -247,23 +272,23 @@ List all successors from an activity: direct or indirect successors.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{Activity id to listed}
+\item{\code{id}}{Activity id to be listed.}
 
-\item{\code{ign_to}}{An arc to be ignored: id -> ign_to}
+\item{\code{ign_to}}{A relation to be ignored: id -> ign_to.
+Activities from this relation will be ignored.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A vector
-List All Predecessors
-
-List all predecessors from an activity: direct or indirect predecessors.
+A vector whith all activities ids.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-all_predecessors"></a>}}
 \if{latex}{\out{\hypertarget{method-all_predecessors}{}}}
 \subsection{Method \code{all_predecessors()}}{
+List all predecessors from an activity:
+direct or indirect predecessors.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$all_predecessors(id, ign_from = NULL)}\if{html}{\out{</div>}}
 }
@@ -271,26 +296,23 @@ List all predecessors from an activity: direct or indirect predecessors.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{Activity id to listed}
+\item{\code{id}}{Activity id to be listed.}
 
-\item{\code{ign_from}}{An arc to be ignored: ign_from -> id}
-
-\item{\code{schedule}}{A schedule}
+\item{\code{ign_from}}{A relation to be ignored: ign_from -> id.
+Activities from this relation will be ignored.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A vector
-Change Activities Duration
-
-Change activities duration and calculate critical path.
-This way is faster than creating a new schedule with new durations.
+A vector whith all activities ids.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-change_durations"></a>}}
 \if{latex}{\out{\hypertarget{method-change_durations}{}}}
 \subsection{Method \code{change_durations()}}{
+Change activities duration and calculate critical path.
+This way is faster than creating a new schedule with new durations.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$change_durations(new_durations)}\if{html}{\out{</div>}}
 }
@@ -298,19 +320,19 @@ This way is faster than creating a new schedule with new durations.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{new_durations}}{A vector with new duration of activities.}
+\item{\code{new_durations}}{A vector with new activities' duration.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 A Schedule object.
-Get a activity by id
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_activity"></a>}}
 \if{latex}{\out{\hypertarget{method-get_activity}{}}}
 \subsection{Method \code{get_activity()}}{
+Get a activity by id.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$get_activity(id)}\if{html}{\out{</div>}}
 }
@@ -318,40 +340,36 @@ Get a activity by id
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{An activity id as defined by the user}
+\item{\code{id}}{An activity id as defined by the user.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A data-frame with one line
-Gantt Matrix
-
-Create a matrix that represents a Gantt chart.
+A data frame with one line with the activity,
+or an error if activity id doesn't exist.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gantt_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-gantt_matrix}{}}}
 \subsection{Method \code{gantt_matrix()}}{
+Create a matrix that represents a Gantt chart.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$gantt_matrix()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-A matrix where 1 indicate that an activity is in executions.
-In this matrix, the rows represent activities.
-Whereas the columns represent the activity execution period.
-
-Transform a Gantt matrix in x,y coordinates
-
-Transform a Gantt matrix in x,y coordinates.
-Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
+A matrix where 1 indicate that an activity is in execution.
+In this matrix, the rows represents activities,
+Whereas the columns represents the activity execution period.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-xy_gantt_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-xy_gantt_matrix}{}}}
 \subsection{Method \code{xy_gantt_matrix()}}{
+Transform a Gantt matrix in x, y coordinates.
+Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$xy_gantt_matrix(gantt = NULL)}\if{html}{\out{</div>}}
 }
@@ -365,17 +383,14 @@ Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
 }
 \subsection{Returns}{
 A matrix x, y and weight.
-
-Is an arc redundant
-
-Verify if an arc between two activities, id_from -> id_to, is redundant.
-An arc A -> C is redundant if there are A -> B -> C relations.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_redundant"></a>}}
 \if{latex}{\out{\hypertarget{method-is_redundant}{}}}
 \subsection{Method \code{is_redundant()}}{
+Verify if a relation between two activities is redundant.
+A relation A->C is redundant if there are A->C, A->B, B->C relations.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$is_redundant(id_from, id_to)}\if{html}{\out{</div>}}
 }
@@ -386,91 +401,112 @@ An arc A -> C is redundant if there are A -> B -> C relations.
 \item{\code{id_from}}{Activity id from.}
 
 \item{\code{id_to}}{Activity id to.}
-
-\item{\code{schedule}}{A Schedule.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 A logical TRUE if an arc is redundant; FALSE if not.
-SP Serial or Parallel Topological Indicator
-
-It shows the closeness of a network to a serial or parallel graph (1, 20).
-
-As the network becomes serial, the SP increase, until one,
-when the network totaly serial
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-topoi_sp"></a>}}
 \if{latex}{\out{\hypertarget{method-topoi_sp}{}}}
 \subsection{Method \code{topoi_sp()}}{
+\strong{SP Serial or Parallel Topological Indicator:}
+It shows the closeness of a network to a serial or parallel graph.
+As the network becomes serial, the SP increase, until one,
+when the network totally serial.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$topoi_sp()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 A number between 0 and 1, inclusive.
-AD Activity Distribution Topological Indicator
-
-Measures the distribution of the activities over the levels (1, 20).
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-topoi_ad"></a>}}
 \if{latex}{\out{\hypertarget{method-topoi_ad}{}}}
 \subsection{Method \code{topoi_ad()}}{
+\strong{AD Activity Distribution Topological Indicator:}
+Measures the distribution of the activities over the levels.
+If AD is approximately equal zero, each level has same numbers of activities.
+Otherwise, if AD is equal one, the quantity of each level is not
+uniformly distributed.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$topoi_ad()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{schedule}}{A Schedule object.}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
 A number between 0 and 1, inclusive.
-Length of Arcs Topological Indicator
-
-Measures the presence of long arcs based on the difference between
-the progressive level of the end activity and the start node of each arc (relation) (1, 20).
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-topoi_la"></a>}}
 \if{latex}{\out{\hypertarget{method-topoi_la}{}}}
 \subsection{Method \code{topoi_la()}}{
+\strong{LA Length of Arcs Topological Indicator:}
+Measures the presence of long arcs based on the difference between
+the progressive level of the end activity and the start node
+of each relation.
+If LA is approximately equal zero, the progressive level between
+activities are as far as possible.
+Otherwise, if LA is equal one, the relation distance are one.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$topoi_la()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{schedule}}{A Schedule object.}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
 A number between 0 and 1, inclusive.
-TF Topological Float Indicator
-
-Measures the topological float of each activity (1, 20).
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-topoi_tf"></a>}}
 \if{latex}{\out{\hypertarget{method-topoi_tf}{}}}
 \subsection{Method \code{topoi_tf()}}{
+\strong{TF Topological Float Indicator:}
+Measures the topological float of each activity.
+If TF = 0, there is no float between activities.
+If TF = 1, there is float between activities
+and they be shift without affecting other activities.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$topoi_tf()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 A number between 0 and 1, inclusive.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-from_data_frame"></a>}}
+\if{latex}{\out{\hypertarget{method-from_data_frame}{}}}
+\subsection{Method \code{from_data_frame()}}{
+Create a schedule from data frame
+Create a schedule from data frames and apply Critical Path Method (CPM)
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$from_data_frame(
+  activities,
+  relations = NULL,
+  title = "",
+  reference = ""
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{activities}}{Activities to add in the schedule}
+
+\item{\code{relations}}{Relations between activities}
+
+\item{\code{title}}{Title of project}
+
+\item{\code{reference}}{Reference of a book, article, journal...}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A Schedule object with an activities and relations.
 }
 }
 \if{html}{\out{<hr>}}

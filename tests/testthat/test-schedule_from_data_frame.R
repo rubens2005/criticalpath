@@ -1,16 +1,16 @@
+activities <- data.frame(
+  id        = 1:17,
+  name      = paste("a", as.character(1:17), sep=""),
+  duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
+)
+
+relations <- data.frame(
+  from = c(1, 1, 2, 2, 2, 3, 3, 3,  3,  4,  5,  6,  7,  8,  9, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15),
+  to   = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11, 12, 13, 14, 15, 16, 17, 16, 17, 16, 17, 16, 17, 16, 17)
+)
+
 vanhoucke2014_project_1 <- function() {
-  activities <- data.frame(
-    id        = 1:17,
-    name      = paste("a", as.character(1:17), sep=""),
-    duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
-  )
-
-  relations <- data.frame(
-    from = c(1, 1, 2, 2, 2, 3, 3, 3,  3,  4,  5,  6,  7,  8,  9, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15),
-    to   = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11, 12, 13, 14, 15, 16, 17, 16, 17, 16, 17, 16, 17, 16, 17)
-  )
-
-  schedule_from_data_frame(
+  Schedule$new()$from_data_frame(
     activities,
     relations,
     "Project 1: Cost Information System",
@@ -25,8 +25,8 @@ test_that("Creating a ONE activity schedule with ZERO duration", {
     duration  = 0
   )
 
-  schedule <- schedule_from_data_frame(activities)
-  activities <- schedule$activities_as_data_frame()
+  schedule <- Schedule$new()$from_data_frame(activities)
+  activities <- schedule$as_data_frame()
 
   expect_equal(schedule$duration, 0)
   expect_equal(activities$ES[1], 0)
@@ -43,8 +43,8 @@ test_that("Creating a schedule with ONE activity", {
     duration  = 3
   )
 
-  schedule <- schedule_from_data_frame(activities)
-  activities <- schedule$activities_as_data_frame()
+  schedule <- Schedule$new()$from_data_frame(activities)
+  activities <- schedule$as_data_frame()
 
   expect_equal(schedule$duration, 3)
   expect_equal(activities$ES[1], 0)
@@ -61,8 +61,8 @@ test_that("Creating a schedule only with activities list, without relations", {
     duration  = c(  3,   2,   4)
   )
 
-  schedule <- schedule_from_data_frame(activities)
-  activities <- schedule$activities_as_data_frame()
+  schedule <- Schedule$new()$from_data_frame(activities)
+  activities <- schedule$as_data_frame()
 
   expect_equal(schedule$duration, 4)
 
@@ -95,7 +95,7 @@ test_that("Schedule duration is 11", {
 test_that("Schedule critical activities are identified", {
   schedule <- vanhoucke2014_project_1()
 
-  activities <- schedule$activities_as_data_frame()
+  activities <- schedule$as_data_frame()
   critical_activities <- paste0(activities$id[activities$critical], collapse=",")
   expected <- paste0(c(1, 2, 4, 11, 16), collapse = ",")
   expect_equal(critical_activities, expected)
@@ -104,7 +104,7 @@ test_that("Schedule critical activities are identified", {
 test_that("Schedule NON critical activities are identified", {
   schedule <- vanhoucke2014_project_1()
 
-  activities <- schedule$activities_as_data_frame()
+  activities <- schedule$as_data_frame()
   non_critical_activities <- paste0(activities$id[!activities$critical], collapse=",")
   expected <- paste0(c(3, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 17), collapse = ",")
   expect_equal(non_critical_activities, expected)
@@ -112,7 +112,7 @@ test_that("Schedule NON critical activities are identified", {
 
 test_that("Early Start and Early Finish are correct!", {
   schedule <- vanhoucke2014_project_1()
-  act <- schedule$activities_as_data_frame()
+  act <- schedule$as_data_frame()
 
   expect_equal(act$ES[1], 0)
   expect_equal(act$EF[1], 1)
@@ -169,7 +169,7 @@ test_that("Early Start and Early Finish are correct!", {
 
 test_that("Late Start and Late Finish are correct!", {
   schedule <- vanhoucke2014_project_1()
-  act <- schedule$activities_as_data_frame()
+  act <- schedule$as_data_frame()
 
   expect_equal(act$LS[1], 0)
   expect_equal(act$LF[1], 1)
@@ -222,4 +222,40 @@ test_that("Late Start and Late Finish are correct!", {
   expect_equal(act$LS[17], 10)
   expect_equal(act$LF[17], 11)
 
+})
+
+test_that("As data frame point an error!", {
+  expected_error_message <- "What must be 'activities', 'relations' or 'both'."
+  schedule <- vanhoucke2014_project_1()
+  expect_error(schedule$as_data_frame("kiksfasdfk"), regexp=expected_error_message)
+})
+
+test_that("Brings the activities data frame by default!", {
+  schedule <- vanhoucke2014_project_1()
+  actual <- schedule$as_data_frame()
+  expected <- activities
+  expect_equal(actual$id, expected$id)
+})
+
+test_that("Brings the activities data frame!", {
+  schedule <- vanhoucke2014_project_1()
+  actual <- schedule$as_data_frame("activities")
+  expected <- activities
+  expect_equal(actual$id, expected$id)
+})
+
+test_that("Brings the relations data frame!", {
+  schedule <- vanhoucke2014_project_1()
+  actual <- schedule$as_data_frame("relations")
+  expected <- relations
+  expect_equal(actual$from, expected$from)
+  expect_equal(actual$to, expected$to)
+})
+
+test_that("Brings the activities and relations data frames in a list", {
+  schedule <- vanhoucke2014_project_1()
+  actual <- schedule$as_data_frame("both")
+  expect_equal(actual$activities$id, activities$id)
+  expect_equal(actual$relations$from, relations$from)
+  expect_equal(actual$relations$to, relations$to)
 })
