@@ -15,19 +15,6 @@ or FALSE, for a empty schedule.
 Number of relations (arcs) in a schedule as an integer value,
 or a logical value that indicates if the schedule has any relation.
 }
-\examples{
-schedule <- Schedule$new()
-schedule$has_any_relation # FALSE
-schedule$nr_relations # 0
-
-schedule <- Schedule$new()
-schedule$add_act_rel(1, "A" , 3, c(2,3))
-schedule$add_act_rel(2, "B" , 4, c(4))
-schedule$add_act_rel(3, "C" , 7, c(4))
-schedule$add_act_rel(4, "D" , 5)
-schedule$has_any_relation # TRUE
-schedule$nr_relations # 4
-}
 \seealso{
 \link{criticalpath}, \link{Schedule}.
 }

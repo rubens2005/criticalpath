@@ -10,17 +10,6 @@ An integer indicating the duration of of a schedule.
 \description{
 An integer value that indicate the duration of a schedule.
 }
-\examples{
-schedule <- Schedule$new()
-schedule$duration # 0
-
-schedule <- Schedule$new()
-schedule$add_act_rel(1, "A" , 3, c(2,3))
-schedule$add_act_rel(2, "B" , 4, c(4))
-schedule$add_act_rel(3, "C" , 7, c(4))
-schedule$add_act_rel(4, "D" , 5)
-schedule$duration # 15
-}
 \seealso{
 \link{criticalpath}, \link{Schedule}.
 }

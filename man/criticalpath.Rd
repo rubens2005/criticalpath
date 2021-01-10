@@ -71,7 +71,13 @@ Springer International Publishing Switzerland.
 doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
 }
 \seealso{
-\link{criticalpath}, \link{Schedule}.
+More information about:
+
+Schedule object \link{Schedule}
+
+Package: \link{criticalpath}
+
+How to create a schedule from scratch: \link{from_data_frame}
 }
 \author{
 Rubens Jose Rosa (rubens@rubensjoserosa.com),

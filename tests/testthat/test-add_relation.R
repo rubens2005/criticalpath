@@ -1,9 +1,10 @@
 test_that("Creating a schedule step-by-step: first with activities and then with relations", {
 
-  schedule <- Schedule$new(
-    "Project 3: Old Carriage House Renovation",
-    "VANHOUCKE, Mario. Integrated project management and control: first comes the theory, then the practice. Gent: Springer, 2014, p. 11"
-  )
+  schedule <- Schedule$new()
+  schedule$title <- "Project 3: Old Carriage House Renovation"
+  schedule$reference <-
+  "VANHOUCKE, Mario. Integrated project management and control:
+  first comes the theory, then the practice. Gent: Springer, 2014, p. 11"
 
   schedule$add_activity(1, "a1" , 2)
   schedule$add_activity(2, "a2" , 2)

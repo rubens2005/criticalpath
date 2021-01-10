@@ -14,7 +14,7 @@ Vamos ver no que vai dar.
 }
 \section{More Information}{
 
-There is \strong{See Also} section in the end of this page for more informatio.
+There is a \strong{See Also} section in the end of this page for more information.
 }
 
 \references{
@@ -40,9 +40,9 @@ Springer International Publishing Switzerland.
 doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
 }
 \seealso{
-Information about the package: \link{criticalpath},
+Copiar o seealso do pacote \strong{criticalpath}
 
-How to create a schedule from data frame: \link{from_data_frame}
+E, claro, apontar para o pacote!
 }
 \author{
 Rubens Jose Rosa (rubens@rubensjoserosa.com),
@@ -51,13 +51,22 @@ Marcos dos Santos, Thiago Marques
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
+\item{\code{activities}}{Return activities in a schedule as data frame.}
+
 \item{\code{nr_activities}}{Number of activities in a schedule as an integer value.}
 
 \item{\code{has_any_activity}}{A logical value that indicate if the schedule has any activity.}
 
+\item{\code{relations}}{Return relations in a schedule as data frame.}
+
 \item{\code{nr_relations}}{Number of relations (arcs) in a schedule as an integer value.}
 
 \item{\code{has_any_relation}}{A logical value that indicate if the schedule has any relation.}
+
+\item{\code{title}}{A project title for identification.}
+
+\item{\code{reference}}{A reference from project origin,
+for example, a book, a paper, a corporation, or nothing.}
 
 \item{\code{duration}}{An integer value that indicate the duration of a schedule.}
 }
@@ -68,10 +77,11 @@ Marcos dos Santos, Thiago Marques
 \itemize{
 \item \href{#method-new}{\code{Schedule$new()}}
 \item \href{#method-add_activity}{\code{Schedule$add_activity()}}
+\item \href{#method-add_activities}{\code{Schedule$add_activities()}}
 \item \href{#method-add_relation}{\code{Schedule$add_relation()}}
+\item \href{#method-add_relations}{\code{Schedule$add_relations()}}
 \item \href{#method-add_act_rel}{\code{Schedule$add_act_rel()}}
 \item \href{#method-print}{\code{Schedule$print()}}
-\item \href{#method-as_data_frame}{\code{Schedule$as_data_frame()}}
 \item \href{#method-all_successors}{\code{Schedule$all_successors()}}
 \item \href{#method-all_predecessors}{\code{Schedule$all_predecessors()}}
 \item \href{#method-change_durations}{\code{Schedule$change_durations()}}
@@ -83,7 +93,6 @@ Marcos dos Santos, Thiago Marques
 \item \href{#method-topoi_ad}{\code{Schedule$topoi_ad()}}
 \item \href{#method-topoi_la}{\code{Schedule$topoi_la()}}
 \item \href{#method-topoi_tf}{\code{Schedule$topoi_tf()}}
-\item \href{#method-from_data_frame}{\code{Schedule$from_data_frame()}}
 \item \href{#method-clone}{\code{Schedule$clone()}}
 }
 }
@@ -91,24 +100,28 @@ Marcos dos Santos, Thiago Marques
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Make a schedule with no activities and no relations.
-The activities and relations will be added in sequence.
+Make a schedule with activities and relations.
+If there is no activities or relations,
+they may be added in sequence with \code{add_activity}
+and \code{add_relation} methods.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$new(title = "", reference = "")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$new(activities = NULL, relations = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{title}}{A project title for identification.}
+\item{\code{activities}}{Activities to be added in the schedule.
+If it is not informed, the schedule will be created without any activity.}
 
-\item{\code{reference}}{A reference from project origin,
-for example, a book, a paper, a corporation, or nothing.}
+\item{\code{relations}}{Relations between activities
+If it is informed, the activities has to be informed too.
+If is is not informed, the schedule will be created without any relation.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A Schedule object with no activities and no relations
+A Schedule object.
 }
 }
 \if{html}{\out{<hr>}}
@@ -136,6 +149,26 @@ It must be equal or grater than zero. The default value is zero.}
 \subsection{Returns}{
 A Schedule object with an activity added and
 the critical path calculated.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_activities"></a>}}
+\if{latex}{\out{\hypertarget{method-add_activities}{}}}
+\subsection{Method \code{add_activities()}}{
+Add activities from a data frame to a schedule.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_activities(activities)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{activities}}{A data frame with the activities to be added.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A Schedule object with activities added and CPM calculated.
 }
 }
 \if{html}{\out{<hr>}}
@@ -181,6 +214,27 @@ It must be an integer, less than, equal or greater than zero.}
 }
 \subsection{Returns}{
 A Schedule object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_relations"></a>}}
+\if{latex}{\out{\hypertarget{method-add_relations}{}}}
+\subsection{Method \code{add_relations()}}{
+Add relations between activities from a data frame
+to a schedule.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_relations(relations)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{relations}}{A data frame with the relations to be added.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A Schedule object with relations added and CPM calculated.
 }
 }
 \if{html}{\out{<hr>}}
@@ -236,30 +290,6 @@ A Schedule object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as_data_frame"></a>}}
-\if{latex}{\out{\hypertarget{method-as_data_frame}{}}}
-\subsection{Method \code{as_data_frame()}}{
-Returns the activities as data frame,
-the relation as data frame or both.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$as_data_frame(what = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{what}}{Character constant, whether to return info about
-"activities", "relations" or "both". The default is "activities".}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A data frame with an activities or relations,
-or a list with two data frames named
-\code{activites} and \code{relations}.
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-all_successors"></a>}}
 \if{latex}{\out{\hypertarget{method-all_successors}{}}}
 \subsection{Method \code{all_successors()}}{
@@ -304,7 +334,7 @@ Activities from this relation will be ignored.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A vector whith all activities ids.
+A vector with all activities ids.
 }
 }
 \if{html}{\out{<hr>}}
@@ -359,7 +389,7 @@ Create a matrix that represents a Gantt chart.
 }
 
 \subsection{Returns}{
-A matrix where 1 indicate that an activity is in execution.
+A matrix where "1" indicate that an activity is in execution.
 In this matrix, the rows represents activities,
 Whereas the columns represents the activity execution period.
 }
@@ -475,38 +505,6 @@ and they be shift without affecting other activities.
 
 \subsection{Returns}{
 A number between 0 and 1, inclusive.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-from_data_frame"></a>}}
-\if{latex}{\out{\hypertarget{method-from_data_frame}{}}}
-\subsection{Method \code{from_data_frame()}}{
-Create a schedule from data frame
-Create a schedule from data frames and apply Critical Path Method (CPM)
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$from_data_frame(
-  activities,
-  relations = NULL,
-  title = "",
-  reference = ""
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{activities}}{Activities to add in the schedule}
-
-\item{\code{relations}}{Relations between activities}
-
-\item{\code{title}}{Title of project}
-
-\item{\code{reference}}{Reference of a book, article, journal...}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A Schedule object with an activities and relations.
 }
 }
 \if{html}{\out{<hr>}}

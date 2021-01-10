@@ -1,8 +1,9 @@
 vanhoucke_2009_p18 <- function() {
-  schedule <- Schedule$new(
-    "Fictitious Project Example",
-    "VANHOUCKE, Mario. Measuring time: improving project performance using earned value management. Gent: Springer, 2009, p. 18"
-  )
+  schedule <- Schedule$new()
+  schedule$title <- "Fictitious Project Example"
+  schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+  improving project performance using earned value management.
+  Gent: Springer, 2009, p. 18"
 
   schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
   schedule$add_act_rel(  2, "a2" , 4, c(5))
@@ -21,7 +22,7 @@ vanhoucke_2009_p18 <- function() {
 
 test_that("Creating a schedule step-by-step, with activities and relations together", {
   schedule <- vanhoucke_2009_p18()
-  activities <- schedule$as_data_frame()
+  activities <- schedule$activities
 
   expect_equal(schedule$duration, 16)
 
@@ -103,7 +104,7 @@ test_that("Creating a schedule step-by-step, with activities and relations toget
 
 test_that("Creating a schedule step-by-step, with activities and relations together: float tests", {
   schedule <- vanhoucke_2009_p18()
-  activities <- schedule$as_data_frame()
+  activities <- schedule$activities
 
   expect_equal(activities$total_float[1], 0)
   expect_equal(activities$total_float[2], 0)

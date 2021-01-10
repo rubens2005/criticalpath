@@ -1,15 +1,18 @@
 vanhoucke_2009_p61 <- function() {
-  Schedule$new(
-    "Fictitious Project Example",
-    "VANHOUCKE, Mario. Measuring time: improving project performance using earned value management. Gent: Springer, 2009, p. 61"
-  )
+  schedule <- Schedule$new()
+  schedule$title <- "Fictitious Project Example"
+  schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+  improving project performance using earned value management.
+  Gent: Springer, 2009, p. 61"
+  schedule
 }
 
 vanhoucke_2009_p18 <- function() {
-  schedule <- Schedule$new(
-    "Fictitious Project Example",
-    "VANHOUCKE, Mario. Measuring time: improving project performance using earned value management. Gent: Springer, 2009, p. 18"
-  )
+  schedule <- Schedule$new()
+  schedule$title <- "Fictitious Project Example"
+  schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+  improving project performance using earned value management.
+  Gent: Springer, 2009, p. 61"
 
   schedule$add_act_rel( 1, "a2" , 4, c(4))
   schedule$add_act_rel( 2, "a3" , 9, c(9))

@@ -10,12 +10,12 @@ vanhoucke2014_project_2 <- function() {
     to   = c(2, 3, 4, 6, 5, 8, 7, 8, 9, 10, 11, 12, 13, 14, 14, 14, 14, 14, 15, 16, 17, 16, 17)
   )
 
-  Schedule$new()$from_data_frame(
-    activities,
-    relations,
-    "Project 2: Patient Transport System",
-    "VANHOUCKE, Mario. Integrated project management and control: first comes the theory, then the practice. Gent: Springer, 2014, p. 9"
-  )
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "Project 2: Patient Transport System"
+  schedule$reference <-
+    "VANHOUCKE, Mario. Integrated project management and control:
+  first comes the theory, then the practice. Gent: Springer, 2014, p. 9"
+  schedule
 }
 
 test_that("Project 2: Schedule duration is 25", {
@@ -27,7 +27,7 @@ test_that("Project 2: Schedule duration is 25", {
 test_that("Project 2: Schedule critical activities are identified", {
   sch <- vanhoucke2014_project_2()
 
-  activities <- sch$as_data_frame()
+  activities <- sch$activities
   critical_activities <- paste0(activities$id[activities$critical], collapse=",")
   expected <- paste0(c(1,2,3,4,5,6,7,8,10,14,16), collapse = ",")
   expect_equal(critical_activities, expected)
@@ -36,7 +36,7 @@ test_that("Project 2: Schedule critical activities are identified", {
 test_that("Project 2: Schedule NON critical activities are identified", {
   sch <- vanhoucke2014_project_2()
 
-  activities <- sch$as_data_frame()
+  activities <- sch$activities
   non_critical_activities <- paste0(activities$id[!activities$critical], collapse=",")
   expected <- paste0(c(9,11,12,13,15,17), collapse = ",")
   expect_equal(non_critical_activities, expected)
@@ -44,7 +44,7 @@ test_that("Project 2: Schedule NON critical activities are identified", {
 
 test_that("Project 2: Early Start and Early Finish are correct!", {
   sch <- vanhoucke2014_project_2()
-  act <- sch$as_data_frame()
+  act <- sch$activities
 
   expect_equal(act$ES[1], 0)
   expect_equal(act$EF[1], 1)
@@ -101,7 +101,7 @@ test_that("Project 2: Early Start and Early Finish are correct!", {
 
 test_that("Project 2: Late Start and Late Finish are correct!", {
   sch <- vanhoucke2014_project_2()
-  act <- sch$as_data_frame()
+  act <- sch$activities
 
   expect_equal(act$LS[1], 0)
   expect_equal(act$LF[1], 1)
@@ -172,7 +172,7 @@ test_that("Project 2: Durations changed! Schedule critical activities are identi
   sch <- vanhoucke2014_project_2()
   sch$change_durations(new_durations)
 
-  activities <- sch$as_data_frame()
+  activities <- sch$activities
   critical_activities <- base::paste0(activities$id[activities$critical], collapse=",")
   expected <- base::paste0(c(1,2,3, 4,5, 8, 10,11, 14, 17), collapse = ",")
   expect_equal(critical_activities, expected)
@@ -182,7 +182,7 @@ test_that("Project 2: Durations changed! Schedule NON critical activities are id
   sch <- vanhoucke2014_project_2()
   sch$change_durations(new_durations)
 
-  activities <- sch$as_data_frame()
+  activities <- sch$activities
   non_critical_activities <- paste0(activities$id[!activities$critical], collapse=",")
   expected <- paste0(c(6,7, 9,12,13, 15,16), collapse = ",")
   expect_equal(non_critical_activities, expected)
@@ -191,7 +191,7 @@ test_that("Project 2: Durations changed! Schedule NON critical activities are id
 test_that("Project 2: Durations changed! Early Start and Early Finish are correct!", {
   sch <- vanhoucke2014_project_2()
   sch$change_durations(new_durations)
-  act <- sch$as_data_frame()
+  act <- sch$activities
 
   expect_equal(act$ES[1], 0)
   expect_equal(act$EF[1], 1)
@@ -249,7 +249,7 @@ test_that("Project 2: Durations changed! Early Start and Early Finish are correc
 test_that("Project 2: Durations changed! Late Start and Late Finish are correct!", {
   sch <- vanhoucke2014_project_2()
   sch$change_durations(new_durations)
-  act <- sch$as_data_frame()
+  act <- sch$activities
 
   expect_equal(act$LS[1], 0)
   expect_equal(act$LF[1], 1)

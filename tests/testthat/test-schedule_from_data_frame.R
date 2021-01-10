@@ -10,12 +10,12 @@ relations <- data.frame(
 )
 
 vanhoucke2014_project_1 <- function() {
-  Schedule$new()$from_data_frame(
-    activities,
-    relations,
-    "Project 1: Cost Information System",
-    "VANHOUCKE, Mario. Integrated project management and control: first comes the theory, then the practice. Gent: Springer, 2014, p. 6"
-  )
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "Project 1: Cost Information System"
+  schedule$reference <- "VANHOUCKE, Mario. Integrated project management and control:
+  first comes the theory, then the practice.
+  Gent: Springer, 2014, p. 6"
+  schedule
 }
 
 test_that("Creating a ONE activity schedule with ZERO duration", {
@@ -25,8 +25,10 @@ test_that("Creating a ONE activity schedule with ZERO duration", {
     duration  = 0
   )
 
-  schedule <- Schedule$new()$from_data_frame(activities)
-  activities <- schedule$as_data_frame()
+  schedule <- Schedule$new(activities)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  activities <- schedule$activities
 
   expect_equal(schedule$duration, 0)
   expect_equal(activities$ES[1], 0)
@@ -43,8 +45,10 @@ test_that("Creating a schedule with ONE activity", {
     duration  = 3
   )
 
-  schedule <- Schedule$new()$from_data_frame(activities)
-  activities <- schedule$as_data_frame()
+  schedule <- Schedule$new(activities)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  activities <- schedule$activities
 
   expect_equal(schedule$duration, 3)
   expect_equal(activities$ES[1], 0)
@@ -61,8 +65,10 @@ test_that("Creating a schedule only with activities list, without relations", {
     duration  = c(  3,   2,   4)
   )
 
-  schedule <- Schedule$new()$from_data_frame(activities)
-  activities <- schedule$as_data_frame()
+  schedule <- Schedule$new(activities)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  activities <- schedule$activities
 
   expect_equal(schedule$duration, 4)
 
@@ -95,7 +101,7 @@ test_that("Schedule duration is 11", {
 test_that("Schedule critical activities are identified", {
   schedule <- vanhoucke2014_project_1()
 
-  activities <- schedule$as_data_frame()
+  activities <- schedule$activities
   critical_activities <- paste0(activities$id[activities$critical], collapse=",")
   expected <- paste0(c(1, 2, 4, 11, 16), collapse = ",")
   expect_equal(critical_activities, expected)
@@ -104,7 +110,7 @@ test_that("Schedule critical activities are identified", {
 test_that("Schedule NON critical activities are identified", {
   schedule <- vanhoucke2014_project_1()
 
-  activities <- schedule$as_data_frame()
+  activities <- schedule$activities
   non_critical_activities <- paste0(activities$id[!activities$critical], collapse=",")
   expected <- paste0(c(3, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 17), collapse = ",")
   expect_equal(non_critical_activities, expected)
@@ -112,7 +118,7 @@ test_that("Schedule NON critical activities are identified", {
 
 test_that("Early Start and Early Finish are correct!", {
   schedule <- vanhoucke2014_project_1()
-  act <- schedule$as_data_frame()
+  act <- schedule$activities
 
   expect_equal(act$ES[1], 0)
   expect_equal(act$EF[1], 1)
@@ -169,7 +175,7 @@ test_that("Early Start and Early Finish are correct!", {
 
 test_that("Late Start and Late Finish are correct!", {
   schedule <- vanhoucke2014_project_1()
-  act <- schedule$as_data_frame()
+  act <- schedule$activities
 
   expect_equal(act$LS[1], 0)
   expect_equal(act$LF[1], 1)
@@ -224,38 +230,24 @@ test_that("Late Start and Late Finish are correct!", {
 
 })
 
-test_that("As data frame point an error!", {
-  expected_error_message <- "What must be 'activities', 'relations' or 'both'."
-  schedule <- vanhoucke2014_project_1()
-  expect_error(schedule$as_data_frame("kiksfasdfk"), regexp=expected_error_message)
-})
-
 test_that("Brings the activities data frame by default!", {
   schedule <- vanhoucke2014_project_1()
-  actual <- schedule$as_data_frame()
+  actual <- schedule$activities
   expected <- activities
   expect_equal(actual$id, expected$id)
 })
 
 test_that("Brings the activities data frame!", {
   schedule <- vanhoucke2014_project_1()
-  actual <- schedule$as_data_frame("activities")
+  actual <- schedule$activities
   expected <- activities
   expect_equal(actual$id, expected$id)
 })
 
 test_that("Brings the relations data frame!", {
   schedule <- vanhoucke2014_project_1()
-  actual <- schedule$as_data_frame("relations")
+  actual <- schedule$relations
   expected <- relations
   expect_equal(actual$from, expected$from)
   expect_equal(actual$to, expected$to)
-})
-
-test_that("Brings the activities and relations data frames in a list", {
-  schedule <- vanhoucke2014_project_1()
-  actual <- schedule$as_data_frame("both")
-  expect_equal(actual$activities$id, activities$id)
-  expect_equal(actual$relations$from, relations$from)
-  expect_equal(actual$relations$to, relations$to)
 })

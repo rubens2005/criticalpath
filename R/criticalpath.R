@@ -32,7 +32,7 @@
 #'
 #' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
 #' Marcos dos Santos, Thiago Marques
-#' @seealso [criticalpath], [Schedule].
+#'
 #' @references
 #'
 #' Csardi, G. & Nepusz, T. (2005).
@@ -56,6 +56,16 @@
 #' Springer International Publishing Switzerland.
 #' doi: [10.1007/978-3-319-04331-9](https://doi.org/10.1007/978-3-319-04331-9)
 #'
+#' @seealso
+#'
+#' More information about:
+#'
+#' Schedule object [Schedule]
+#'
+#' Package: [criticalpath]
+#'
+#' How to create a schedule from scratch: [from_data_frame]
+#'
 #' @docType package
 #' @name criticalpath
 #' @aliases CPM cpm critical path
@@ -66,22 +76,21 @@ NULL
 #' @name from_data_frame
 #' @aliases schedule_from_data_frame from_data_frame
 #'          as_data_frame relations_as_data_frame
-#' @description The method \code{from_data_frame} creates an schedule object
-#' from one or two data frames, one containing activities lists and the order the
-#' precedence relations between activities. After creation, it is applied
-#' the Critical Path Method (CPM).
-#' The method \code{as_data_frame} does the opposite: it returns the activities
-#' data frame, the relation data frame or both.
-#' @param activities data frame with activities.
-#' @param relations data frame with precedence relations between activities.
+#' @description The method Schedule$new(title, reference, activities, relations)
+#' creates an schedule object  from one or two data frames,
+#' one containing activities lists and the order the precedence relations
+#' between activities. After creation, it is applied the Critical Path Method (CPM).
+#'
+#' The method Schedule$activities and Schedule$relations
+#' does the opposite: it returns the activities data frame
+#' and the relation data frame from a schedule.
 #' @param title A project title for identification.
 #' @param reference A reference from project origin,
 #' for example, a book, a paper, a corporation, or nothing.
-#' @param what Character constant, whether to return info about
-#' "activities", "relations" or "both". The default is "activities".
-#' @return A Schedule object with an activities and relations,
-#' and either a data frame or a list two data frames named
-#' \code{activites} and \code{relations}.
+#' @param activities data frame with activities.
+#' @param relations data frame with precedence relations between activities.
+#' @return A Schedule object with an activities and relations.
+#' Or a data frame for activities or relations.
 #' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
 #' Marcos dos Santos, Thiago Marques
 #' @seealso [criticalpath], [Schedule].
@@ -91,24 +100,19 @@ NULL
 #'   name      = paste("a", as.character(1:17), sep=""),
 #'   duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
 #' )
+#'
 #' relations <- data.frame(
-#'   from = c(1, 1, 2, 2, 2, 3, 3, 3,  3,  4,  5,  6,  7,
-#'   8,  9, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15),
-#'   to   = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11, 12,
-#'   13, 14, 15, 16, 17, 16, 17, 16, 17, 16, 17, 16, 17)
+#'   from = c(1, 1, 2, 2, 2, 3, 3, 3,  3,  4,  5,  6,
+#'            7,  8,  9, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15),
+#'   to   = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11,
+#'            12, 13, 14, 15, 16, 17, 16, 17, 16, 17, 16, 17, 16, 17)
 #' )
-#' schedule <- Schedule$new()$from_data_frame(
-#'   activities,
-#'   relations,
-#'   "Project 1: Cost Information System",
-#'   "VANHOUCKE, Mario. Integrated project management and control:
+#' schedule <- Schedule$new(activities, relations)
+#' schedule$title <- "Project 1: Cost Information System"
+#' schedule$reference <- "VANHOUCKE, Mario.
+#' Integrated project management and control:
 #'   first comes the theory, then the practice.
 #'   Gent: Springer, 2014, p. 6"
-#' )
-#' schedule$as_data_frame()
-#' schedule$as_data_frame("activities")
-#' schedule$as_data_frame("relations")
-#' schedule$as_data_frame("both")
 NULL
 
 
@@ -123,18 +127,6 @@ NULL
 #' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
 #' Marcos dos Santos, Thiago Marques
 #' @seealso [criticalpath], [Schedule].
-#' @examples
-#' schedule <- Schedule$new()
-#' schedule$has_any_activity # FALSE
-#' schedule$nr_activities # 0
-#'
-#' schedule <- Schedule$new()
-#' schedule$add_act_rel(1, "A" , 3, c(2,3))
-#' schedule$add_act_rel(2, "B" , 4, c(4))
-#' schedule$add_act_rel(3, "C" , 7, c(4))
-#' schedule$add_act_rel(4, "D" , 5)
-#' schedule$has_any_activity # TRUE
-#' schedule$nr_activities # 4
 NULL
 
 
@@ -149,18 +141,6 @@ NULL
 #' or FALSE, for a empty schedule.
 #' @author Rubens Jose Rosa (rubens@rubensjoserosa.com), Marcos dos Santos, Thiago Marques
 #' @seealso [criticalpath], [Schedule].
-#' @examples
-#' schedule <- Schedule$new()
-#' schedule$has_any_relation # FALSE
-#' schedule$nr_relations # 0
-#'
-#' schedule <- Schedule$new()
-#' schedule$add_act_rel(1, "A" , 3, c(2,3))
-#' schedule$add_act_rel(2, "B" , 4, c(4))
-#' schedule$add_act_rel(3, "C" , 7, c(4))
-#' schedule$add_act_rel(4, "D" , 5)
-#' schedule$has_any_relation # TRUE
-#' schedule$nr_relations # 4
 NULL
 
 
@@ -171,16 +151,6 @@ NULL
 #' @return An integer indicating the duration of of a schedule.
 #' @author Rubens Jose Rosa (rubens@rubensjoserosa.com), Marcos dos Santos, Thiago Marques
 #' @seealso [criticalpath], [Schedule].
-#' @examples
-#' schedule <- Schedule$new()
-#' schedule$duration # 0
-#'
-#' schedule <- Schedule$new()
-#' schedule$add_act_rel(1, "A" , 3, c(2,3))
-#' schedule$add_act_rel(2, "B" , 4, c(4))
-#' schedule$add_act_rel(3, "C" , 7, c(4))
-#' schedule$add_act_rel(4, "D" , 5)
-#' schedule$duration # 15
 NULL
 
 #' @title Topological Indicators: SP, AD, LA, TF
@@ -218,15 +188,5 @@ NULL
 #' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
 #' Marcos dos Santos, Thiago Marques
 #' @seealso [criticalpath], [Schedule].
-#' @examples
-#' schedule <- Schedule$new()
-#' schedule$add_act_rel(1, "A" , 3, c(2,3))
-#' schedule$add_act_rel(2, "B" , 4, c(4))
-#' schedule$add_act_rel(3, "C" , 7, c(4))
-#' schedule$add_act_rel(4, "D" , 5)
-#' schedule$topoi_sp()
-#' schedule$topoi_ad()
-#' schedule$topoi_la()
-#' schedule$topoi_tf()
 NULL
 

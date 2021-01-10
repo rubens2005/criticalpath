@@ -10,7 +10,10 @@ s0 <- function() {
     to   = c()
   )
 
-  Schedule$new()$from_data_frame(activities, relations)
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  schedule
 }
 
 s1 <- function() {
@@ -25,7 +28,10 @@ s1 <- function() {
     to   = c(2)
   )
 
-  Schedule$new()$from_data_frame(activities, relations)
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  schedule
 }
 
 s2 <- function() {
@@ -40,7 +46,10 @@ s2 <- function() {
     to   = c(3)
   )
 
-  Schedule$new()$from_data_frame(activities, relations)
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  schedule
 }
 
 s3 <- function() {
@@ -55,7 +64,10 @@ s3 <- function() {
     to   = c(2, 3)
   )
 
-  Schedule$new()$from_data_frame(activities, relations)
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  schedule
 }
 
 s4 <- function() {
@@ -70,7 +82,10 @@ s4 <- function() {
     to   = c(3)
   )
 
-  Schedule$new()$from_data_frame(activities, relations)
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  schedule
 }
 
 s5 <- function() {
@@ -85,7 +100,10 @@ s5 <- function() {
     to   = c(2, 3)
   )
 
-  Schedule$new()$from_data_frame(activities, relations)
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  schedule
 }
 
 s6 <- function() {
@@ -100,7 +118,10 @@ s6 <- function() {
     to   = c(3, 3)
   )
 
-  Schedule$new()$from_data_frame(activities, relations)
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  schedule
 }
 
 s7 <- function() {
@@ -115,7 +136,10 @@ s7 <- function() {
     to   = c(2, 3, 3)
   )
 
-  Schedule$new()$from_data_frame(activities, relations)
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+  schedule
 }
 
 test_that("There is no Gantt matrix for a schedule with zero duration!", {
