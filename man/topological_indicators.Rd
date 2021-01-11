@@ -6,6 +6,10 @@
 \alias{topoi_ad}
 \alias{topoi_la}
 \alias{topoi_tf}
+\alias{sp}
+\alias{ad}
+\alias{la}
+\alias{tf}
 \alias{topological}
 \alias{indicator}
 \alias{indicators}
@@ -14,6 +18,13 @@
 A number between 0 and 1, inclusive.
 }
 \description{
+\itemize{
+\item $topoi_sp()
+\item $topoi_ad()
+\item $topoi_la()
+\item $topoi_tf()
+}
+
 Shows information about network structure.
 It may be of four type:
 

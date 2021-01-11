@@ -14,6 +14,9 @@ or FALSE, for a empty schedule.
 \description{
 Number of activities in a schedule as an integer value,
 or a logical value that indicate if the schedule has any activity.
+The method Schedule$activities and Schedule$relations
+does the opposite: it returns the activities data frame
+and the relation data frame from a schedule.
 }
 \seealso{
 \link{criticalpath}, \link{Schedule}.

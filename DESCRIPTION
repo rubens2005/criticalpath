@@ -22,3 +22,7 @@ Imports:
     R6
 Suggests: 
     testthat
+Collate: 
+    'Schedule.R'
+    'criticalpath_references.R'
+    'criticalpath.R'

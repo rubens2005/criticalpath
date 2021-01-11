@@ -51,6 +51,11 @@ Marcos dos Santos, Thiago Marques
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
+\item{\code{title}}{A project title for identification.}
+
+\item{\code{reference}}{A reference from project origin,
+for example, a book, a paper, a corporation, or nothing.}
+
 \item{\code{activities}}{Return activities in a schedule as data frame.}
 
 \item{\code{nr_activities}}{Number of activities in a schedule as an integer value.}
@@ -63,11 +68,6 @@ Marcos dos Santos, Thiago Marques
 
 \item{\code{has_any_relation}}{A logical value that indicate if the schedule has any relation.}
 
-\item{\code{title}}{A project title for identification.}
-
-\item{\code{reference}}{A reference from project origin,
-for example, a book, a paper, a corporation, or nothing.}
-
 \item{\code{duration}}{An integer value that indicate the duration of a schedule.}
 }
 \if{html}{\out{</div>}}
@@ -78,6 +78,7 @@ for example, a book, a paper, a corporation, or nothing.}
 \item \href{#method-new}{\code{Schedule$new()}}
 \item \href{#method-add_activity}{\code{Schedule$add_activity()}}
 \item \href{#method-add_activities}{\code{Schedule$add_activities()}}
+\item \href{#method-get_activity}{\code{Schedule$get_activity()}}
 \item \href{#method-add_relation}{\code{Schedule$add_relation()}}
 \item \href{#method-add_relations}{\code{Schedule$add_relations()}}
 \item \href{#method-add_act_rel}{\code{Schedule$add_act_rel()}}
@@ -85,7 +86,6 @@ for example, a book, a paper, a corporation, or nothing.}
 \item \href{#method-all_successors}{\code{Schedule$all_successors()}}
 \item \href{#method-all_predecessors}{\code{Schedule$all_predecessors()}}
 \item \href{#method-change_durations}{\code{Schedule$change_durations()}}
-\item \href{#method-get_activity}{\code{Schedule$get_activity()}}
 \item \href{#method-gantt_matrix}{\code{Schedule$gantt_matrix()}}
 \item \href{#method-xy_gantt_matrix}{\code{Schedule$xy_gantt_matrix()}}
 \item \href{#method-is_redundant}{\code{Schedule$is_redundant()}}
@@ -100,10 +100,17 @@ for example, a book, a paper, a corporation, or nothing.}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Make a schedule with activities and relations.
-If there is no activities or relations,
-they may be added in sequence with \code{add_activity}
-and \code{add_relation} methods.
+Make a schedule with activities and relations between activities.
+The method \code{Schedule$new(activities, relations)}
+creates an schedule object from two data frames,
+one containing activities lists and the other the precedence relations
+between activities.
+After creation, it is applied the Critical Path Method (CPM).
+
+It is possible to create a empty schedule, without any activity or relation
+with the constructor \code{Schedule$new()}.
+After that, it is possible to add activity with \code{add_activity}
+and relation with \code{add_relation} methods.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$new(activities = NULL, relations = NULL)}\if{html}{\out{</div>}}
 }
@@ -111,17 +118,46 @@ and \code{add_relation} methods.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{activities}}{Activities to be added in the schedule.
-If it is not informed, the schedule will be created without any activity.}
+\item{\code{activities}}{Data frame with activities.
+If it is not informed, the schedule will be created without any activity.
+Its structure is:
+\itemize{
+\item \strong{id:} Activity id. It is an integer number that
+must be unique within a schedule.
+\item \strong{name:} Activity name. It may be empty.
+\item \strong{duration:} Activity duration. It is integer number without unit time.
+It may be zero.
+}}
 
-\item{\code{relations}}{Relations between activities
+\item{\code{relations}}{Data frame with precedence relations between activities.
 If it is informed, the activities has to be informed too.
-If is is not informed, the schedule will be created without any relation.}
+If is is not informed, the schedule will be created without any relation.
+It is formed by predecessor activity e successor activity.
+Its structure is:
+\itemize{
+\item \strong{from:} The id of predecessor activity. Must exist a activity with from id.
+\item \strong{to:} The id of successor activity. Must exist a activity with to id.
+\item \strong{type:} Specifies the type of relation between activities.
+The default type is FS and its value may be: FS, FF, SS, SF, that means:
+\itemize{
+\item \strong{FS:} Finish-Start relation.
+Activity to_id can only start after the finish of activity from_id.
+\item \strong{FF:} Finish-Finish relation.
+Activity to_id must finish together with activity from_id.
+\item \strong{SS:} Start-Start relation.
+Activity to_id must start together with activity from_id.
+\item \strong{SF:} Start-Finish relation.
+Activity to_id must finish when activity from_id starts.
+}
+\item \strong{lag:} The time period between activities that the successor activity
+must be advanced, or lated, after activity from_id.
+It must be an integer, less than, equal or greater than zero.
+}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A Schedule object.
+A Schedule object with CPM parameters calculated.
 }
 }
 \if{html}{\out{<hr>}}
@@ -172,6 +208,27 @@ A Schedule object with activities added and CPM calculated.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_activity"></a>}}
+\if{latex}{\out{\hypertarget{method-get_activity}{}}}
+\subsection{Method \code{get_activity()}}{
+Get a activity by id.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$get_activity(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{An activity id as defined by the user.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A data frame with one line with the activity,
+or an error if activity id doesn't exist.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_relation"></a>}}
 \if{latex}{\out{\hypertarget{method-add_relation}{}}}
 \subsection{Method \code{add_relation()}}{
@@ -179,41 +236,41 @@ Add a relation to a schedule.
 If type is not defined, it is assumed to be FS.
 If lag is not defined, it is assumed to be zero.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_relation(from_id, to_id, type = "FS", lag = 0)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_relation(from, to, type = "FS", lag = 0)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{from_id}}{The id of predecessor activity.
-Must exist a activity with from_id.}
+\item{\code{from}}{The id of predecessor activity.
+Must exist a activity with from.}
 
-\item{\code{to_id}}{The id of successor activity.
-Must exist a activity with to_id.}
+\item{\code{to}}{The id of successor activity.
+Must exist a activity with to.}
 
 \item{\code{type}}{Specifies the type of relation between activities.
 The default type is FS and its value may be: FS, FF, SS, SF, that means:
 
 \strong{FS:} Finish-Start relation.
-Activity to_id can only start after the finish of activity from_id.
+Activity to can only start after the finish of activity from.
 
 \strong{FF:} Finish-Finish relation.
-Activity to_id must finish together with activity from_id.
+Activity to must finish together with activity from.
 
 \strong{SS:} Start-Start relation.
-Activity to_id must start together with activity from_id.
+Activity to must start together with activity from.
 
 \strong{SF:} Start-Finish relation.
-Activity to_id must finish when activity from_id starts.}
+Activity to must finish when activity from starts.}
 
 \item{\code{lag}}{The time period between activities that the successor activity
-must be advanced, or lated, after activity from_id.
+must be advanced, or lated, after activity from.
 It must be an integer, less than, equal or greater than zero.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A Schedule object.
+A Schedule object with CPM parameters calculated.
 }
 }
 \if{html}{\out{<hr>}}
@@ -243,7 +300,13 @@ A Schedule object with relations added and CPM calculated.
 \subsection{Method \code{add_act_rel()}}{
 Add an activity and her relations to a schedule.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_act_rel(id, name, duration, relations_id = c(), dir = "succ")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_act_rel(
+  id,
+  name,
+  duration,
+  relations_id = c(),
+  direction = "succ"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -259,7 +322,7 @@ It must be equal or grater than zero.}
 \item{\code{relations_id}}{A vector of ids such that will be linked with activity id.
 It may be a relations of successor or predecessors.}
 
-\item{\code{dir}}{Direction of relations_id: It may be "succ" or "pred".
+\item{\code{direction}}{Direction of relations_id: It may be "succ" or "pred".
 If dir="succ" the relations_id will be the successor of the activity.
 If dir="pred" the relations_id will be the predecessor of the activity.}
 }
@@ -356,27 +419,6 @@ This way is faster than creating a new schedule with new durations.
 }
 \subsection{Returns}{
 A Schedule object.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_activity"></a>}}
-\if{latex}{\out{\hypertarget{method-get_activity}{}}}
-\subsection{Method \code{get_activity()}}{
-Get a activity by id.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$get_activity(id)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{An activity id as defined by the user.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A data frame with one line with the activity,
-or an error if activity id doesn't exist.
 }
 }
 \if{html}{\out{<hr>}}

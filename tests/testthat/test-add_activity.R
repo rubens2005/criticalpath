@@ -78,3 +78,20 @@ test_that("Add activities works, with mean duration equal SIX", {
   expect_equal(schedule$duration, 9)
 
 })
+
+test_that("Add activites is equal to new Schedule with activities", {
+  activities <- data.frame(
+    id        = 1:17,
+    name      = paste("a", as.character(1:17), sep=""),
+    duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
+  )
+  base <- Schedule$new(activities)
+
+  schedule <- Schedule$new()
+  schedule$add_activities(activities)
+
+  expect_equal(base$activities$id, schedule$activities$id)
+  expect_equal(base$activities$name, schedule$activities$name)
+  expect_equal(base$activities$duration, schedule$activities$duration)
+
+})
