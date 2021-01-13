@@ -14,17 +14,7 @@
 \alias{indicator}
 \alias{indicators}
 \title{Topological Indicators: SP, AD, LA, TF}
-\value{
-A number between 0 and 1, inclusive.
-}
 \description{
-\itemize{
-\item $topoi_sp()
-\item $topoi_ad()
-\item $topoi_la()
-\item $topoi_tf()
-}
-
 Shows information about network structure.
 It may be of four type:
 
@@ -32,12 +22,18 @@ It may be of four type:
 It shows the closeness of a network to a serial or parallel graph.
 As the network becomes serial, the SP increase, until one,
 when the network totally serial.
+\itemize{
+\item Usage: \code{Schedule$topoi_sp()}
+}
 
 \strong{AD Activity Distribution:}
 Measures the distribution of the activities over the levels.
 If AD is approximately equal zero, each level has same numbers of activities.
 Otherwise, if AD is equal one, the quantity of each level is not
 uniformly distributed.
+\itemize{
+\item Usage: \code{Schedule$topoi_ad()}
+}
 
 \strong{LA Length of Arcs:}
 Measures the presence of long arcs based on the difference between
@@ -46,12 +42,45 @@ of each relation.
 If LA is approximately equal zero, the progressive level between
 activities are as far as possible.
 Otherwise, if LA is equal one, the relation distance are one.
+\itemize{
+\item Usage: \code{Schedule$topoi_la()}
+}
 
 \strong{TF Topological Float Indicator:}
 Measures the topological float of each activity.
 If TF = 0, there is no float between activities.
 If TF = 1, there is float between activities
 and they be shift without affecting other activities.
+\itemize{
+\item Usage: \code{Schedule$topoi_tf()}
+}
+}
+\examples{
+# Create a schedule
+schedule <- Schedule$new()
+schedule$title <- "Fictitious Project Example"
+schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+  improving project performance using earned value management.
+  Gent: Springer, 2009, p. 18"
+
+# Add activities and relations to it.
+schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
+schedule$add_act_rel(  2, "a2" , 4, c(5))
+schedule$add_act_rel(  3, "a3" , 9, c(10))
+schedule$add_act_rel(  4, "a4" , 1, c(6))
+schedule$add_act_rel(  5, "a5" , 4, c(9))
+schedule$add_act_rel(  6, "a6" , 5, c(7))
+schedule$add_act_rel(  7, "a7" , 1, c(8,11))
+schedule$add_act_rel(  8, "a8" , 7, c(12))
+schedule$add_act_rel(  9, "a9" , 8, c(12))
+schedule$add_act_rel( 10, "a10", 3, c(12))
+schedule$add_act_rel( 11, "a11", 3, c(12))
+schedule$add_act_rel( 12, "a12", 0)
+
+schedule$topoi_sp()
+schedule$topoi_ad()
+schedule$topoi_la()
+schedule$topoi_tf()
 }
 \seealso{
 \link{criticalpath}, \link{Schedule}.

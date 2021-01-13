@@ -4,10 +4,105 @@
 \alias{schedule_from_relations}
 \alias{add_relation}
 \alias{add_relations}
-\title{Schedule with relations added one by one}
-\description{
+\title{Add relations to a schedule}
+\arguments{
+\item{from}{The id of predecessor activity.
+Must exist a activity with from id.}
+
+\item{to}{The id of successor activity.
+Must exist a activity with to.}
+
+\item{type}{Specifies the type of relation between activities.
+The default type is FS and its value may be: FS, FF, SS, SF, that means:
+If type is not defined, it is assumed to be FS.
 \itemize{
-\item $add_relation(from_id, to_id, type="FS", lag=0)
-\item $add_relations(relations)
+\item \strong{FS:} Finish-Start relation.
+Activity to can only start after the finish of activity from.
+\item \strong{FF:} Finish-Finish relation.
+Activity to must finish together with activity from.
+\item \strong{SS:} Start-Start relation.
+Activity to must start together with activity from.
+\item \strong{SF:} Start-Finish relation.
+Activity to must finish when activity from starts.
+}}
+
+\item{lag}{The time period between activities that the successor activity
+must be advanced, or lated, after activity from.
+It must be an integer, less than, equal or greater than zero.
+If lag is not informed, it is assumed to be zero.}
+
+\item{relations}{Data frame with precedence relations between activities.
+It is formed by predecessor activity e successor activity.
+Its structure is defined in \link{schedule_from_data_frame}.}
 }
+\value{
+A Schedule object with CPM parameters calculated.
+}
+\description{
+\code{Schedule$add_relation(from, to, type="FS", lag=0)}
+adds a relation to a schedule.
+
+\code{Schedule$add_relations(relations)}
+adds a relations data frame to a schedule.
+
+Usage
+
+Schedule$add_relation(from, to, type="FS", lag=0)
+
+Schedule$add_relations(relations)
+}
+\examples{
+# First, create an empty schedule
+schedule <- Schedule$new()
+schedule$title <- "Project 3: Old Carriage House Renovation"
+schedule$reference <-
+  "VANHOUCKE, Mario. Integrated project management and control:
+  first comes the theory, then the practice. Gent: Springer, 2014, p. 11"
+
+# Second, add activities to it
+schedule$add_activity(1, "a1" , 2)
+schedule$add_activity(2, "a2" , 2)
+schedule$add_activity(3, "a3" , 4)
+schedule$add_activity(4, "a4" , 3)
+schedule$add_activity(5, "a5" , 4)
+schedule$add_activity(6, "a6" , 1)
+schedule$add_activity(7, "a7" , 1)
+schedule$add_activity(8, "a8" , 1)
+schedule$add_activity(9, "a9" , 1)
+schedule$add_activity(10, "a10", 1)
+schedule$add_activity(11, "a11", 3)
+schedule$add_activity(12, "a12", 2)
+schedule$add_activity(13, "a13", 1)
+schedule$add_activity(14, "a14", 1)
+schedule$add_activity(15, "a15", 2)
+schedule$add_activity(16, "a16", 1)
+schedule$add_activity(17, "a17", 1)
+
+# Finaly, add relations to it
+schedule$add_relation( 1, 2)
+schedule$add_relation( 2, 3)
+schedule$add_relation( 3, 4)
+schedule$add_relation( 4, 5)
+schedule$add_relation( 5, 6)
+schedule$add_relation( 6, 7)
+schedule$add_relation( 6, 8)
+schedule$add_relation( 6, 9)
+schedule$add_relation( 7, 10)
+schedule$add_relation( 8, 10)
+schedule$add_relation( 9, 10)
+schedule$add_relation( 10, 11)
+schedule$add_relation( 10, 13)
+schedule$add_relation( 11, 12)
+schedule$add_relation( 12, 15)
+schedule$add_relation( 13, 14)
+schedule$add_relation( 14, 15)
+schedule$add_relation( 15, 16)
+schedule$add_relation( 16, 17)
+}
+\seealso{
+\link{schedule_from_data_frame}, \link{add_relation}, \link{criticalpath}, \link{Schedule}.
+}
+\author{
+Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Marcos dos Santos, Thiago Marques
 }

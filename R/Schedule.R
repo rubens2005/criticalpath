@@ -207,12 +207,12 @@ Schedule <- R6::R6Class("Schedule",
           private$.activities
         )
         ts <- as.numeric(igraph::topo_sort(g, "out"))
-
+        sorted_activity_id <- private$.activities$id[ts]
         topo_order <- order(
-          match(private$.relations$from, ts),
-          match(private$.relations$to, ts)
+          match(private$.relations$from, sorted_activity_id),
+          match(private$.relations$to, sorted_activity_id)
         )
-        private$.relations <- private$.relations[topo_order,]
+        private$.relations <- private$.relations[topo_order, ]
         rownames(private$.relations) <- 1:nrow(private$.relations)
       }
 
@@ -295,22 +295,6 @@ Schedule <- R6::R6Class("Schedule",
 
         backward = list(
 
-          SS = function(acts, pr, su, lag) {
-            proximo =  acts$LS[su] - lag
-            if (proximo < acts$LF[pr]) {
-              acts$LS[pr] <<- proximo
-              acts$LF[pr] <<- proximo + acts$duration[pr]
-            }
-          },
-
-          SF = function(acts, pr, su, lag) {
-            proximo =  acts$LF[su] - lag
-            if (proximo < acts$LS[pr]) {
-              acts$LS[pr] <<- proximo
-              acts$LF[pr] <<- proximo + acts$duration[pr]
-            }
-          },
-
           FS = function(acts, pr, su, lag) {
             proximo =  acts$LS[su] - lag
             if (proximo < acts$LF[pr]) {
@@ -324,6 +308,22 @@ Schedule <- R6::R6Class("Schedule",
             if (proximo < acts$LF[pr]) {
               acts$LF[pr] <<- proximo
               acts$LS[pr] <<- proximo - acts$duration[pr]
+            }
+          },
+
+          SS = function(acts, pr, su, lag) {
+            proximo =  acts$LS[su] - lag
+            if (proximo < acts$LS[pr]) {
+              acts$LS[pr] <<- proximo
+              acts$LF[pr] <<- proximo + acts$duration[pr]
+            }
+          },
+
+          SF = function(acts, pr, su, lag) {
+            proximo =  acts$LF[su] - lag
+            if (proximo < acts$LS[pr]) {
+              acts$LS[pr] <<- proximo
+              acts$LF[pr] <<- proximo + acts$duration[pr]
             }
           }
 
@@ -339,11 +339,9 @@ Schedule <- R6::R6Class("Schedule",
       # Define milestone
       acts$milestone <- acts$duration == 0
 
-      # Init ealy, late, start and finish values
+      # Init early start and finish values
       acts$ES <- -Inf
       acts$EF <- -Inf
-      acts$LS <- Inf
-      acts$LF <- Inf
 
       # arrumarPeriodoDasAtividadesIniciais
       acts$ES[private$config$starters] <- 0
@@ -365,8 +363,12 @@ Schedule <- R6::R6Class("Schedule",
       # Calculate project duration
       private$info$duration <- base::max(acts$EF) - base::min(acts$ES)
 
+      # Init late start and finish values
+      acts$LF <- +Inf
+      acts$LS <- +Inf
+
       # arrumarPeriodoDasAtividadesFinais
-      acts$LF[private$config$ends] <- max(acts$EF)
+      acts$LF[private$config$ends] <- base::max(acts$EF)
       acts$LS[private$config$ends] <- acts$LF[private$config$ends] - acts$duration[private$config$ends]
 
       # Backward calculate
@@ -385,24 +387,25 @@ Schedule <- R6::R6Class("Schedule",
       # Calculate total_float
       acts$total_float <- acts$LS - acts$ES
 
-      # Calculate free_flot
-      acts$free_float <- +Inf
-      acts$free_float[private$config$ends] <- 0
+      # Calculate free_float
+      acts$free_float <- acts$total_float  ## Acho que aqui tem que ser a TOTAL_FLOAT !!!
+      #acts$free_float[private$config$ends] <- 0
       if(nrow(acts) > 0) {
-        for(from in 1:nrow(acts)) {
-          succesors <- rela[rela$from == from, ]
+        for(i_from in 1:nrow(acts)) {
+          succesors <- rela[rela$i_from == i_from, ]
           if(nrow(succesors) > 0) {
             for(j in 1:nrow(succesors)) {
               to <- succesors$i_to[j]
-              ff <- acts$ES[to] - acts$EF[from]
-              if(ff < acts$free_float[from]) {
-                acts$free_float[from] <- ff
+              ff <- acts$ES[to] - acts$EF[i_from]
+              if(ff < acts$free_float[i_from]) {
+                acts$free_float[i_from] <- ff
               }
             }
+          } else {
+            acts$free_float[i_from] <- acts$total_float[i_from]
           }
         }
       }
-
 
       # Identify critical activity
       acts$critical <- acts$total_float <= 0
@@ -601,7 +604,7 @@ Schedule <- R6::R6Class("Schedule",
 
       new_activity <- data.frame(
         id        = id,
-        name      = ifelse(base::is.null(name), base::paste0("act", id), name),
+        name      = ifelse(base::is.null(name), base::paste0("a", id), name),
         duration  = ifelse(base::is.null(duration), 0, duration),
         milestone = FALSE,
         critical = FALSE,
@@ -657,8 +660,6 @@ Schedule <- R6::R6Class("Schedule",
     },
 
     #' @description Add a relation to a schedule.
-    #' If type is not defined, it is assumed to be FS.
-    #' If lag is not defined, it is assumed to be zero.
     #' @param from
     #' The id of predecessor activity.
     #' Must exist a activity with from.
@@ -668,6 +669,7 @@ Schedule <- R6::R6Class("Schedule",
     #' @param type
     #' Specifies the type of relation between activities.
     #' The default type is FS and its value may be: FS, FF, SS, SF, that means:
+    #' If type is not defined, it is assumed to be FS.
     #'
     #' **FS:** Finish-Start relation.
     #' Activity to can only start after the finish of activity from.
@@ -682,6 +684,7 @@ Schedule <- R6::R6Class("Schedule",
     #' Activity to must finish when activity from starts.
     #'
     #' @param lag
+    #' If lag is not defined, it is assumed to be zero.
     #' The time period between activities that the successor activity
     #' must be advanced, or lated, after activity from.
     #' It must be an integer, less than, equal or greater than zero.
@@ -713,7 +716,7 @@ Schedule <- R6::R6Class("Schedule",
       private$.relations <- base::rbind(old_relations, new_relation)
 
       private$info$nr_relations <- base::nrow(private$.relations)
-      private$info$has_any_relation <- TRUE
+      private$info$has_any_relation <- private$info$nr_relations > 0
 
       ## Topological organization
       private$topological_organization()
@@ -843,19 +846,19 @@ Schedule <- R6::R6Class("Schedule",
         private$config$temp_relations$keep <- TRUE
         for(i in 1:temp_n) {
           from <- private$config$temp_relations$from[i]
-          to <- private$config$temp_relations$to[i]
+          to   <- private$config$temp_relations$to[i]
           type <- private$config$temp_relations$type[i]
-          lag <- private$config$temp_relations$lag[i]
-          j <- base::intersect(private$.activities$id, from)
-          k <- base::intersect(private$.activities$id, to)
-          if(length(j) > 0 && length(k) > 0) {
+          lag  <- private$config$temp_relations$lag[i]
+          j <- base::match(from, private$.activities$id)
+          k <- base::match(to, private$.activities$id)
+          if(!is.na(j) && !is.na(k)) {
             self$add_relation(from, to, type, lag)
             private$config$temp_relations$keep[i] <- FALSE
           }
         }
 
         #2 Remove temp_relations add
-        if(sum(private$config$temp_relations$keep) > 0) {
+        if(base::any(private$config$temp_relations$keep)) {
           private$config$temp_relations <- private$config$temp_relations[private$config$temp_relations$keep, ]
           private$config$temp_relations$keep <- NULL
         } else {
@@ -963,6 +966,10 @@ Schedule <- R6::R6Class("Schedule",
         gantt[i, inicio:termino] <- 1
       }
       class(gantt) <- base::unique(c("Gantt", class(gantt)))
+
+      row.names(gantt) <- atvs$id
+      colnames(gantt) <- 1:duration
+
       gantt
     },
 
@@ -1074,8 +1081,8 @@ Schedule <- R6::R6Class("Schedule",
       }
 
       len <- 1
-      levels_from <- private$.activities$progr_level[private$.relations$from]
-      levels_to <- private$.activities$progr_level[private$.relations$to]
+      levels_from <- private$.activities$progr_level[private$.relations$i_from]
+      levels_to <- private$.activities$progr_level[private$.relations$i_to]
       arcs_qty <- base::sum(levels_to - levels_from == len)
 
       (arcs_qty - nr_act + wi[1]) / (D - nr_act + wi[1])

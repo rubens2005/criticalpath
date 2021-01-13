@@ -3,9 +3,57 @@
 \name{schedule_from_act_rel}
 \alias{schedule_from_act_rel}
 \alias{add_act_rel}
-\title{Schedule with activities and relations added together}
-\description{
+\title{Add activities and relations together to an schedule.}
+\arguments{
+\item{id}{Activity id, an integer number that
+must be unique within a schedule.
+It will be used to make relation between activities.}
+
+\item{name}{The name of activity.}
+
+\item{duration}{A number that represents the activity's duration.
+It must be equal or grater than zero.}
+
+\item{relations_id}{A vector of ids such that will be linked with activity.
+It may be a relations of successor or predecessors.}
+
+\item{direction}{Direction of relations_id: It may be "succ" or "pred".
 \itemize{
-\item $add_act_rel(id, name, duration, relations_id=c(), direction="succ")
+\item \strong{succ:} the relations_id vector will be the successor of the activity.
+\item \strong{pred:} the relations_id vector will be the predecessor of the activity.
+}}
 }
+\value{
+A Schedule object with activities and relations added
+and CPM's parameters calculated.
+}
+\description{
+Add an activity to a schedule
+in the same time that adds relations.
+
+Usage
+
+$add_act_rel(id, name, duration, relations_id=c(), direction="succ")
+}
+\examples{
+# Create a schedule
+schedule <- Schedule$new()
+schedule$title <- "Fictitious Project Example"
+schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+  improving project performance using earned value management.
+  Gent: Springer, 2009, p. 18"
+
+# Add activities and relations to it.
+schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
+schedule$add_act_rel(  2, "a2" , 4, c(5))
+schedule$add_act_rel(  3, "a3" , 9, c(10))
+schedule$add_act_rel(  4, "a4" , 1, c(6))
+schedule$add_act_rel(  5, "a5" , 4, c(9))
+schedule$add_act_rel(  6, "a6" , 5, c(7))
+schedule$add_act_rel(  7, "a7" , 1, c(8,11))
+schedule$add_act_rel(  8, "a8" , 7, c(12))
+schedule$add_act_rel(  9, "a9" , 8, c(12))
+schedule$add_act_rel( 10, "a10", 3, c(12))
+schedule$add_act_rel( 11, "a11", 3, c(12))
+schedule$add_act_rel( 12, "a12", 0)
 }

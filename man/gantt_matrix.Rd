@@ -7,8 +7,43 @@
 \alias{xy}
 \title{Gantt Matrix}
 \description{
+Create a matrix that represents a Gantt chart,
+a matrix where "1" indicate that an activity is planned to be
+in execution.
+
+In this matrix, the rows represents activities,
+Whereas the columns represents the activity execution period.
+So, the number of columns is equal to project duration.
 \itemize{
-\item $gantt_matrix()
-\item $xy_gantt_matrix(gantt=NULL)
+\item \code{Schedule$gantt_matrix()} Return the Gantt matrix.
+\item \code{Schedule$xy_gantt_matrix(gantt=NULL)}
+Transform a Gantt matrix in x, y coordinates and the weight one.
+Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
 }
+}
+\examples{
+activities <- data.frame(
+  id        = c( 1,   2,   3,   4 ),
+  name      = c("A", "B", "C", "D"),
+  duration  = c( 2,   3,   1,   2 )
+)
+relations <- data.frame(
+  from = c(1, 2, 4, 4),
+  to   = c(3, 3, 1, 2)
+)
+schedule <- Schedule$new(activities, relations)
+schedule$title <- "A project"
+schedule$reference <- "From criticalpath"
+gantt <- schedule$gantt_matrix()
+gantt
+# What is the effort by time period?
+colSums(gantt) # 1 1 2 2 1 1
+# What is the duration by activities?
+rowSums(gantt) # 2 3 1 2
+# what is the S curve
+cumsum(colSums(gantt))
+plot(cumsum(colSums(gantt)), type="l", lwd=3)
+xyw <- schedule$xy_gantt_matrix()
+xyw
+plot(xyw[, 1:2])
 }

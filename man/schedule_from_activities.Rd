@@ -4,7 +4,7 @@
 \alias{schedule_from_activities}
 \alias{add_activity}
 \alias{add_activities}
-\title{Add an activity to a schedule.}
+\title{Add activities to a schedule.}
 \arguments{
 \item{id}{Activity id, an integer number that
 must be unique within a schedule.
@@ -15,17 +15,27 @@ It will be used to make relation between activities.}
 \item{duration}{A number that represents the activity's duration.
 It is integer number without time unit.
 It must be equal or grater than zero. The default value is zero.}
+
+\item{activities}{Data frame with activities.
+If it is not informed, the schedule will be created without any activity.
+Its structure is defined in \link{schedule_from_data_frame}}
 }
 \value{
 A Schedule object with an activity added and
 the critical path calculated.
 }
 \description{
-\code{Schedule$add_activity(id, name, duraiton)}
+\code{Schedule$add_activity(id, name, duration)}
 adds an activity to a schedule.
 
 \code{Schedule$add_activities(activities)}
 adds an activities data frame to a schedule.
+
+Usage
+
+Schedule$add_activity(id, name, duration)
+
+Schedule$add_activities(activities)
 }
 \examples{
 # Activities added one by one

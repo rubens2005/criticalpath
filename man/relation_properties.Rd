@@ -5,12 +5,82 @@
 \alias{nr_relations}
 \alias{has_any_relation}
 \alias{any_relation}
+\alias{relations}
 \title{Relation Properties}
 \description{
+There several methods about relations that you can use to get
+information about them. After you add activities and relations
+to a schedule, you may want to know how much relations has in a
+schedule or which relations belong to critical path.
+In this section, we will explain how you can find these information.
 \itemize{
-\item relations: Return relations in a schedule as data frame.
-\item DESCREVER CADA UMA DAS COLUNAS DO DATA FRAME
-\item nr_relations: Number of relations (arcs) in a schedule as an integer value.
-\item has_any_relation: A logical value that indicate if the schedule has any relation.
+\item \strong{Has Any Relation:} A logical value that indicates if the schedule
+has any relation. A TRUE value means that the schedule has some
+relation; a FALSE, means that the schedule does not have any relation.
+\itemize{
+\item Usage: \code{Schedule$has_any_relation}
 }
+\item \strong{Number of Relations:} Number of relations in a schedule
+as an integer value.
+\itemize{
+\item Usage: \code{Schedule$nr_relations}
+}
+\item \strong{Relations:} Return a data frame with all relations of a schedule
+in inclusion order. This is the main information calculated by CPM.
+The data frame is formed by following structure:
+\itemize{
+\item \strong{from:} Predecessor activity id from a relation.
+\item \strong{to:} Successor activity id from a relation.
+\item \strong{type:} The type of relation between activities.
+Its value may be: FS, FF, SS, SF, as described in \link{schedule_from_data_frame}
+\item \strong{lag:} The time period between activity predecessor and
+activity successor activity
+\item \strong{critical:} A critical relation formed by two activity critical:
+predecessor and successor.
+\code{TRUE} indicates it is critical;
+\code{FALSE} indicates it is not critical.
+\item \strong{ord:} Indicates de order that the relation was added in the schedule.
+\item \strong{i_from:} It the index of predecessor activity in the
+activities data frame.
+\item \strong{i_to:} It the index of successor activity in the
+activities data frame.
+\item Usage: \code{Schedule$relations}
+}
+}
+}
+\examples{
+# Create a schedule
+schedule <- Schedule$new()
+schedule$title <- "Fictitious Project Example"
+schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+  improving project performance using earned value management.
+  Gent: Springer, 2009, p. 18"
+
+schedule$has_any_relation  # FALSE
+schedule$nr_relations      # 0
+
+# Add activities and relations to it.
+schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
+schedule$add_act_rel(  2, "a2" , 4, c(5))
+schedule$add_act_rel(  3, "a3" , 9, c(10))
+schedule$add_act_rel(  4, "a4" , 1, c(6))
+schedule$add_act_rel(  5, "a5" , 4, c(9))
+schedule$add_act_rel(  6, "a6" , 5, c(7))
+schedule$add_act_rel(  7, "a7" , 1, c(8,11))
+schedule$add_act_rel(  8, "a8" , 7, c(12))
+schedule$add_act_rel(  9, "a9" , 8, c(12))
+schedule$add_act_rel( 10, "a10", 3, c(12))
+schedule$add_act_rel( 11, "a11", 3, c(12))
+schedule$add_act_rel( 12, "a12", 0)
+
+schedule$has_any_relation  # TRUE
+schedule$nr_relations      # 14
+
+schedule$relations
+}
+\seealso{
+\link{criticalpath}, \link{Schedule}.
+}
+\author{
+Rubens Jose Rosa (rubens@rubensjoserosa.com), Marcos dos Santos, Thiago Marques
 }

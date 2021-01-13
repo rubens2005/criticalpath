@@ -33,16 +33,16 @@ Its structure is:
 The default type is FS and its value may be: FS, FF, SS, SF, that means:
 \itemize{
 \item \strong{FS:} Finish-Start relation.
-Activity to_id can only start after the finish of activity from_id.
+Activity to id can only start after the finish of activity from id.
 \item \strong{FF:} Finish-Finish relation.
-Activity to_id must finish together with activity from_id.
+Activity to id must finish together with activity from id.
 \item \strong{SS:} Start-Start relation.
-Activity to_id must start together with activity from_id.
+Activity to id must start together with activity from id.
 \item \strong{SF:} Start-Finish relation.
-Activity to_id must finish when activity from_id starts.
+Activity to id must finish when activity from id starts.
 }
 \item \strong{lag:} The time period between activities that the successor activity
-must be advanced, or lated, after activity from_id.
+must be advanced, or lated, after activity from id.
 It must be an integer, less than, equal or greater than zero.
 }}
 }

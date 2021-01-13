@@ -233,8 +233,6 @@ or an error if activity id doesn't exist.
 \if{latex}{\out{\hypertarget{method-add_relation}{}}}
 \subsection{Method \code{add_relation()}}{
 Add a relation to a schedule.
-If type is not defined, it is assumed to be FS.
-If lag is not defined, it is assumed to be zero.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$add_relation(from, to, type = "FS", lag = 0)}\if{html}{\out{</div>}}
 }
@@ -250,6 +248,7 @@ Must exist a activity with to.}
 
 \item{\code{type}}{Specifies the type of relation between activities.
 The default type is FS and its value may be: FS, FF, SS, SF, that means:
+If type is not defined, it is assumed to be FS.
 
 \strong{FS:} Finish-Start relation.
 Activity to can only start after the finish of activity from.
@@ -263,7 +262,8 @@ Activity to must start together with activity from.
 \strong{SF:} Start-Finish relation.
 Activity to must finish when activity from starts.}
 
-\item{\code{lag}}{The time period between activities that the successor activity
+\item{\code{lag}}{If lag is not defined, it is assumed to be zero.
+The time period between activities that the successor activity
 must be advanced, or lated, after activity from.
 It must be an integer, less than, equal or greater than zero.}
 }

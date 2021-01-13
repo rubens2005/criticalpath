@@ -5,15 +5,54 @@
 \alias{title}
 \alias{duration}
 \alias{schedule_duration}
-\title{Title, Reference and Duration}
+\title{Title, Reference and Schedule Duration}
 \description{
-\strong{title} A project title for identification.
-\strong{reference} A reference from project origin,
+After a schedule is created, it is possible
+access several type of information:
+\itemize{
+\item \strong{title:} A project title for identification. It depends on
+user. Its use are:
+\itemize{
+\item \code{Sechedule$title <- "A title"} sets a title for a project.
+\item \code{Sechedule$title} gets the title of the project.
+}
+\item \strong{reference:} A reference from project origin,
 for example, a book, a paper, a corporation, or nothing.
 \itemize{
-\item title: A project title for identification.
-\item reference: A reference from project origin, for example, a book, a paper, a corporation, or nothing.
-\item duration: An integer value that indicate the project duration calculated by CPM.
-An integer value that indicate the duration of a schedule.
+\item \code{Sechedule$reference <- "A reference"} sets a reference for a project.
+\item \code{Sechedule$title} gets the reference of the project.
 }
+\item \strong{duration:} An integer value that indicate the project duration
+calculated by CPM. Every time you include an activity or a relation
+to a schedule, the duration is calculated. You can only read
+the schedule duration.
+\itemize{
+\item \code{Sechedule$duration} gets the duration of the project.
+}
+}
+}
+\examples{
+# Create a schedule
+schedule <- Schedule$new()
+schedule$title <- "Fictitious Project Example"
+schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+  improving project performance using earned value management.
+  Gent: Springer, 2009, p. 18"
+
+# Add activities and relations to it.
+schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
+schedule$add_act_rel(  2, "a2" , 4, c(5))
+schedule$add_act_rel(  3, "a3" , 9, c(10))
+schedule$add_act_rel(  4, "a4" , 1, c(6))
+schedule$add_act_rel(  5, "a5" , 4, c(9))
+schedule$add_act_rel(  6, "a6" , 5, c(7))
+schedule$add_act_rel(  7, "a7" , 1, c(8,11))
+schedule$add_act_rel(  8, "a8" , 7, c(12))
+schedule$add_act_rel(  9, "a9" , 8, c(12))
+schedule$add_act_rel( 10, "a10", 3, c(12))
+schedule$add_act_rel( 11, "a11", 3, c(12))
+schedule$add_act_rel( 12, "a12", 0)
+schedule$title
+schedule$reference
+schedule$duration
 }
