@@ -57,3 +57,13 @@ schedule$add_act_rel( 10, "a10", 3, c(12))
 schedule$add_act_rel( 11, "a11", 3, c(12))
 schedule$add_act_rel( 12, "a12", 0)
 }
+\seealso{
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item Schedule Class Definition: \link{Schedule}
+}
+}
+\author{
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
+Marcos dos Santos, Thiago Marques
+}

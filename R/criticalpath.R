@@ -1,36 +1,28 @@
-#' criticalpath: Object Oriented Critical Path Method
+#' criticalpath: Object Oriented Critical Path Method Implementation
 #'
-#' An object oriented implementation of the Critical Path Method in R with R6 library.
+#' @description
+#' criticalpath package is an object oriented implementation of the
+#' Critical Path Method (CPM) in R with R6 library. CPM is a method used to estimate
+#' the minimum project duration and  determine the amount of scheduling flexibility
+#' on the logical network paths within the schedule model. The flexibility is in
+#' terms of early start, early finish, late start, late finish, total float and
+#' free float. Beside, it permits to quantify the complexity of network diagram
+#' through the analysis of topological indicators. Finally, it permits to change
+#' the activities duration to perform what-if scenario analysis.
 #'
-#' The goal of this package is to calculate the project duration
-#' and to find its critical activities through application of Critical
-#' Path Method to activities and precedence relation between them.
+#' With this package, you can calculate the following CPM parameters:
+#' - Schedule duration
+#' - Critical Path
+#' - Early start and finish date of each activity
+#' - Late start and finish date of each activity
+#' - Critical activities
+#' - Critical path
+#' - Total float and free float
+#' - Gantt Matrix
+#' - What-if scenario analysis
+#' - Topological indicators
 #'
-#' @section Parameters calculated from CPM:
-#'
-#' Schedule duration:
-#'
-#' Critical Path
-#'
-#' Critical Activities
-#'
-#' @section Topological indicators:
-#'
-#' SP
-#'
-#' DA
-#'
-#' CA
-#'
-#' TF
-#'
-#' @section What else ONE:
-#' Do not operate heavy machinery within 8 hours of using this function.
-#'
-#' @section What else TWO:
-#' Do not operate heavy machinery within 8 hours of using this function.
-#'
-#' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
 #' Marcos dos Santos, Thiago Marques
 #'
 #' @references
@@ -40,6 +32,15 @@
 #' *InterJournal*. Complex Systems. 1695.
 #' [Article](https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research)
 #'  / [igraph](https://igraph.org/)
+#'
+#' Project Management Institute (2017).
+#' **A Guide to the Project Management Body of Knowledge (PMBOK® Guide)**.
+#' Sixth Edition.
+#' [PMBOK](https://www.pmi.org/pmbok-guide-standards/foundational/pmbok)
+#'
+#' Project Management Institute (2017).
+#' **PMI Lexicon of Project Management Terms:** Version 3.2.
+#' [PMI Lexicon](https://www.pmi.org/pmbok-guide-standards/lexicon)
 #'
 #' Vanhoucke, M. (2009) *Measuring Time*:
 #' Improving Project Performance Using Earned Value Management.
@@ -57,18 +58,29 @@
 #' doi: [10.1007/978-3-319-04331-9](https://doi.org/10.1007/978-3-319-04331-9)
 #'
 #' @seealso
+#' In the following links there are more information with examples.
+#' - Schedule Class Definition: [Schedule]
+#' - How to create a schedule:
+#'   - Add activities and relations together to an schedule: [schedule_from_act_rel]
+#'   - Add activities to a schedule: [schedule_from_activities]
+#'   - Add relations to a schedule: [schedule_from_relations]
+#'   - Create a schedule object from data frames: [schedule_from_data_frame]
+#'  - How to get schedule information:
+#'    - Title, Reference and Schedule Duration: [reference]
+#'  - How to get activities properties:
+#'    - Activity Properties: [activity_properties]
+#'    - Gantt Matrix: [gantt_matrix]
+#'  - How to change activities duration:
+#'    - Change Activities Duration: [change_durations]
+#'  - How to get relations properties:
+#'    - Relation Properties [relation_properties]
+#'    - Successors and Predecessors: [successors]
+#'  - How to get topological properties:
+#'    - Topological Indicators: [topological_indicators]
 #'
-#' More information about:
-#'
-#' Schedule object [Schedule]
-#'
-#' Package: [criticalpath]
-#'
-#' How to create a schedule from scratch: [from_data_frame]
-#'
-#' @docType package
 #' @name criticalpath
 #' @aliases CPM cpm critical path
+#' @docType package
 NULL
 
 
@@ -119,9 +131,11 @@ NULL
 #' must be advanced, or lated, after activity from id.
 #' It must be an integer, less than, equal or greater than zero.
 #' @return A Schedule object with CPM parameters calculated.
-#' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
 #' Marcos dos Santos, Thiago Marques
-#' @seealso [add_activity], [add_relation], [criticalpath], [Schedule].
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #'
 #' # An empty schedule.
@@ -177,9 +191,11 @@ NULL
 #' Its structure is defined in [schedule_from_data_frame]
 #' @return A Schedule object with an activity added and
 #' the critical path calculated.
-#' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
 #' Marcos dos Santos, Thiago Marques
-#' @seealso [schedule_from_data_frame], [add_relation], [criticalpath], [Schedule].
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #' # Activities added one by one
 #' schedule <- Schedule$new()
@@ -249,9 +265,11 @@ NULL
 #' Its structure is defined in [schedule_from_data_frame].
 #'
 #' @return A Schedule object with CPM parameters calculated.
-#' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
 #' Marcos dos Santos, Thiago Marques
-#' @seealso [schedule_from_data_frame], [add_relation], [criticalpath], [Schedule].
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #' # First, create an empty schedule
 #' schedule <- Schedule$new()
@@ -324,6 +342,11 @@ NULL
 #' - **pred:** the relations_id vector will be the predecessor of the activity.
 #' @return A Schedule object with activities and relations added
 #' and CPM's parameters calculated.
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#' Marcos dos Santos, Thiago Marques
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #' # Create a schedule
 #' schedule <- Schedule$new()
@@ -354,19 +377,34 @@ NULL
 #' @description After a schedule is created, it is possible
 #' access several type of information:
 #'
-#' - **title:** A project title for identification. It depends on
-#' user. Its use are:
-#'    - \code{Sechedule$title <- "A title"} sets a title for a project.
-#'    - \code{Sechedule$title} gets the title of the project.
-#' - **reference:** A reference from project origin,
-#' for example, a book, a paper, a corporation, or nothing.
-#'    - \code{Sechedule$reference <- "A reference"} sets a reference for a project.
-#'    - \code{Sechedule$title} gets the reference of the project.
-#' - **duration:** An integer value that indicate the project duration
+#' - **title:**
+#' A project title for identification. It depends on
+#' user of the class. Its use are:
+#'    - \code{Sechedule$title <- "A title"}
+#'      - sets a title for a project.
+#'    - \code{Sechedule$title}
+#'      - gets the title of the project.
+#'
+#' - **reference:**
+#' A reference from project origin, for example, a book, a paper, a corporation,
+#' or nothing.
+#'    - \code{Sechedule$reference <- "A reference"}
+#'      - sets a reference for a project.
+#'    - \code{Sechedule$title}
+#'      - gets the reference of the project.
+#'
+#' - **duration:**
+#' An integer value that indicate the project duration
 #' calculated by CPM. Every time you include an activity or a relation
 #' to a schedule, the duration is calculated. You can only read
 #' the schedule duration.
-#'    - \code{Sechedule$duration} gets the duration of the project.
+#'    - \code{Sechedule$duration}
+#'      - gets the duration of the project.
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#' Marcos dos Santos, Thiago Marques
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #' # Create a schedule
 #' schedule <- Schedule$new()
@@ -404,22 +442,24 @@ NULL
 #' is planned to start or to finish.
 #' In this section, we will explain how you can find these information.
 #'
-#' - **Has Any Activity:** A logical value that indicate if the schedule
+#' - **Has Any Activity:**
+#' A logical value that indicate if the schedule
 #' has any activity. A TRUE value means that the schedule has some
 #' activity; a FALSE, means that the schedule is empty.
 #'    - Usage: \code{Schedule$has_any_activity}
 #'
-#' - **Number of Activities:** Number of activities in a schedule
-#' as an integer value.
+#' - **Number of Activities:**
+#' Number of activities in a schedule as an integer value.
 #'    - Usage: \code{Schedule$nr_activities}
 #'
-#' - **Get activity:** Gets an activity by id. It returns a data
+#' - **Get activity:**
+#' Gets an activity by id. It returns a data
 #' frame with one line about activity. The structure of a data is
 #' described in next topic.
-#'
 #'    - Usage: \code{Schedule$get_activity(id)}
 #'
-#' - **Activities:** Return a data frame with all activities of a schedule
+#' - **Activities:**
+#' Return a data frame with all activities of a schedule
 #' in a activity id order. This is the main information calculated by CPM.
 #' The data frame is formed by following structure:
 #'    - **id:** Activity id.
@@ -456,11 +496,12 @@ NULL
 #'
 #'    - Usage: \code{Schedule$activities}
 #'
-#' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
-#' Marcos dos Santos, Thiago Marques
 #'    - Usage: \code{Schedule$get_activity(id)}
-#' @seealso [criticalpath], [Schedule].
-#'
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#' Marcos dos Santos, Thiago Marques
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #' # Create a schedule
 #' schedule <- Schedule$new()
@@ -497,7 +538,8 @@ NULL
 #' @title Gantt Matrix
 #' @name gantt_matrix
 #' @aliases gantt xy_gantt xy
-#' @description Create a matrix that represents a Gantt chart,
+#' @description
+#' Create a matrix that represents a Gantt chart,
 #' a matrix where "1" indicate that an activity is planned to be
 #' in execution.
 #'
@@ -510,7 +552,11 @@ NULL
 #' -  \code{Schedule$xy_gantt_matrix(gantt=NULL)}
 #' Transform a Gantt matrix in x, y coordinates and the weight one.
 #' Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
-#'
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#' Marcos dos Santos, Thiago Marques
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #' activities <- data.frame(
 #'   id        = c( 1,   2,   3,   4 ),
@@ -549,16 +595,18 @@ NULL
 #' schedule or which relations belong to critical path.
 #' In this section, we will explain how you can find these information.
 #'
-#' - **Has Any Relation:** A logical value that indicates if the schedule
+#' - **Has Any Relation:**
+#' A logical value that indicates if the schedule
 #' has any relation. A TRUE value means that the schedule has some
 #' relation; a FALSE, means that the schedule does not have any relation.
 #'    - Usage: \code{Schedule$has_any_relation}
 #'
-#' - **Number of Relations:** Number of relations in a schedule
-#' as an integer value.
+#' - **Number of Relations:**
+#' Number of relations in a schedule as an integer value.
 #'    - Usage: \code{Schedule$nr_relations}
 #'
-#' - **Relations:** Return a data frame with all relations of a schedule
+#' - **Relations:**
+#' Return a data frame with all relations of a schedule
 #' in inclusion order. This is the main information calculated by CPM.
 #' The data frame is formed by following structure:
 #'    - **from:** Predecessor activity id from a relation.
@@ -579,8 +627,11 @@ NULL
 #'
 #'    - Usage: \code{Schedule$relations}
 #'
-#' @author Rubens Jose Rosa (rubens@rubensjoserosa.com), Marcos dos Santos, Thiago Marques
-#' @seealso [criticalpath], [Schedule].
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#' Marcos dos Santos, Thiago Marques
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #' # Create a schedule
 #' schedule <- Schedule$new()
@@ -613,13 +664,73 @@ NULL
 NULL
 
 #' @title Successors and Predecessors
-#' @name sucessors
+#' @name successors
 #' @aliases all_successors all_predecessors predecessors
 #' is_redundant redundant
 #' @description
-#' - $all_successors(id, ign_to=NULL)
-#' - $all_predecessors(id, ign_from=NULL)
-#' - $is_redundant(id_from, id_to)
+#' A schedule is structured by activities and each activity has
+#' zero, one or more successors and predecessors. Besides, a relation
+#' may be redundant.
+#'
+#' - **All Successors:**
+#' List all successors from an activity: direct and indirect successors.
+#'    - Usage: \code{Schedule$all_successors(id, ign_to=NULL)}
+#'      - **id** Activity id to be listed.
+#'      - **ign_to** A relation to be ignored: id -> ign_to.
+#'      Activities from this relation will be ignored.
+#'
+#' - **All Predecessors:**
+#' List all predecessors from an activity: direct or indirect predecessors.
+#'    - Usage: \code{Schedule$all_predecessors(id, ign_from=NULL)}
+#'      - **id** Activity id to be listed.
+#'      - **ign_from** A relation to be ignored: ign_from -> id.
+#'      Activities from this relation will be ignored.
+#'
+#' - **Is Redundant:**
+#' Verify if a relation between two activities is redundant.
+#' A relation A->C is redundant if there are A->C, A->B, B->C relations.
+#' It returns a logical \code{TRUE} if an arc is redundant;
+#' \code{FALSE} if it is not.
+#'    - Usage: \code{Schedule$is_redundant(id_from, id_to)}
+#'      - **id_from** From activity id.
+#'      - **id_to** To activity id.
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#' Marcos dos Santos, Thiago Marques
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
+#' @examples
+#' # Create a schedule
+#' schedule <- Schedule$new()
+#' schedule$title <- "Fictitious Project Example"
+#' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+#'   improving project performance using earned value management.
+#'   Gent: Springer, 2009, p. 18"
+#'
+#' # Add activities and relations to it.
+#' schedule$add_act_rel(  2, "a2" , 4, c(5, 12))
+#' schedule$add_act_rel(  3, "a3" , 9, c(10))
+#' schedule$add_act_rel(  4, "a4" , 1, c(6))
+#' schedule$add_act_rel(  5, "a5" , 4, c(9))
+#' schedule$add_act_rel(  6, "a6" , 5, c(7))
+#' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
+#' schedule$add_act_rel(  8, "a8" , 7, c(12))
+#' schedule$add_act_rel(  9, "a9" , 8, c(12))
+#' schedule$add_act_rel( 10, "a10", 3, c(12))
+#' schedule$add_act_rel( 11, "a11", 3, c(12))
+#' schedule$add_act_rel( 12, "a12", 0)
+#'
+#' schedule$all_successors(2) # 5, 9, 12
+#' schedule$all_successors(7) # 8, 11, 12
+#' schedule$all_successors(10) # 12
+#'
+#' schedule$all_predecessors(2) # nothing
+#' schedule$all_predecessors(7) # 6, 4
+#' schedule$all_predecessors(10) # 3
+#'
+#' schedule$is_redundant(2, 5)  #FALSE
+#' schedule$is_redundant(2, 12) #TRUE
+
 NULL
 
 
@@ -628,8 +739,7 @@ NULL
 #' @aliases topoi_sp topoi_ad topoi_la topoi_tf sp ad la tf
 #' topological indicator indicators
 #' @description
-#' Shows information about network structure.
-#' It may be of four type:
+#' Shows information about network structure. It may be of four type:
 #'
 #' **SP Serial or Parallel:**
 #' It shows the closeness of a network to a serial or parallel graph.
@@ -660,10 +770,11 @@ NULL
 #' and they be shift without affecting other activities.
 #'    - Usage: \code{Schedule$topoi_tf()}
 #'
-#' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
 #' Marcos dos Santos, Thiago Marques
-#' @seealso [criticalpath], [Schedule].
-#'
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
 #' @examples
 #' # Create a schedule
 #' schedule <- Schedule$new()
@@ -692,9 +803,52 @@ NULL
 #' schedule$topoi_tf()
 NULL
 
-#' @title Changing Activities Durations
+#' @title Change Activities Duration
 #' @name change_durations
 #' @description
-#' - $change_durations(new_durations)
+#' Change activities duration and calculate critical path.
+#' This way is faster than creating a new schedule with new durations.
+#'   new_durations A vector with new activities' duration.
+#'
+#' **Attention:** The vector duration must be ordered by activity id.
+#' @return A Schedule object.
+#'
+#' - **Usage:** \code{Schedule$change_durations(new_durations)}
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#' Marcos dos Santos, Thiago Marques
+#' @seealso
+#' - Critical Path Method Package: [criticalpath]
+#' - Schedule Class Definition: [Schedule]
+#' @examples
+#' activities <- data.frame(
+#'   id        = 1:17,
+#'   name      = paste("a", as.character(1:17), sep=""),
+#'   duration  = c(1,1,3,2, 2,2,2,1, 4,5,3,3, 4,5,1,5,2)
+#' )
+#'
+#' relations <- data.frame(
+#'   from = c(1, 2, 3, 3, 4, 5, 6, 7, 8,  8,  8,
+#'     8,  8,  9, 10, 11, 12, 13, 13, 14, 14, 15, 15),
+#'   to   = c(2, 3, 4, 6, 5, 8, 7, 8, 9, 10, 11,
+#'    12, 13, 14, 14, 14, 14, 14, 15, 16, 17, 16, 17)
+#' )
+#'
+#' schedule <- Schedule$new(activities, relations)
+#' schedule$title <- "Project 2: Patient Transport System"
+#' schedule$reference <-
+#'   "VANHOUCKE, Mario. Integrated project management and control:
+#'   first comes the theory, then the practice. Gent: Springer, 2014, p. 9"
+#' #Project duration
+#' schedule$duration # 25
+#' #Activities duration
+#' schedule$activities$duration
+#'
+#' new_durations <- c(1,2,5, 4,3, 2,1, 5, 3,5,5,3,4, 2,1, 2,4)
+#' schedule$change_durations(new_durations)
+#'
+#' #Project duration
+#' schedule$duration # 31
+#' #Activities duration
+#' schedule$activities$duration
+#'
 NULL
-

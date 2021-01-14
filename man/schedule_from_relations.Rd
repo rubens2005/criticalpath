@@ -100,9 +100,12 @@ schedule$add_relation( 15, 16)
 schedule$add_relation( 16, 17)
 }
 \seealso{
-\link{schedule_from_data_frame}, \link{add_relation}, \link{criticalpath}, \link{Schedule}.
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item Schedule Class Definition: \link{Schedule}
+}
 }
 \author{
-Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
 Marcos dos Santos, Thiago Marques
 }

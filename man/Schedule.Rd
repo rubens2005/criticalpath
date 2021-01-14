@@ -5,16 +5,18 @@
 \alias{schedule}
 \title{R6 Class Representing a Schedule}
 \description{
-A schedule has activities and relations data-frames.
-With a Schedule, you can calculate the project critical path.
-}
-\details{
-Alguns detalhes a mais.
-Vamos ver no que vai dar.
+This class is a representation of Precedence Diagramming Method (PDM).
+PDM is a technique used for constructing a schedule model in which activities
+are represented by nodes and are graphically linked by one or more logical
+relationships to show the sequence in which the activities are to be performed.
+
+A schedule has activities and relations data-frames. With this class,
+it is possible to apply critical path method
 }
 \section{More Information}{
 
-There is a \strong{See Also} section in the end of this page for more information.
+There is a \strong{See Also} section in the end of this page
+for more information with examples.
 }
 
 \references{
@@ -23,6 +25,15 @@ The Igraph Software Package for Complex Network Research.
 \emph{InterJournal}. Complex Systems. 1695.
 \href{https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research}{Article}
 / \href{https://igraph.org/}{igraph}
+
+Project Management Institute (2017).
+\strong{A Guide to the Project Management Body of Knowledge (PMBOK® Guide)}.
+Sixth Edition.
+\href{https://www.pmi.org/pmbok-guide-standards/foundational/pmbok}{PMBOK}
+
+Project Management Institute (2017).
+\strong{PMI Lexicon of Project Management Terms:} Version 3.2.
+\href{https://www.pmi.org/pmbok-guide-standards/lexicon}{PMI Lexicon}
 
 Vanhoucke, M. (2009) \emph{Measuring Time}:
 Improving Project Performance Using Earned Value Management.
@@ -40,33 +51,156 @@ Springer International Publishing Switzerland.
 doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
 }
 \seealso{
-Copiar o seealso do pacote \strong{criticalpath}
-
-E, claro, apontar para o pacote!
+In the following links there are more information with examples.
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item How to create a schedule:
+\itemize{
+\item Add activities and relations together to an schedule: \link{schedule_from_act_rel}
+\item Add activities to a schedule: \link{schedule_from_activities}
+\item Add relations to a schedule: \link{schedule_from_relations}
+\item Create a schedule object from data frames: \link{schedule_from_data_frame}
+}
+\item How to get schedule information:
+\itemize{
+\item Title, Reference and Schedule Duration: \link{reference}
+}
+\item How to get activities properties:
+\itemize{
+\item Activity Properties: \link{activity_properties}
+\item Gantt Matrix: \link{gantt_matrix}
+}
+\item How to change activities duration:
+\itemize{
+\item Change Activities Duration: \link{change_durations}
+}
+\item How to get relations properties:
+\itemize{
+\item Relation Properties \link{relation_properties}
+\item Successors and Predecessors: \link{successors}
+}
+\item How to get topological properties:
+\itemize{
+\item Topological Indicators: \link{topological_indicators}
+}
+}
 }
 \author{
-Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
 Marcos dos Santos, Thiago Marques
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{title}}{A project title for identification.}
+\item{\code{title}}{A project title for identification. It depends on
+user of the class. Its use are:
+\itemize{
+\item \code{Sechedule$title <- "A title"}
+\itemize{
+\item sets a title for a project.
+}
+\item \code{Sechedule$title}
+\itemize{
+\item gets the title of the project.
+}
+}}
 
-\item{\code{reference}}{A reference from project origin,
-for example, a book, a paper, a corporation, or nothing.}
+\item{\code{reference}}{A reference from project origin, for example, a book, a paper, a corporation,
+or nothing. Its uses are:
+\itemize{
+\item \code{Sechedule$reference <- "A reference"}
+\itemize{
+\item sets a reference for a project.
+}
+\item \code{Sechedule$title}
+\itemize{
+\item gets the reference of the project.
+}
+}}
 
-\item{\code{activities}}{Return activities in a schedule as data frame.}
+\item{\code{has_any_activity}}{A logical value that indicate if the schedule
+has any activity. A TRUE value means that the schedule has some
+activity; a FALSE, means that the schedule is empty.
+\itemize{
+\item Usage: \code{Schedule$has_any_activity}
+}}
 
-\item{\code{nr_activities}}{Number of activities in a schedule as an integer value.}
+\item{\code{nr_activities}}{Number of activities in a schedule as an integer value.
+\itemize{
+\item Usage: \code{Schedule$nr_activities}
+}}
 
-\item{\code{has_any_activity}}{A logical value that indicate if the schedule has any activity.}
+\item{\code{activities}}{Return a data frame with all activities of a schedule
+in a activity id order. This is the main information calculated by CPM.
+The data frame is formed by following structure:
+\itemize{
+\item \strong{id:} Activity id.
+\item \strong{name:} The name of activity.
+\item \strong{duration:} A number that represents the activity's duration.
+\item \strong{milestone:} A milestone is an activity with zero duration.
+This property indicates if a activity is a milestone or not:
+\code{TRUE} indicates it is a milestone; \code{FALSE} indicates it is not.
+\item \strong{critical:} A critical activity is one with total float minor or equal
+to zero. This property indicates if a activity is critical:
+\code{TRUE} indicates it is critical;
+\code{FALSE} indicates it is not critical.
+\item \strong{ES:} Early Start: is the earliest start period an activity can begin
+after its predecessors without violating precedence relation.
+\item \strong{EF:} Early Finish: is the early start plus activity duration.
+\item \strong{LS:} Late Start: is the late finish minus activity duration.
+\item \strong{LF:} Late Finish: is the latest finish an activity can finish
+before their successors without violating precedence relation.
+\item \strong{total_float:} It is the amount of period an activity can be
+delayed without violating the project duration. Its formula is:
+LS - ES or LF - EF.
+\item \strong{free_float:} It is the amount of period an activity can be
+delayed without violating the start time of the successors activities.
+\item \strong{progr_level:} Progressive level is the rank of activities counted
+from begin. The level of the activities that don't have predecessor is one;
+the level of the other activities, is one plus the maximal level of
+their predecessor.
+\item \strong{regr_level:} Regressive level is the rank of activities counted
+from the end. The level of the activities that don't have successor is the
+maximal progressive level; the level of the other activities,
+is one minus the minimal level of their successor.
+\item \strong{topo_float:} It is the difference between progressive level
+and regressive level.
+\item Usage: \code{Schedule$activities}
+}}
 
-\item{\code{relations}}{Return relations in a schedule as data frame.}
+\item{\code{has_any_relation}}{A logical value that indicates if the schedule
+has any relation. A TRUE value means that the schedule has some
+relation; a FALSE, means that the schedule does not have any relation.
+\itemize{
+\item Usage: \code{Schedule$has_any_relation}
+}}
 
-\item{\code{nr_relations}}{Number of relations (arcs) in a schedule as an integer value.}
+\item{\code{nr_relations}}{Number of relations in a schedule as an integer value.
+\itemize{
+\item Usage: \code{Schedule$nr_relations}
+}}
 
-\item{\code{has_any_relation}}{A logical value that indicate if the schedule has any relation.}
+\item{\code{relations}}{Return a data frame with all relations of a schedule
+in inclusion order. This is the main information calculated by CPM.
+The data frame is formed by following structure:
+\itemize{
+\item \strong{from:} Predecessor activity id from a relation.
+\item \strong{to:} Successor activity id from a relation.
+\item \strong{type:} The type of relation between activities.
+Its value may be: FS, FF, SS, SF, as described in \link{schedule_from_data_frame}
+\item \strong{lag:} The time period between activity predecessor and
+activity successor activity
+\item \strong{critical:} A critical relation formed by two activity critical:
+predecessor and successor.
+\code{TRUE} indicates it is critical;
+\code{FALSE} indicates it is not critical.
+\item \strong{ord:} Indicates de order that the relation was added in the schedule.
+\item \strong{i_from:} It is the index of predecessor activity in the
+activities data frame.
+\item \strong{i_to:} It is the index of successor activity in the
+activities data frame.
+\item Usage: \code{Schedule$relations}
+}}
 
 \item{\code{duration}}{An integer value that indicate the duration of a schedule.}
 }
@@ -85,10 +219,10 @@ for example, a book, a paper, a corporation, or nothing.}
 \item \href{#method-print}{\code{Schedule$print()}}
 \item \href{#method-all_successors}{\code{Schedule$all_successors()}}
 \item \href{#method-all_predecessors}{\code{Schedule$all_predecessors()}}
+\item \href{#method-is_redundant}{\code{Schedule$is_redundant()}}
 \item \href{#method-change_durations}{\code{Schedule$change_durations()}}
 \item \href{#method-gantt_matrix}{\code{Schedule$gantt_matrix()}}
 \item \href{#method-xy_gantt_matrix}{\code{Schedule$xy_gantt_matrix()}}
-\item \href{#method-is_redundant}{\code{Schedule$is_redundant()}}
 \item \href{#method-topoi_sp}{\code{Schedule$topoi_sp()}}
 \item \href{#method-topoi_ad}{\code{Schedule$topoi_ad()}}
 \item \href{#method-topoi_la}{\code{Schedule$topoi_la()}}
@@ -211,7 +345,8 @@ A Schedule object with activities added and CPM calculated.
 \if{html}{\out{<a id="method-get_activity"></a>}}
 \if{latex}{\out{\hypertarget{method-get_activity}{}}}
 \subsection{Method \code{get_activity()}}{
-Get a activity by id.
+Gets an activity by id. It returns a data
+frame with one line about activity.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$get_activity(id)}\if{html}{\out{</div>}}
 }
@@ -356,8 +491,7 @@ A Schedule object.
 \if{html}{\out{<a id="method-all_successors"></a>}}
 \if{latex}{\out{\hypertarget{method-all_successors}{}}}
 \subsection{Method \code{all_successors()}}{
-List all successors from an activity:
-direct or indirect successors.
+List all successors from an activity: direct and indirect successors.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$all_successors(id, ign_to = NULL)}\if{html}{\out{</div>}}
 }
@@ -380,8 +514,7 @@ A vector whith all activities ids.
 \if{html}{\out{<a id="method-all_predecessors"></a>}}
 \if{latex}{\out{\hypertarget{method-all_predecessors}{}}}
 \subsection{Method \code{all_predecessors()}}{
-List all predecessors from an activity:
-direct or indirect predecessors.
+List all predecessors from an activity: direct or indirect predecessors.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$all_predecessors(id, ign_from = NULL)}\if{html}{\out{</div>}}
 }
@@ -398,6 +531,30 @@ Activities from this relation will be ignored.}
 }
 \subsection{Returns}{
 A vector with all activities ids.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_redundant"></a>}}
+\if{latex}{\out{\hypertarget{method-is_redundant}{}}}
+\subsection{Method \code{is_redundant()}}{
+Verify if a relation between two activities is redundant.
+A relation A->C is redundant if there are A->C, A->B, B->C relations.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$is_redundant(id_from, id_to)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id_from}}{From activity id.}
+
+\item{\code{id_to}}{To activity id.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A logical \code{TRUE} if an arc is redundant;
+\code{FALSE} if it is not.
 }
 }
 \if{html}{\out{<hr>}}
@@ -425,22 +582,26 @@ A Schedule object.
 \if{html}{\out{<a id="method-gantt_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-gantt_matrix}{}}}
 \subsection{Method \code{gantt_matrix()}}{
-Create a matrix that represents a Gantt chart.
+Create a matrix that represents a Gantt chart,
+a matrix where "1" indicate that an activity is planned to be
+in execution.
+
+In this matrix, the rows represents activities,
+Whereas the columns represents the activity execution period.
+So, the number of columns is equal to project duration.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$gantt_matrix()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 A matrix where "1" indicate that an activity is in execution.
-In this matrix, the rows represents activities,
-Whereas the columns represents the activity execution period.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-xy_gantt_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-xy_gantt_matrix}{}}}
 \subsection{Method \code{xy_gantt_matrix()}}{
-Transform a Gantt matrix in x, y coordinates.
+Transform a Gantt matrix in x, y coordinates and the weight one.
 Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$xy_gantt_matrix(gantt = NULL)}\if{html}{\out{</div>}}
@@ -449,35 +610,13 @@ Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{gantt}}{A Gantt Matrix.}
+\item{\code{gantt}}{A Gantt Matrix. If it is not informed, it will use
+\code{gantt_matrix()} before this function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 A matrix x, y and weight.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_redundant"></a>}}
-\if{latex}{\out{\hypertarget{method-is_redundant}{}}}
-\subsection{Method \code{is_redundant()}}{
-Verify if a relation between two activities is redundant.
-A relation A->C is redundant if there are A->C, A->B, B->C relations.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$is_redundant(id_from, id_to)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id_from}}{Activity id from.}
-
-\item{\code{id_to}}{Activity id to.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A logical TRUE if an arc is redundant; FALSE if not.
 }
 }
 \if{html}{\out{<hr>}}

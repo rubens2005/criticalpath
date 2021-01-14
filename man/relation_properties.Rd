@@ -14,18 +14,20 @@ to a schedule, you may want to know how much relations has in a
 schedule or which relations belong to critical path.
 In this section, we will explain how you can find these information.
 \itemize{
-\item \strong{Has Any Relation:} A logical value that indicates if the schedule
+\item \strong{Has Any Relation:}
+A logical value that indicates if the schedule
 has any relation. A TRUE value means that the schedule has some
 relation; a FALSE, means that the schedule does not have any relation.
 \itemize{
 \item Usage: \code{Schedule$has_any_relation}
 }
-\item \strong{Number of Relations:} Number of relations in a schedule
-as an integer value.
+\item \strong{Number of Relations:}
+Number of relations in a schedule as an integer value.
 \itemize{
 \item Usage: \code{Schedule$nr_relations}
 }
-\item \strong{Relations:} Return a data frame with all relations of a schedule
+\item \strong{Relations:}
+Return a data frame with all relations of a schedule
 in inclusion order. This is the main information calculated by CPM.
 The data frame is formed by following structure:
 \itemize{
@@ -79,8 +81,12 @@ schedule$nr_relations      # 14
 schedule$relations
 }
 \seealso{
-\link{criticalpath}, \link{Schedule}.
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item Schedule Class Definition: \link{Schedule}
+}
 }
 \author{
-Rubens Jose Rosa (rubens@rubensjoserosa.com), Marcos dos Santos, Thiago Marques
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
+Marcos dos Santos, Thiago Marques
 }

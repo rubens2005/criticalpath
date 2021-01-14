@@ -7,53 +7,46 @@
 \alias{cpm}
 \alias{critical}
 \alias{path}
-\title{criticalpath: Object Oriented Critical Path Method}
+\title{criticalpath: Object Oriented Critical Path Method Implementation}
 \description{
-An object oriented implementation of the Critical Path Method in R with R6 library.
+criticalpath package is an object oriented implementation of the
+Critical Path Method (CPM) in R with R6 library. CPM is a method used to estimate
+the minimum project duration and  determine the amount of scheduling flexibility
+on the logical network paths within the schedule model. The flexibility is in
+terms of early start, early finish, late start, late finish, total float and
+free float. Beside, it permits to quantify the complexity of network diagram
+through the analysis of topological indicators. Finally, it permits to change
+the activities duration to perform what-if scenario analysis.
+
+With this package, you can calculate the following CPM parameters:
+\itemize{
+\item Schedule duration
+\item Critical Path
+\item Early start and finish date of each activity
+\item Late start and finish date of each activity
+\item Critical activities
+\item Critical path
+\item Total float and free float
+\item Gantt Matrix
+\item What-if scenario analysis
+\item Topological indicators
 }
-\details{
-The goal of this package is to calculate the project duration
-and to find its critical activities through application of Critical
-Path Method to activities and precedence relation between them.
 }
-\section{Parameters calculated from CPM}{
-
-
-Schedule duration:
-
-Critical Path
-
-Critical Activities
-}
-
-\section{Topological indicators}{
-
-
-SP
-
-DA
-
-CA
-
-TF
-}
-
-\section{What else ONE}{
-
-Do not operate heavy machinery within 8 hours of using this function.
-}
-
-\section{What else TWO}{
-
-Do not operate heavy machinery within 8 hours of using this function.
-}
-
 \references{
 Csardi, G. & Nepusz, T. (2005).
 The Igraph Software Package for Complex Network Research.
 \emph{InterJournal}. Complex Systems. 1695.
 \href{https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research}{Article}
 / \href{https://igraph.org/}{igraph}
+
+Project Management Institute (2017).
+\strong{A Guide to the Project Management Body of Knowledge (PMBOK® Guide)}.
+Sixth Edition.
+\href{https://www.pmi.org/pmbok-guide-standards/foundational/pmbok}{PMBOK}
+
+Project Management Institute (2017).
+\strong{PMI Lexicon of Project Management Terms:} Version 3.2.
+\href{https://www.pmi.org/pmbok-guide-standards/lexicon}{PMI Lexicon}
 
 Vanhoucke, M. (2009) \emph{Measuring Time}:
 Improving Project Performance Using Earned Value Management.
@@ -71,15 +64,41 @@ Springer International Publishing Switzerland.
 doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
 }
 \seealso{
-More information about:
-
-Schedule object \link{Schedule}
-
-Package: \link{criticalpath}
-
-How to create a schedule from scratch: \link{from_data_frame}
+In the following links there are more information with examples.
+\itemize{
+\item Schedule Class Definition: \link{Schedule}
+\item How to create a schedule:
+\itemize{
+\item Add activities and relations together to an schedule: \link{schedule_from_act_rel}
+\item Add activities to a schedule: \link{schedule_from_activities}
+\item Add relations to a schedule: \link{schedule_from_relations}
+\item Create a schedule object from data frames: \link{schedule_from_data_frame}
+}
+\item How to get schedule information:
+\itemize{
+\item Title, Reference and Schedule Duration: \link{reference}
+}
+\item How to get activities properties:
+\itemize{
+\item Activity Properties: \link{activity_properties}
+\item Gantt Matrix: \link{gantt_matrix}
+}
+\item How to change activities duration:
+\itemize{
+\item Change Activities Duration: \link{change_durations}
+}
+\item How to get relations properties:
+\itemize{
+\item Relation Properties \link{relation_properties}
+\item Successors and Predecessors: \link{successors}
+}
+\item How to get topological properties:
+\itemize{
+\item Topological Indicators: \link{topological_indicators}
+}
+}
 }
 \author{
-Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
 Marcos dos Santos, Thiago Marques
 }

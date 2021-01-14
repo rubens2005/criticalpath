@@ -5,15 +5,18 @@
 #' @export
 #'
 #' @description
-#' A schedule has activities and relations data-frames.
-#' With a Schedule, you can calculate the project critical path.
 #'
-#' @details
-#' Alguns detalhes a mais.
-#' Vamos ver no que vai dar.
+#' This class is a representation of Precedence Diagramming Method (PDM).
+#' PDM is a technique used for constructing a schedule model in which activities
+#' are represented by nodes and are graphically linked by one or more logical
+#' relationships to show the sequence in which the activities are to be performed.
+#'
+#' A schedule has activities and relations data-frames. With this class,
+#' it is possible to apply critical path method
 #'
 #' @section More Information:
-#' There is a **See Also** section in the end of this page for more information.
+#' There is a **See Also** section in the end of this page
+#' for more information with examples.
 #'
 #' @references
 #'
@@ -22,6 +25,15 @@
 #' *InterJournal*. Complex Systems. 1695.
 #' [Article](https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research)
 #'  / [igraph](https://igraph.org/)
+#'
+#' Project Management Institute (2017).
+#' **A Guide to the Project Management Body of Knowledge (PMBOK® Guide)**.
+#' Sixth Edition.
+#' [PMBOK](https://www.pmi.org/pmbok-guide-standards/foundational/pmbok)
+#'
+#' Project Management Institute (2017).
+#' **PMI Lexicon of Project Management Terms:** Version 3.2.
+#' [PMI Lexicon](https://www.pmi.org/pmbok-guide-standards/lexicon)
 #'
 #' Vanhoucke, M. (2009) *Measuring Time*:
 #' Improving Project Performance Using Earned Value Management.
@@ -38,13 +50,29 @@
 #' Springer International Publishing Switzerland.
 #' doi: [10.1007/978-3-319-04331-9](https://doi.org/10.1007/978-3-319-04331-9)
 #'
-#' @author Rubens Jose Rosa (rubens@rubensjoserosa.com),
+#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
 #' Marcos dos Santos, Thiago Marques
 #'
 #' @seealso
-#' Copiar o seealso do pacote **criticalpath**
-#'
-#' E, claro, apontar para o pacote!
+#' In the following links there are more information with examples.
+#' - Critical Path Method Package: [criticalpath]
+#' - How to create a schedule:
+#'   - Add activities and relations together to an schedule: [schedule_from_act_rel]
+#'   - Add activities to a schedule: [schedule_from_activities]
+#'   - Add relations to a schedule: [schedule_from_relations]
+#'   - Create a schedule object from data frames: [schedule_from_data_frame]
+#'  - How to get schedule information:
+#'    - Title, Reference and Schedule Duration: [reference]
+#'  - How to get activities properties:
+#'    - Activity Properties: [activity_properties]
+#'    - Gantt Matrix: [gantt_matrix]
+#'  - How to change activities duration:
+#'    - Change Activities Duration: [change_durations]
+#'  - How to get relations properties:
+#'    - Relation Properties [relation_properties]
+#'    - Successors and Predecessors: [successors]
+#'  - How to get topological properties:
+#'    - Topological Indicators: [topological_indicators]
 Schedule <- R6::R6Class("Schedule",
 
   private = list(
@@ -424,7 +452,12 @@ Schedule <- R6::R6Class("Schedule",
   active = list(
 
     #' @field title
-    #' A project title for identification.
+    #' A project title for identification. It depends on
+    #' user of the class. Its use are:
+    #'    - \code{Sechedule$title <- "A title"}
+    #'      - sets a title for a project.
+    #'    - \code{Sechedule$title}
+    #'      - gets the title of the project.
     title = function(value) {
       if(missing(value)) {
         return(private$info$title)
@@ -435,8 +468,12 @@ Schedule <- R6::R6Class("Schedule",
     },
 
     #' @field reference
-    #' A reference from project origin,
-    #' for example, a book, a paper, a corporation, or nothing.
+    #' A reference from project origin, for example, a book, a paper, a corporation,
+    #' or nothing. Its uses are:
+    #'    - \code{Sechedule$reference <- "A reference"}
+    #'      - sets a reference for a project.
+    #'    - \code{Sechedule$title}
+    #'      - gets the reference of the project.
     reference = function(value) {
       if(missing(value)) {
         return(private$info$reference)
@@ -446,8 +483,66 @@ Schedule <- R6::R6Class("Schedule",
       invisible(self)
     },
 
+    #' @field has_any_activity
+    #' A logical value that indicate if the schedule
+    #' has any activity. A TRUE value means that the schedule has some
+    #' activity; a FALSE, means that the schedule is empty.
+    #'    - Usage: \code{Schedule$has_any_activity}
+    has_any_activity = function(value) {
+      if(missing(value)) {
+        return(self$nr_activities > 0)
+      }
+      stop("Can't set `$has_any_activity`", call. = FALSE)
+    },
+
+    #' @field nr_activities
+    #' Number of activities in a schedule as an integer value.
+    #'    - Usage: \code{Schedule$nr_activities}
+    nr_activities = function(value) {
+      if(missing(value)) {
+        return(private$info$nr_activities)
+      }
+      stop("Can't set `$nr_activities`", call. = FALSE)
+    },
+
     #' @field activities
-    #' Return activities in a schedule as data frame.
+    #' Return a data frame with all activities of a schedule
+    #' in a activity id order. This is the main information calculated by CPM.
+    #' The data frame is formed by following structure:
+    #'    - **id:** Activity id.
+    #'    - **name:** The name of activity.
+    #'    - **duration:** A number that represents the activity's duration.
+    #'    - **milestone:** A milestone is an activity with zero duration.
+    #'    This property indicates if a activity is a milestone or not:
+    #'    \code{TRUE} indicates it is a milestone; \code{FALSE} indicates it is not.
+    #'    - **critical:** A critical activity is one with total float minor or equal
+    #'    to zero. This property indicates if a activity is critical:
+    #'    \code{TRUE} indicates it is critical;
+    #'    \code{FALSE} indicates it is not critical.
+    #'    - **ES:** Early Start: is the earliest start period an activity can begin
+    #'    after its predecessors without violating precedence relation.
+    #'    - **EF:** Early Finish: is the early start plus activity duration.
+    #'    - **LS:** Late Start: is the late finish minus activity duration.
+    #'    - **LF:** Late Finish: is the latest finish an activity can finish
+    #'    before their successors without violating precedence relation.
+    #'    - **total_float:** It is the amount of period an activity can be
+    #'    delayed without violating the project duration. Its formula is:
+    #'    LS - ES or LF - EF.
+    #'    - **free_float:** It is the amount of period an activity can be
+    #'    delayed without violating the start time of the successors activities.
+    #'    - **progr_level:** Progressive level is the rank of activities counted
+    #'    from begin. The level of the activities that don't have predecessor is one;
+    #'    the level of the other activities, is one plus the maximal level of
+    #'    their predecessor.
+    #'    - **regr_level:** Regressive level is the rank of activities counted
+    #'    from the end. The level of the activities that don't have successor is the
+    #'    maximal progressive level; the level of the other activities,
+    #'    is one minus the minimal level of their successor.
+    #'    - **topo_float:** It is the difference between progressive level
+    #'     and regressive level.
+    #'
+    #'  - Usage: \code{Schedule$activities}
+    #'
     activities = function(value) {
       if(missing(value)) {
         if(self$has_any_activity) {
@@ -460,26 +555,49 @@ Schedule <- R6::R6Class("Schedule",
       stop("Can't set `$activities`", call. = FALSE)
     },
 
-    #' @field nr_activities
-    #' Number of activities in a schedule as an integer value.
-    nr_activities = function(value) {
+    #' @field has_any_relation
+    #' A logical value that indicates if the schedule
+    #' has any relation. A TRUE value means that the schedule has some
+    #' relation; a FALSE, means that the schedule does not have any relation.
+    #'    - Usage: \code{Schedule$has_any_relation}
+    has_any_relation = function(value) {
       if(missing(value)) {
-        return(private$info$nr_activities)
+        return(private$info$has_any_relation)
       }
-      stop("Can't set `$nr_activities`", call. = FALSE)
+      stop("Can't set `$has_any_relation`", call. = FALSE)
     },
 
-    #' @field has_any_activity
-    #' A logical value that indicate if the schedule has any activity.
-    has_any_activity = function(value) {
+    #' @field nr_relations
+    #' Number of relations in a schedule as an integer value.
+    #'    - Usage: \code{Schedule$nr_relations}
+    nr_relations = function(value) {
       if(missing(value)) {
-        return(self$nr_activities > 0)
+        return(private$info$nr_relations)
       }
-      stop("Can't set `$has_any_activity`", call. = FALSE)
+      stop("Can't set `$nr_relations`", call. = FALSE)
     },
 
     #' @field relations
-    #' Return relations in a schedule as data frame.
+    #' Return a data frame with all relations of a schedule
+    #' in inclusion order. This is the main information calculated by CPM.
+    #' The data frame is formed by following structure:
+    #'    - **from:** Predecessor activity id from a relation.
+    #'    - **to:** Successor activity id from a relation.
+    #'    - **type:** The type of relation between activities.
+    #'    Its value may be: FS, FF, SS, SF, as described in [schedule_from_data_frame]
+    #'    - **lag:** The time period between activity predecessor and
+    #'    activity successor activity
+    #'    - **critical:** A critical relation formed by two activity critical:
+    #'    predecessor and successor.
+    #'    \code{TRUE} indicates it is critical;
+    #'    \code{FALSE} indicates it is not critical.
+    #'    - **ord:** Indicates de order that the relation was added in the schedule.
+    #'    - **i_from:** It is the index of predecessor activity in the
+    #'    activities data frame.
+    #'    - **i_to:** It is the index of successor activity in the
+    #'    activities data frame.
+    #'
+    #'    - Usage: \code{Schedule$relations}
     relations = function(value) {
       if(missing(value)) {
         if(self$has_any_relation) {
@@ -490,24 +608,6 @@ Schedule <- R6::R6Class("Schedule",
       }
 
       stop("Can't set `$relations`", call. = FALSE)
-    },
-
-    #' @field nr_relations
-    #' Number of relations (arcs) in a schedule as an integer value.
-    nr_relations = function(value) {
-      if(missing(value)) {
-        return(private$info$nr_relations)
-      }
-      stop("Can't set `$nr_relations`", call. = FALSE)
-    },
-
-    #' @field has_any_relation
-    #' A logical value that indicate if the schedule has any relation.
-    has_any_relation = function(value) {
-      if(missing(value)) {
-        return(private$info$has_any_relation)
-      }
-      stop("Can't set `$has_any_relation`", call. = FALSE)
     },
 
     #' @field duration
@@ -650,7 +750,9 @@ Schedule <- R6::R6Class("Schedule",
       invisible(self)
     },
 
-    #' @description Get a activity by id.
+    #' @description
+    #' Gets an activity by id. It returns a data
+    #' frame with one line about activity.
     #' @param id An activity id as defined by the user.
     #' @return A data frame with one line with the activity,
     #' or an error if activity id doesn't exist.
@@ -879,8 +981,8 @@ Schedule <- R6::R6Class("Schedule",
       invisible(self)
     },
 
-    #' @description List all successors from an activity:
-    #' direct or indirect successors.
+    #' @description
+    #' List all successors from an activity: direct and indirect successors.
     #' @param id Activity id to be listed.
     #' @param ign_to A relation to be ignored: id -> ign_to.
     #' Activities from this relation will be ignored.
@@ -907,8 +1009,8 @@ Schedule <- R6::R6Class("Schedule",
       base::rev(base::unique(base::rev(a_list[-1])))
     },
 
-    #' @description List all predecessors from an activity:
-    #' direct or indirect predecessors.
+    #' @description
+    #' List all predecessors from an activity: direct or indirect predecessors.
     #' @param id Activity id to be listed.
     #' @param ign_from A relation to be ignored: ign_from -> id.
     #' Activities from this relation will be ignored.
@@ -935,7 +1037,24 @@ Schedule <- R6::R6Class("Schedule",
       rev(unique(rev(a_list[-1])))
     },
 
-    #' @description Change activities duration and calculate critical path.
+    #' @description
+    #' Verify if a relation between two activities is redundant.
+    #' A relation A->C is redundant if there are A->C, A->B, B->C relations.
+    #' @param id_from From activity id.
+    #' @param id_to To activity id.
+    #' @return A logical \code{TRUE} if an arc is redundant;
+    #' \code{FALSE} if it is not.
+    is_redundant = function(id_from, id_to) {
+      private$assert_activity_id_exist(id_from)
+      private$assert_activity_id_exist(id_to)
+      private$assert_relation_exist(id_from, id_to)
+
+      succ <- self$all_successors(id_from, id_to)
+      id_to %in% succ
+    },
+
+    #' @description
+    #' Change activities duration and calculate critical path.
     #' This way is faster than creating a new schedule with new durations.
     #' @param new_durations A vector with new activities' duration.
     #' @return A Schedule object.
@@ -948,10 +1067,15 @@ Schedule <- R6::R6Class("Schedule",
       invisible(self)
     },
 
-    #' @description Create a matrix that represents a Gantt chart.
-    #' @return A matrix where "1" indicate that an activity is in execution.
+    #' @description
+    #' Create a matrix that represents a Gantt chart,
+    #' a matrix where "1" indicate that an activity is planned to be
+    #' in execution.
+    #'
     #' In this matrix, the rows represents activities,
     #' Whereas the columns represents the activity execution period.
+    #' So, the number of columns is equal to project duration.
+    #' @return A matrix where "1" indicate that an activity is in execution.
     gantt_matrix = function() {
       if(self$duration == 0) {
         stop("There is no Gantt Matrix for a schedule with zero duration!")
@@ -973,9 +1097,11 @@ Schedule <- R6::R6Class("Schedule",
       gantt
     },
 
-    #' @description Transform a Gantt matrix in x, y coordinates.
+    #' @description
+    #' Transform a Gantt matrix in x, y coordinates and the weight one.
     #' Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
-    #' @param gantt A Gantt Matrix.
+    #' @param gantt A Gantt Matrix. If it is not informed, it will use
+    #' \code{gantt_matrix()} before this function.
     #' @return A matrix x, y and weight.
     xy_gantt_matrix = function(gantt=NULL) {
       if(base::is.null(gantt)) {
@@ -993,20 +1119,6 @@ Schedule <- R6::R6Class("Schedule",
       base::matrix(c(x, y + 1, peso), ncol=3)
     },
 
-
-    #' @description Verify if a relation between two activities is redundant.
-    #' A relation A->C is redundant if there are A->C, A->B, B->C relations.
-    #' @param id_from Activity id from.
-    #' @param id_to Activity id to.
-    #' @return A logical TRUE if an arc is redundant; FALSE if not.
-    is_redundant = function(id_from, id_to) {
-      private$assert_activity_id_exist(id_from)
-      private$assert_activity_id_exist(id_to)
-      private$assert_relation_exist(id_from, id_to)
-
-      succ <- self$all_successors(id_from, id_to)
-      id_to %in% succ
-    },
 
     #' @description **SP Serial or Parallel Topological Indicator:**
     #' It shows the closeness of a network to a serial or parallel graph.

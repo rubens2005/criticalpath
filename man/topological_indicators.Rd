@@ -15,8 +15,7 @@
 \alias{indicators}
 \title{Topological Indicators: SP, AD, LA, TF}
 \description{
-Shows information about network structure.
-It may be of four type:
+Shows information about network structure. It may be of four type:
 
 \strong{SP Serial or Parallel:}
 It shows the closeness of a network to a serial or parallel graph.
@@ -83,9 +82,12 @@ schedule$topoi_la()
 schedule$topoi_tf()
 }
 \seealso{
-\link{criticalpath}, \link{Schedule}.
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item Schedule Class Definition: \link{Schedule}
+}
 }
 \author{
-Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
 Marcos dos Santos, Thiago Marques
 }

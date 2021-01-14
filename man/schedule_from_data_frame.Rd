@@ -88,9 +88,12 @@ Integrated project management and control:
   Gent: Springer, 2014, p. 6"
 }
 \seealso{
-\link{add_activity}, \link{add_relation}, \link{criticalpath}, \link{Schedule}.
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item Schedule Class Definition: \link{Schedule}
+}
 }
 \author{
-Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
 Marcos dos Santos, Thiago Marques
 }

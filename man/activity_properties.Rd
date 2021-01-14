@@ -15,24 +15,27 @@ want to know how much activities has in a schedule or when each activity
 is planned to start or to finish.
 In this section, we will explain how you can find these information.
 \itemize{
-\item \strong{Has Any Activity:} A logical value that indicate if the schedule
+\item \strong{Has Any Activity:}
+A logical value that indicate if the schedule
 has any activity. A TRUE value means that the schedule has some
 activity; a FALSE, means that the schedule is empty.
 \itemize{
 \item Usage: \code{Schedule$has_any_activity}
 }
-\item \strong{Number of Activities:} Number of activities in a schedule
-as an integer value.
+\item \strong{Number of Activities:}
+Number of activities in a schedule as an integer value.
 \itemize{
 \item Usage: \code{Schedule$nr_activities}
 }
-\item \strong{Get activity:} Gets an activity by id. It returns a data
+\item \strong{Get activity:}
+Gets an activity by id. It returns a data
 frame with one line about activity. The structure of a data is
 described in next topic.
 \itemize{
 \item Usage: \code{Schedule$get_activity(id)}
 }
-\item \strong{Activities:} Return a data frame with all activities of a schedule
+\item \strong{Activities:}
+Return a data frame with all activities of a schedule
 in a activity id order. This is the main information calculated by CPM.
 The data frame is formed by following structure:
 \itemize{
@@ -68,6 +71,7 @@ is one minus the minimal level of their successor.
 \item \strong{topo_float:} It is the difference between progressive level
 and regressive level.
 \item Usage: \code{Schedule$activities}
+\item Usage: \code{Schedule$get_activity(id)}
 }
 }
 }
@@ -103,12 +107,12 @@ schedule$get_activity(10)
 schedule$activities
 }
 \seealso{
-\link{criticalpath}, \link{Schedule}.
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item Schedule Class Definition: \link{Schedule}
+}
 }
 \author{
-Rubens Jose Rosa (rubens@rubensjoserosa.com),
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
 Marcos dos Santos, Thiago Marques
-\itemize{
-\item Usage: \code{Schedule$get_activity(id)}
-}
 }

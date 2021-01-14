@@ -10,24 +10,42 @@
 After a schedule is created, it is possible
 access several type of information:
 \itemize{
-\item \strong{title:} A project title for identification. It depends on
-user. Its use are:
+\item \strong{title:}
+A project title for identification. It depends on
+user of the class. Its use are:
 \itemize{
-\item \code{Sechedule$title <- "A title"} sets a title for a project.
-\item \code{Sechedule$title} gets the title of the project.
-}
-\item \strong{reference:} A reference from project origin,
-for example, a book, a paper, a corporation, or nothing.
+\item \code{Sechedule$title <- "A title"}
 \itemize{
-\item \code{Sechedule$reference <- "A reference"} sets a reference for a project.
-\item \code{Sechedule$title} gets the reference of the project.
+\item sets a title for a project.
 }
-\item \strong{duration:} An integer value that indicate the project duration
+\item \code{Sechedule$title}
+\itemize{
+\item gets the title of the project.
+}
+}
+\item \strong{reference:}
+A reference from project origin, for example, a book, a paper, a corporation,
+or nothing.
+\itemize{
+\item \code{Sechedule$reference <- "A reference"}
+\itemize{
+\item sets a reference for a project.
+}
+\item \code{Sechedule$title}
+\itemize{
+\item gets the reference of the project.
+}
+}
+\item \strong{duration:}
+An integer value that indicate the project duration
 calculated by CPM. Every time you include an activity or a relation
 to a schedule, the duration is calculated. You can only read
 the schedule duration.
 \itemize{
-\item \code{Sechedule$duration} gets the duration of the project.
+\item \code{Sechedule$duration}
+\itemize{
+\item gets the duration of the project.
+}
 }
 }
 }
@@ -55,4 +73,14 @@ schedule$add_act_rel( 12, "a12", 0)
 schedule$title
 schedule$reference
 schedule$duration
+}
+\seealso{
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item Schedule Class Definition: \link{Schedule}
+}
+}
+\author{
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
+Marcos dos Santos, Thiago Marques
 }

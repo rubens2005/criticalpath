@@ -47,3 +47,13 @@ xyw <- schedule$xy_gantt_matrix()
 xyw
 plot(xyw[, 1:2])
 }
+\seealso{
+\itemize{
+\item Critical Path Method Package: \link{criticalpath}
+\item Schedule Class Definition: \link{Schedule}
+}
+}
+\author{
+Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
+Marcos dos Santos, Thiago Marques
+}

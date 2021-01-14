@@ -2,16 +2,22 @@ Package: criticalpath
 Title: An Implementation of the Critical Path Method
 Version: 0.0.0.9010
 Authors@R: c(
-    person("Rubens", "Rosa", role=c("aut", "cre"), email = "rubens@rubensjoserosa.com"),
+    person("Rubens Jose", "Rosa", role=c("aut", "cre"), email = "rubens@rubensjoserosa.com"),
     person("Marcos", "dos Santos", role="aut", email="marcosdossantos@ime.eb.br"),
     person("Thiago", "Marques", role="aut", email="KKKKKKKKKKKKKK"))
 Ahthor: Rubens Jose Rosa [aut, cre],
     Marcos dos Santos [aut],
     Thiago Marques [aug]
 Maintainer: Rubens Jose Rosa <rubens@rubensjoserosa.com>
-Description: The goal of criticalpath is to calculate the project duration 
-    and to find its critical activities through application of Critical
-    Path Method to activities and precedence relation between them.
+URL: https://rubensjoserosa.com/criticalpath
+Description: criticalpath package is an object oriented implementation of the 
+    Critical Path Method (CPM) in R with R6 library. CPM is a method used to 
+    estimate the minimum project duration and  determine the amount of scheduling 
+    flexibility on the logical network paths within the schedule model. The flexibility
+    is in terms of early start, early finish, late start, late finish, total float and 
+    free float. Beside, it permits to quantify the complexity of network diagram 
+    through the analysis of topological indicators. Finally, it permits to change the 
+    activities duration to perform what-if scenario analysis.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -24,5 +30,4 @@ Suggests:
     testthat
 Collate: 
     'Schedule.R'
-    'criticalpath_references.R'
     'criticalpath.R'
