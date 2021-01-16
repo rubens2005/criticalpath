@@ -22,8 +22,10 @@
 #' - What-if scenario analysis
 #' - Topological indicators
 #'
-#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
-#' Marcos dos Santos, Thiago Marques
+#' @author
+#'   Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#'   Marcos dos Santos (\email{marcosdossantos@@ime.eb.br}),
+#'   Thiago Marques (\email{profestathimarques@@gmail.com})
 #'
 #' @references
 #'
@@ -34,7 +36,7 @@
 #'  / [igraph](https://igraph.org/)
 #'
 #' Project Management Institute (2017).
-#' **A Guide to the Project Management Body of Knowledge (PMBOK® Guide)**.
+#' **A Guide to the Project Management Body of Knowledge (PMBOK Guide)**.
 #' Sixth Edition.
 #' [PMBOK](https://www.pmi.org/pmbok-guide-standards/foundational/pmbok)
 #'

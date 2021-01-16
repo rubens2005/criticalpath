@@ -27,7 +27,7 @@
 #'  / [igraph](https://igraph.org/)
 #'
 #' Project Management Institute (2017).
-#' **A Guide to the Project Management Body of Knowledge (PMBOK® Guide)**.
+#' **A Guide to the Project Management Body of Knowledge (PMBOK Guide)**.
 #' Sixth Edition.
 #' [PMBOK](https://www.pmi.org/pmbok-guide-standards/foundational/pmbok)
 #'
@@ -50,8 +50,10 @@
 #' Springer International Publishing Switzerland.
 #' doi: [10.1007/978-3-319-04331-9](https://doi.org/10.1007/978-3-319-04331-9)
 #'
-#' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
-#' Marcos dos Santos, Thiago Marques
+#' @author
+#'   Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
+#'   Marcos dos Santos (\email{marcosdossantos@@ime.eb.br}),
+#'   Thiago Marques (\email{profestathimarques@@gmail.com})
 #'
 #' @seealso
 #' In the following links there are more information with examples.

@@ -27,7 +27,7 @@ The Igraph Software Package for Complex Network Research.
 / \href{https://igraph.org/}{igraph}
 
 Project Management Institute (2017).
-\strong{A Guide to the Project Management Body of Knowledge (PMBOK® Guide)}.
+\strong{A Guide to the Project Management Body of Knowledge (PMBOK Guide)}.
 Sixth Edition.
 \href{https://www.pmi.org/pmbok-guide-standards/foundational/pmbok}{PMBOK}
 
@@ -87,7 +87,8 @@ In the following links there are more information with examples.
 }
 \author{
 Rubens Jose Rosa (\email{rubens@rubensjoserosa.com}),
-Marcos dos Santos, Thiago Marques
+Marcos dos Santos (\email{marcosdossantos@ime.eb.br}),
+Thiago Marques (\email{profestathimarques@gmail.com})
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}

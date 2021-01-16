@@ -1,10 +1,10 @@
 Package: criticalpath
 Title: An Implementation of the Critical Path Method
-Version: 0.0.0.9010
+Version: 0.0.0.9020
 Authors@R: c(
     person("Rubens Jose", "Rosa", role=c("aut", "cre"), email = "rubens@rubensjoserosa.com"),
     person("Marcos", "dos Santos", role="aut", email="marcosdossantos@ime.eb.br"),
-    person("Thiago", "Marques", role="aut", email="KKKKKKKKKKKKKK"))
+    person("Thiago", "Marques", role="aut", email="profestathimarques@gmail.com"))
 Ahthor: Rubens Jose Rosa [aut, cre],
     Marcos dos Santos [aut],
     Thiago Marques [aug]
@@ -27,7 +27,10 @@ Imports:
     igraph,
     R6
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Collate: 
     'Schedule.R'
     'criticalpath.R'
+VignetteBuilder: knitr
