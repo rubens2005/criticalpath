@@ -103,8 +103,8 @@ schedule$add_act_rel( 12, "a12", 0)
 schedule$has_any_activity  # TRUE
 schedule$nr_activities     # 12
 
-schedule$get_activity(10)
-schedule$activities
+# schedule$get_activity(10)
+# schedule$activities
 }
 \seealso{
 \itemize{

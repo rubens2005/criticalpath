@@ -182,7 +182,7 @@ relation; a FALSE, means that the schedule does not have any relation.
 }}
 
 \item{\code{relations}}{Return a data frame with all relations of a schedule
-in inclusion order. This is the main information calculated by CPM.
+in topological order. This is the main information calculated by CPM.
 The data frame is formed by following structure:
 \itemize{
 \item \strong{from:} Predecessor activity id from a relation.

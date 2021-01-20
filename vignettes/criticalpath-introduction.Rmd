@@ -1,11 +1,9 @@
 ---
-title: criticalpath - R Package Implementation of Critical Path Method 
+title: criticalpath - R Package Implementation of Critical Path Method
 output: rmarkdown::html_vignette
 author:
-  Rubens Jose Rosa (rubens@rubensjoserosa.com),
-  Marcos dos Santos (marcosdossantos@ime.eb.br),
-  Thiago Marques (profestathimarques@gmail.com)
-date: 2021-01-20
+  Rubens Jose Rosa, Marcos dos Santos, Thiago Marques
+date: 2021-01-22
 vignette: >
   %\VignetteIndexEntry{criticalpath Package Introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -19,32 +17,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+
 ```{r setup}
 library(criticalpath)
-library(igraph)
 ```
 
-# R code example
-
-```{r}
-# Add two numbers together
-add <- function(a, b) a + b
-add(10, 20)
-```
 
 # Introduction
 
-
-Mostrar um diagrama de rede completo, com cada atividade representada por uma matriz com 4 linhas e 2 colunas, depois ir montando parte por parte o diagra, do início ao fim.
-
-
-- project management
-
-- Schedule management
-
-- Critical Path Method
-
-
+## Critical Path Method
 
 criticalpath package is an object oriented implementation of the
 Critical Path Method (CPM) in R with R6 library. CPM is a method used to estimate
@@ -58,7 +39,6 @@ the activities duration to perform what-if scenario analysis.
 With this package, you can calculate the following CPM parameters:
 
 - Schedule duration
-- Critical Path
 - Early start and finish date of each activity
 - Late start and finish date of each activity
 - Critical activities
@@ -69,37 +49,18 @@ With this package, you can calculate the following CPM parameters:
 - Topological indicators
 
 
-
-- Objetivo: applying critical path method
-  - Por que: para desenvolver experimentos com os parâmetros do CPM
-    
-## Exemplos de experimentos
-- Ao sortear aleatoriamente a duração das atividades, 
-  - como fica a aparênia da curva S associada ao cronograma?
-  - qual a distribuição da duração do projeto
-- Ao retirar aleatoriamente alguns relacionamentos do cronograma, 
-  - como fica a curva S
-  - qual a distribuição da duração do projeto
-- Qual é a principal diferença entre os dois experimentos acima?
-- Ao sortear a duração das das atividades, não é necessário criar um novo cronograma.
-  - Ao sortear ligações para serem retiradas, é necessário criar um novo cronograma a cada nova estrutura sorteada.
-
-
-
-
-# Schedule Class Definition
-
-[Schedule]
-
-
+The aim of this package is to apply critical path method, for the researcher to make experiments with CPM parameters.
 
 # How to create a schedule
 
 You have the following alternatives to create a schedule:
 
-- 1
-- 2
-- 3
+1. Create an empty schedule and add activities to i.
+1. Create an empty schedule, add activities and relations to it.
+1. Create an empty schedule and add activities at the same time that add relations to it.
+1. Create an schedule from activities data frame and relations data frame.
+
+Lets discuss each one.
 
 
 ## Add activities to a schedule
@@ -625,7 +586,7 @@ Number of relations in a schedule as an integer value.
 
 - **Relations:**
 Return a data frame with all relations of a schedule
-in inclusion order. This is the main information calculated by CPM.
+in topological order. This is the main information calculated by CPM.
 The data frame is formed by following structure:
    - **from:** Predecessor activity id from a relation.
    - **to:** Successor activity id from a relation.
@@ -838,4 +799,3 @@ doi: [10.1007/978-3-642-40438-2](https://doi.org/10.1007/978-3-642-40438-2)
 First Comes the Theory, then the Practice.
 Springer International Publishing Switzerland.
 doi: [10.1007/978-3-319-04331-9](https://doi.org/10.1007/978-3-319-04331-9)
-

@@ -21,7 +21,6 @@ the activities duration to perform what-if scenario analysis.
 With this package, you can calculate the following CPM parameters:
 \itemize{
 \item Schedule duration
-\item Critical Path
 \item Early start and finish date of each activity
 \item Late start and finish date of each activity
 \item Critical activities

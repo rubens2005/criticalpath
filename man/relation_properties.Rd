@@ -28,7 +28,7 @@ Number of relations in a schedule as an integer value.
 }
 \item \strong{Relations:}
 Return a data frame with all relations of a schedule
-in inclusion order. This is the main information calculated by CPM.
+in topolgical order. This is the main information calculated by CPM.
 The data frame is formed by following structure:
 \itemize{
 \item \strong{from:} Predecessor activity id from a relation.
@@ -78,7 +78,7 @@ schedule$add_act_rel( 12, "a12", 0)
 schedule$has_any_relation  # TRUE
 schedule$nr_relations      # 14
 
-schedule$relations
+#schedule$relations
 }
 \seealso{
 \itemize{

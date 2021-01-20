@@ -5,20 +5,18 @@ Authors@R: c(
     person("Rubens Jose", "Rosa", role=c("aut", "cre"), email = "rubens@rubensjoserosa.com"),
     person("Marcos", "dos Santos", role="aut", email="marcosdossantos@ime.eb.br"),
     person("Thiago", "Marques", role="aut", email="profestathimarques@gmail.com"))
-Ahthor: Rubens Jose Rosa [aut, cre],
+Author: Rubens Jose Rosa [aut, cre],
     Marcos dos Santos [aut],
     Thiago Marques [aug]
 Maintainer: Rubens Jose Rosa <rubens@rubensjoserosa.com>
 URL: https://rubensjoserosa.com/criticalpath
+     https://github.com/rubens2005/criticalpath
+BugReports: https://github.com/rubens2005/criticalpath/issues
 Description: criticalpath package is an object oriented implementation of the 
     Critical Path Method (CPM) in R with R6 library. CPM is a method used to 
     estimate the minimum project duration and  determine the amount of scheduling 
-    flexibility on the logical network paths within the schedule model. The flexibility
-    is in terms of early start, early finish, late start, late finish, total float and 
-    free float. Beside, it permits to quantify the complexity of network diagram 
-    through the analysis of topological indicators. Finally, it permits to change the 
-    activities duration to perform what-if scenario analysis.
-License: GPL-3 + file LICENSE
+    flexibility on the logical network paths within the schedule model.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -27,9 +25,10 @@ Imports:
     igraph,
     R6
 Suggests: 
-    testthat,
+    DiagrammeR,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 Collate: 
     'Schedule.R'
     'criticalpath.R'

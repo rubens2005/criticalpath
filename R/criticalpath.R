@@ -12,7 +12,6 @@
 #'
 #' With this package, you can calculate the following CPM parameters:
 #' - Schedule duration
-#' - Critical Path
 #' - Early start and finish date of each activity
 #' - Late start and finish date of each activity
 #' - Critical activities
@@ -217,7 +216,8 @@ NULL
 #' )
 #' schedule <- Schedule$new()
 #' schedule$add_activities(activities)
-#'
+#' # schedule$duration
+#' # schedule$activities
 NULL
 
 
@@ -319,6 +319,9 @@ NULL
 #' schedule$add_relation( 14, 15)
 #' schedule$add_relation( 15, 16)
 #' schedule$add_relation( 16, 17)
+#' # schedule$duration
+#' # schedule$activities
+#' # schedule$relations
 NULL
 
 
@@ -370,6 +373,9 @@ NULL
 #' schedule$add_act_rel( 10, "a10", 3, c(12))
 #' schedule$add_act_rel( 11, "a11", 3, c(12))
 #' schedule$add_act_rel( 12, "a12", 0)
+#' # schedule$duration
+#' # schedule$activities
+#' # schedule$relations
 NULL
 
 
@@ -428,9 +434,11 @@ NULL
 #' schedule$add_act_rel( 10, "a10", 3, c(12))
 #' schedule$add_act_rel( 11, "a11", 3, c(12))
 #' schedule$add_act_rel( 12, "a12", 0)
-#' schedule$title
-#' schedule$reference
-#' schedule$duration
+#' # schedule$title
+#' # schedule$reference
+#' # schedule$duration
+#' # schedule$activities
+#' # schedule$relations
 NULL
 
 
@@ -532,8 +540,8 @@ NULL
 #' schedule$has_any_activity  # TRUE
 #' schedule$nr_activities     # 12
 #'
-#' schedule$get_activity(10)
-#' schedule$activities
+#' # schedule$get_activity(10)
+#' # schedule$activities
 NULL
 
 
@@ -580,10 +588,10 @@ NULL
 #' rowSums(gantt) # 2 3 1 2
 #' # what is the S curve
 #' cumsum(colSums(gantt))
-#' plot(cumsum(colSums(gantt)), type="l", lwd=3)
+#' # plot(cumsum(colSums(gantt)), type="l", lwd=3)
 #' xyw <- schedule$xy_gantt_matrix()
 #' xyw
-#' plot(xyw[, 1:2])
+#' # plot(xyw[, 1:2])
 NULL
 
 
@@ -609,7 +617,7 @@ NULL
 #'
 #' - **Relations:**
 #' Return a data frame with all relations of a schedule
-#' in inclusion order. This is the main information calculated by CPM.
+#' in topolgical order. This is the main information calculated by CPM.
 #' The data frame is formed by following structure:
 #'    - **from:** Predecessor activity id from a relation.
 #'    - **to:** Successor activity id from a relation.
@@ -662,7 +670,7 @@ NULL
 #' schedule$has_any_relation  # TRUE
 #' schedule$nr_relations      # 14
 #'
-#' schedule$relations
+#' #schedule$relations
 NULL
 
 #' @title Successors and Predecessors

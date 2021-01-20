@@ -70,9 +70,11 @@ schedule$add_act_rel(  9, "a9" , 8, c(12))
 schedule$add_act_rel( 10, "a10", 3, c(12))
 schedule$add_act_rel( 11, "a11", 3, c(12))
 schedule$add_act_rel( 12, "a12", 0)
-schedule$title
-schedule$reference
-schedule$duration
+# schedule$title
+# schedule$reference
+# schedule$duration
+# schedule$activities
+# schedule$relations
 }
 \seealso{
 \itemize{

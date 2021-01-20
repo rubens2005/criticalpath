@@ -581,7 +581,7 @@ Schedule <- R6::R6Class("Schedule",
 
     #' @field relations
     #' Return a data frame with all relations of a schedule
-    #' in inclusion order. This is the main information calculated by CPM.
+    #' in topological order. This is the main information calculated by CPM.
     #' The data frame is formed by following structure:
     #'    - **from:** Predecessor activity id from a relation.
     #'    - **to:** Successor activity id from a relation.
@@ -602,11 +602,7 @@ Schedule <- R6::R6Class("Schedule",
     #'    - Usage: \code{Schedule$relations}
     relations = function(value) {
       if(missing(value)) {
-        if(self$has_any_relation) {
-          return(private$.relations[order(private$.relations$ord), ])
-        } else {
-          return(private$.relations)
-        }
+        return(private$.relations)
       }
 
       stop("Can't set `$relations`", call. = FALSE)

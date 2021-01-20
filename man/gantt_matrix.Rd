@@ -42,10 +42,10 @@ colSums(gantt) # 1 1 2 2 1 1
 rowSums(gantt) # 2 3 1 2
 # what is the S curve
 cumsum(colSums(gantt))
-plot(cumsum(colSums(gantt)), type="l", lwd=3)
+# plot(cumsum(colSums(gantt)), type="l", lwd=3)
 xyw <- schedule$xy_gantt_matrix()
 xyw
-plot(xyw[, 1:2])
+# plot(xyw[, 1:2])
 }
 \seealso{
 \itemize{

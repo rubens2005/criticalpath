@@ -56,7 +56,8 @@ activities <- data.frame(
 )
 schedule <- Schedule$new()
 schedule$add_activities(activities)
-
+# schedule$duration
+# schedule$activities
 }
 \seealso{
 \itemize{

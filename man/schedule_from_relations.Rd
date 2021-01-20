@@ -98,6 +98,9 @@ schedule$add_relation( 13, 14)
 schedule$add_relation( 14, 15)
 schedule$add_relation( 15, 16)
 schedule$add_relation( 16, 17)
+# schedule$duration
+# schedule$activities
+# schedule$relations
 }
 \seealso{
 \itemize{

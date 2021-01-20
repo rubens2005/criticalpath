@@ -1,0 +1,16 @@
+citHeader("To cite criticalpath in publications use:")
+
+citEntry(entry = "Misc",
+  title        = "An Implementation of the Critical Path Method",
+  author       = personList(as.person("Rubens Jose Rosa"),
+                   as.person("Marcos dos Santos"),
+                   as.person("Thiago Marques")
+                   ),
+  year         = "2021",
+  url          = "https://rubensjoserosa.com/criticalpath/",
+
+  textVersion  =
+  paste("Rubens Jose Rosa, Marcos dos Santos, Thiago Marques (2021).",
+        "An Implementation of the Critical Path Method.",
+        "URL https://rubensjoserosa.com/criticalpath/.")
+)
