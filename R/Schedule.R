@@ -38,17 +38,17 @@
 #' Vanhoucke, M. (2009) *Measuring Time*:
 #' Improving Project Performance Using Earned Value Management.
 #' Springer-Verlag US.
-#' doi: [10.1007/978-1-4419-1014-1](https://doi.org/10.1007/978-1-4419-1014-1).
+#' DOI: 10.1007/978-1-4419-1014-1.
 #'
 #' Vanhoucke, M. (2013) *Project Management with Dynamic Scheduling*:
 #' Baseline Scheduling, Risk Analysis and Project Control.
 #' Springer-Verlag Berlin Heidelberg.
-#' doi: [10.1007/978-3-642-40438-2](https://doi.org/10.1007/978-3-642-40438-2)
+#' DOI: 10.1007/978-3-642-40438-2.
 #'
 #' Vanhoucke, M. (2014) *Integrated Project Management and Control*:
 #' First Comes the Theory, then the Practice.
 #' Springer International Publishing Switzerland.
-#' doi: [10.1007/978-3-319-04331-9](https://doi.org/10.1007/978-3-319-04331-9)
+#' DOI: 10.1007/978-3-319-04331-9.
 #'
 #' @author
 #'   Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),

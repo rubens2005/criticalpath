@@ -50,17 +50,17 @@ Project Management Institute (2017).
 Vanhoucke, M. (2009) \emph{Measuring Time}:
 Improving Project Performance Using Earned Value Management.
 Springer-Verlag US.
-doi: \href{https://doi.org/10.1007/978-1-4419-1014-1}{10.1007/978-1-4419-1014-1}.
+DOI: 10.1007/978-1-4419-1014-1.
 
 Vanhoucke, M. (2013) \emph{Project Management with Dynamic Scheduling}:
 Baseline Scheduling, Risk Analysis and Project Control.
 Springer-Verlag Berlin Heidelberg.
-doi: \href{https://doi.org/10.1007/978-3-642-40438-2}{10.1007/978-3-642-40438-2}
+DOI: 10.1007/978-3-642-40438-2.
 
 Vanhoucke, M. (2014) \emph{Integrated Project Management and Control}:
 First Comes the Theory, then the Practice.
 Springer International Publishing Switzerland.
-doi: \href{https://doi.org/10.1007/978-3-319-04331-9}{10.1007/978-3-319-04331-9}
+DOI: 10.1007/978-3-319-04331-9.
 }
 \seealso{
 In the following links there are more information with examples.
