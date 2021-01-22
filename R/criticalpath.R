@@ -121,15 +121,17 @@ NULL
 #' - **type:** Specifies the type of relation between activities.
 #' The default type is FS and its value may be: FS, FF, SS, SF, that means:
 #'     - **FS:** Finish-Start relation.
-#' Activity to id can only start after the finish of activity from id.
+#' Activity 'to' id can only start after the finish of activity 'from' id.
 #'     - **FF:** Finish-Finish relation.
-#' Activity to id must finish together with activity from id.
+#' Activity 'to' id must finish together with activity 'from' id.
 #'     - **SS:** Start-Start relation.
-#' Activity to id must start together with activity from id.
+#' Activity 'to' id must start together with activity 'from' id.
 #'     - **SF:** Start-Finish relation.
-#' Activity to id must finish when activity from id starts.
+#' Activity 'to' id must finish when activity 'from' id starts.
 #' - **lag:** The time period between activities that the successor activity
-#' must be advanced, or lated, after activity from id.
+#'  'to' must be advanced after activity 'from' has been finished.
+#'  The value may be negative, in such case, the activity 'to' will be
+#'  anticipated 'lag' time periods.
 #' It must be an integer, less than, equal or greater than zero.
 #' @return A Schedule object with CPM parameters calculated.
 #' @author Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
@@ -246,20 +248,22 @@ NULL
 #' If type is not defined, it is assumed to be FS.
 #'
 #' - **FS:** Finish-Start relation.
-#' Activity to can only start after the finish of activity from.
+#' Activity 'to' id can only start after the finish of activity 'from' id.
 #'
 #' - **FF:** Finish-Finish relation.
-#' Activity to must finish together with activity from.
+#' Activity 'to' id must finish together with activity 'from' id.
 #'
 #' - **SS:** Start-Start relation.
-#' Activity to must start together with activity from.
+#' Activity 'to' id must start together with activity 'from' id.
 #'
 #' - **SF:** Start-Finish relation.
-#' Activity to must finish when activity from starts.
+#' Activity 'to' id must finish when activity 'from' id starts.
 #'
 #' @param lag
 #' The time period between activities that the successor activity
-#' must be advanced, or lated, after activity from.
+#'  'to' must be advanced after activity 'from' has been finished.
+#'  The value may be negative, in such case, the activity 'to' will be
+#'  anticipated 'lag' time periods.
 #' It must be an integer, less than, equal or greater than zero.
 #' If lag is not informed, it is assumed to be zero.
 #' @param relations Data frame with precedence relations between activities.

@@ -772,22 +772,24 @@ Schedule <- R6::R6Class("Schedule",
     #' If type is not defined, it is assumed to be FS.
     #'
     #' **FS:** Finish-Start relation.
-    #' Activity to can only start after the finish of activity from.
+    #' Activity 'to' id can only start after the finish of activity 'from' id.
     #'
     #' **FF:** Finish-Finish relation.
-    #' Activity to must finish together with activity from.
+    #' Activity 'to' id must finish together with activity 'from' id.
     #'
     #' **SS:** Start-Start relation.
-    #' Activity to must start together with activity from.
+    #' Activity 'to' id must start together with activity 'from' id.
     #'
     #' **SF:** Start-Finish relation.
-    #' Activity to must finish when activity from starts.
+    #' Activity 'to' id must finish when activity 'from' id starts.
     #'
     #' @param lag
-    #' If lag is not defined, it is assumed to be zero.
     #' The time period between activities that the successor activity
-    #' must be advanced, or lated, after activity from.
+    #'  'to' must be advanced after activity 'from' has been finished.
+    #'  The value may be negative, in such case, the activity 'to' will be
+    #'  anticipated 'lag' time periods.
     #' It must be an integer, less than, equal or greater than zero.
+    #' If lag is not defined, it is assumed to be zero.
     #' @return A Schedule object with CPM parameters calculated.
     add_relation = function(from, to, type="FS", lag=0) {
       private$assert_activity_id_is_valid(from)

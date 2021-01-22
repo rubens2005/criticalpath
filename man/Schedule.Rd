@@ -387,21 +387,23 @@ The default type is FS and its value may be: FS, FF, SS, SF, that means:
 If type is not defined, it is assumed to be FS.
 
 \strong{FS:} Finish-Start relation.
-Activity to can only start after the finish of activity from.
+Activity 'to' id can only start after the finish of activity 'from' id.
 
 \strong{FF:} Finish-Finish relation.
-Activity to must finish together with activity from.
+Activity 'to' id must finish together with activity 'from' id.
 
 \strong{SS:} Start-Start relation.
-Activity to must start together with activity from.
+Activity 'to' id must start together with activity 'from' id.
 
 \strong{SF:} Start-Finish relation.
-Activity to must finish when activity from starts.}
+Activity 'to' id must finish when activity 'from' id starts.}
 
-\item{\code{lag}}{If lag is not defined, it is assumed to be zero.
-The time period between activities that the successor activity
-must be advanced, or lated, after activity from.
-It must be an integer, less than, equal or greater than zero.}
+\item{\code{lag}}{The time period between activities that the successor activity
+'to' must be advanced after activity 'from' has been finished.
+The value may be negative, in such case, the activity 'to' will be
+anticipated 'lag' time periods.
+It must be an integer, less than, equal or greater than zero.
+If lag is not defined, it is assumed to be zero.}
 }
 \if{html}{\out{</div>}}
 }
