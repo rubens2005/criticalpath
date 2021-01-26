@@ -1,3 +1,19 @@
+# criticalpath 0.1.0
+
+## Cran comments Package Submission (22 de Janeiro de 2021 13:13)
+
+
+-> validar 
+  - check()
+  - check_win_devel()
+  - https://builder.r-hub.io/
+
+
+--->>> build()
+
+
+
+
 ## Test environments
 * local OS windows 7,  R version 4.0.3 (2020-10-10)
 * https://builder.r-hub.io/

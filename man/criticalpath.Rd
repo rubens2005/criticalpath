@@ -3,10 +3,6 @@
 \docType{package}
 \name{criticalpath}
 \alias{criticalpath}
-\alias{CPM}
-\alias{cpm}
-\alias{critical}
-\alias{path}
 \title{criticalpath: Object Oriented Critical Path Method Implementation}
 \description{
 criticalpath package is an object oriented implementation of the
@@ -31,69 +27,38 @@ With this package, you can calculate the following CPM parameters:
 \item Topological indicators
 }
 }
-\references{
-Csardi, G. & Nepusz, T. (2005).
-The Igraph Software Package for Complex Network Research.
-\emph{InterJournal}. Complex Systems. 1695.
-\href{https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research}{Article}
-/ \href{https://igraph.org/}{igraph}
-
-Project Management Institute (2017).
-\strong{A Guide to the Project Management Body of Knowledge (PMBOK Guide)}.
-Sixth Edition.
-\href{https://www.pmi.org/pmbok-guide-standards/foundational/pmbok}{PMBOK}
-
-Project Management Institute (2017).
-\strong{PMI Lexicon of Project Management Terms:} Version 3.2.
-\href{https://www.pmi.org/pmbok-guide-standards/lexicon}{PMI Lexicon}
-
-Vanhoucke, M. (2009) \emph{Measuring Time}:
-Improving Project Performance Using Earned Value Management.
-Springer-Verlag US.
-DOI: 10.1007/978-1-4419-1014-1.
-
-Vanhoucke, M. (2013) \emph{Project Management with Dynamic Scheduling}:
-Baseline Scheduling, Risk Analysis and Project Control.
-Springer-Verlag Berlin Heidelberg.
-DOI: 10.1007/978-3-642-40438-2.
-
-Vanhoucke, M. (2014) \emph{Integrated Project Management and Control}:
-First Comes the Theory, then the Practice.
-Springer International Publishing Switzerland.
-DOI: 10.1007/978-3-319-04331-9.
-}
 \seealso{
-In the following links there are more information with examples.
+On vignette package there are more information with examples about:
 \itemize{
 \item Schedule Class Definition: \link{Schedule}
 \item How to create a schedule:
 \itemize{
-\item Add activities and relations together to an schedule: \link{schedule_from_act_rel}
-\item Add activities to a schedule: \link{schedule_from_activities}
-\item Add relations to a schedule: \link{schedule_from_relations}
-\item Create a schedule object from data frames: \link{schedule_from_data_frame}
+\item Add activities and relations together to an schedule.
+\item Add activities to a schedule.
+\item Add relations to a schedule.
+\item Create a schedule object from data frames.
 }
 \item How to get schedule information:
 \itemize{
-\item Title, Reference and Schedule Duration: \link{reference}
+\item Title, Reference and Schedule Duration.
 }
 \item How to get activities properties:
 \itemize{
-\item Activity Properties: \link{activity_properties}
-\item Gantt Matrix: \link{gantt_matrix}
+\item Activity Properties.
+\item Gantt Matrix.
 }
 \item How to change activities duration:
 \itemize{
-\item Change Activities Duration: \link{change_durations}
+\item Change Activities Duration.
 }
 \item How to get relations properties:
 \itemize{
-\item Relation Properties \link{relation_properties}
-\item Successors and Predecessors: \link{successors}
+\item Relation Properties
+\item Successors and Predecessors.
 }
 \item How to get topological properties:
 \itemize{
-\item Topological Indicators: \link{topological_indicators}
+\item Topological Indicators.
 }
 }
 }

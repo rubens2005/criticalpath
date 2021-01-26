@@ -20,35 +20,20 @@
 #'
 #' @references
 #'
-#' Csardi, G. & Nepusz, T. (2005).
-#' The Igraph Software Package for Complex Network Research.
-#' *InterJournal*. Complex Systems. 1695.
-#' [Article](https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research)
-#'  / [igraph](https://igraph.org/)
+#' Csardi, G. & Nepusz, T. (2005)
+#' <https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research>
 #'
-#' Project Management Institute (2017).
-#' **A Guide to the Project Management Body of Knowledge (PMBOK Guide)**.
-#' Sixth Edition.
-#' [PMBOK](https://www.pmi.org/pmbok-guide-standards/foundational/pmbok)
+#' Project Management Institute (2017)
+#' <https://www.pmi.org/pmbok-guide-standards/foundational/pmbok>
 #'
-#' Project Management Institute (2017).
-#' **PMI Lexicon of Project Management Terms:** Version 3.2.
-#' [PMI Lexicon](https://www.pmi.org/pmbok-guide-standards/lexicon)
+#' Project Management Institute (2017)
+#' <https://www.pmi.org/pmbok-guide-standards/lexicon>
 #'
-#' Vanhoucke, M. (2009) *Measuring Time*:
-#' Improving Project Performance Using Earned Value Management.
-#' Springer-Verlag US.
-#' DOI: 10.1007/978-1-4419-1014-1.
+#' Vanhoucke, M. (2009) <doi:10.1007/978-1-4419-1014-1>
 #'
-#' Vanhoucke, M. (2013) *Project Management with Dynamic Scheduling*:
-#' Baseline Scheduling, Risk Analysis and Project Control.
-#' Springer-Verlag Berlin Heidelberg.
-#' DOI: 10.1007/978-3-642-40438-2.
+#' Vanhoucke, M. (2013) <doi:10.1007/978-3-642-40438-2>
 #'
-#' Vanhoucke, M. (2014) *Integrated Project Management and Control*:
-#' First Comes the Theory, then the Practice.
-#' Springer International Publishing Switzerland.
-#' DOI: 10.1007/978-3-319-04331-9.
+#' Vanhoucke, M. (2014) <doi:10.1007/978-3-319-04331-9>
 #'
 #' @author
 #'   Rubens Jose Rosa (\email{rubens@@rubensjoserosa.com}),
@@ -56,25 +41,26 @@
 #'   Thiago Marques (\email{profestathimarques@@gmail.com})
 #'
 #' @seealso
-#' In the following links there are more information with examples.
-#' - Critical Path Method Package: [criticalpath]
+#' On vignette package there are more information with examples about:
+#' - Critical Path Method Package [criticalpath].
 #' - How to create a schedule:
-#'   - Add activities and relations together to an schedule: [schedule_from_act_rel]
-#'   - Add activities to a schedule: [schedule_from_activities]
-#'   - Add relations to a schedule: [schedule_from_relations]
-#'   - Create a schedule object from data frames: [schedule_from_data_frame]
+#'   - Add activities and relations together to an schedule.
+#'   - Add activities to a schedule.
+#'   - Add relations to a schedule.
+#'   - Create a schedule object from data frames.
 #'  - How to get schedule information:
-#'    - Title, Reference and Schedule Duration: [reference]
+#'    - Title, Reference and Schedule Duration.
 #'  - How to get activities properties:
-#'    - Activity Properties: [activity_properties]
-#'    - Gantt Matrix: [gantt_matrix]
+#'    - Activity Properties.
+#'    - Gantt Matrix.
 #'  - How to change activities duration:
-#'    - Change Activities Duration: [change_durations]
+#'    - Change Activities Duration.
 #'  - How to get relations properties:
-#'    - Relation Properties [relation_properties]
-#'    - Successors and Predecessors: [successors]
+#'    - Relation Properties
+#'    - Successors and Predecessors.
 #'  - How to get topological properties:
-#'    - Topological Indicators: [topological_indicators]
+#'    - Topological Indicators.
+#'
 Schedule <- R6::R6Class("Schedule",
 
   private = list(
@@ -289,35 +275,35 @@ Schedule <- R6::R6Class("Schedule",
 
         forward = list(
 
-          FS = function(acts, pr, su, lag) {
-            proximo =  acts$EF[pr] + lag
-            if (proximo > acts$ES[su]) {
-              acts$ES[su] <<- proximo
-              acts$EF[su] <<- proximo + acts$duration[su]
+          FS = function(pr, su, lag) {
+            proximo =  private$.activities$EF[pr] + lag
+            if (proximo > private$.activities$ES[su]) {
+              private$.activities$ES[su] <- proximo
+              private$.activities$EF[su] <- proximo + private$.activities$duration[su]
             }
           },
 
-          FF = function(acts, pr, su, lag) {
-            proximo =  acts$EF[pr] + lag
-            if (proximo > acts$EF[su]) {
-              acts$EF[su] <<- proximo
-              acts$ES[su] <<- proximo - acts$duration[su]
+          FF = function(pr, su, lag) {
+            proximo =  private$.activities$EF[pr] + lag
+            if (proximo > private$.activities$EF[su]) {
+              private$.activities$EF[su] <- proximo
+              private$.activities$ES[su] <- proximo - private$.activities$duration[su]
             }
           },
 
-          SS = function(acts, pr, su, lag) {
-            proximo =  acts$ES[pr] + lag
-            if (proximo > acts$ES[su]) {
-              acts$ES[su] <<- proximo
-              acts$EF[su] <<- proximo + acts$duration[su]
+          SS = function(pr, su, lag) {
+            proximo =  private$.activities$ES[pr] + lag
+            if (proximo > private$.activities$ES[su]) {
+              private$.activities$ES[su] <- proximo
+              private$.activities$EF[su] <- proximo + private$.activities$duration[su]
             }
           },
 
-          SF = function(acts, pr, su, lag) {
-            proximo =  acts$ES[pr] + lag
-            if (proximo > acts$EF[su]) {
-              acts$EF[su] <<- proximo
-              acts$ES[su] <<- proximo - acts$duration[su]
+          SF = function(pr, su, lag) {
+            proximo =  private$.activities$ES[pr] + lag
+            if (proximo > private$.activities$EF[su]) {
+              private$.activities$EF[su] <- proximo
+              private$.activities$ES[su] <- proximo - private$.activities$duration[su]
             }
           }
 
@@ -325,35 +311,35 @@ Schedule <- R6::R6Class("Schedule",
 
         backward = list(
 
-          FS = function(acts, pr, su, lag) {
-            proximo =  acts$LS[su] - lag
-            if (proximo < acts$LF[pr]) {
-              acts$LF[pr] <<- proximo
-              acts$LS[pr] <<- proximo - acts$duration[pr]
+          FS = function(pr, su, lag) {
+            proximo =  private$.activities$LS[su] - lag
+            if (proximo < private$.activities$LF[pr]) {
+              private$.activities$LF[pr] <- proximo
+              private$.activities$LS[pr] <- proximo - private$.activities$duration[pr]
             }
           },
 
-          FF = function(acts, pr, su, lag) {
-            proximo =  acts$LF[su] - lag
-            if (proximo < acts$LF[pr]) {
-              acts$LF[pr] <<- proximo
-              acts$LS[pr] <<- proximo - acts$duration[pr]
+          FF = function(pr, su, lag) {
+            proximo =  private$.activities$LF[su] - lag
+            if (proximo < private$.activities$LF[pr]) {
+              private$.activities$LF[pr] <- proximo
+              private$.activities$LS[pr] <- proximo - private$.activities$duration[pr]
             }
           },
 
-          SS = function(acts, pr, su, lag) {
-            proximo =  acts$LS[su] - lag
-            if (proximo < acts$LS[pr]) {
-              acts$LS[pr] <<- proximo
-              acts$LF[pr] <<- proximo + acts$duration[pr]
+          SS = function(pr, su, lag) {
+            proximo =  private$.activities$LS[su] - lag
+            if (proximo < private$.activities$LS[pr]) {
+              private$.activities$LS[pr] <- proximo
+              private$.activities$LF[pr] <- proximo + private$.activities$duration[pr]
             }
           },
 
-          SF = function(acts, pr, su, lag) {
-            proximo =  acts$LF[su] - lag
-            if (proximo < acts$LS[pr]) {
-              acts$LS[pr] <<- proximo
-              acts$LF[pr] <<- proximo + acts$duration[pr]
+          SF = function(pr, su, lag) {
+            proximo =  private$.activities$LF[su] - lag
+            if (proximo < private$.activities$LS[pr]) {
+              private$.activities$LS[pr] <- proximo
+              private$.activities$LF[pr] <- proximo + private$.activities$duration[pr]
             }
           }
 
@@ -363,26 +349,25 @@ Schedule <- R6::R6Class("Schedule",
 
       ##############################
 
-      acts <- private$.activities
+      ##acts <- private$.activities
       rela <- private$.relations
 
       # Define milestone
-      acts$milestone <- acts$duration == 0
+      private$.activities$milestone <- private$.activities$duration == 0
 
       # Init early start and finish values
-      acts$ES <- -Inf
-      acts$EF <- -Inf
+      private$.activities$ES <- -Inf
+      private$.activities$EF <- -Inf
 
       # arrumarPeriodoDasAtividadesIniciais
-      acts$ES[private$config$starters] <- 0
-      acts$EF[private$config$starters] <- acts$duration[private$config$starters]
+      private$.activities$ES[private$config$starters] <- 0
+      private$.activities$EF[private$config$starters] <- private$.activities$duration[private$config$starters]
 
       # Forward calculate
       if(nrow(rela) > 0) {
         for(i in 1:nrow(rela)) {
           type <- rela$type[i]
           relation_type$forward[[type]](
-            acts,
             rela$i_from[i],
             rela$i_to[i],
             rela$lag[i]
@@ -391,22 +376,21 @@ Schedule <- R6::R6Class("Schedule",
       }
 
       # Calculate project duration
-      private$info$duration <- base::max(acts$EF) - base::min(acts$ES)
+      private$info$duration <- base::max(private$.activities$EF) - base::min(private$.activities$ES)
 
       # Init late start and finish values
-      acts$LF <- +Inf
-      acts$LS <- +Inf
+      private$.activities$LF <- +Inf
+      private$.activities$LS <- +Inf
 
       # arrumarPeriodoDasAtividadesFinais
-      acts$LF[private$config$ends] <- base::max(acts$EF)
-      acts$LS[private$config$ends] <- acts$LF[private$config$ends] - acts$duration[private$config$ends]
+      private$.activities$LF[private$config$ends] <- base::max(private$.activities$EF)
+      private$.activities$LS[private$config$ends] <- private$.activities$LF[private$config$ends] - private$.activities$duration[private$config$ends]
 
       # Backward calculate
       if(nrow(rela) > 0) {
         for(i in nrow(rela):1) {
           type <- rela$type[i]
           relation_type$backward[[type]](
-            acts,
             rela$i_from[i],
             rela$i_to[i],
             rela$lag[i]
@@ -415,37 +399,36 @@ Schedule <- R6::R6Class("Schedule",
       }
 
       # Calculate total_float
-      acts$total_float <- acts$LS - acts$ES
+      private$.activities$total_float <- private$.activities$LS - private$.activities$ES
 
       # Calculate free_float
-      acts$free_float <- acts$total_float  ## Acho que aqui tem que ser a TOTAL_FLOAT !!!
-      #acts$free_float[private$config$ends] <- 0
-      if(nrow(acts) > 0) {
-        for(i_from in 1:nrow(acts)) {
+      private$.activities$free_float <- private$.activities$total_float  ## Acho que aqui tem que ser a TOTAL_FLOAT !!!
+      if(nrow(private$.activities) > 0) {
+        for(i_from in 1:nrow(private$.activities)) {
           succesors <- rela[rela$i_from == i_from, ]
           if(nrow(succesors) > 0) {
             for(j in 1:nrow(succesors)) {
               to <- succesors$i_to[j]
-              ff <- acts$ES[to] - acts$EF[i_from]
-              if(ff < acts$free_float[i_from]) {
-                acts$free_float[i_from] <- ff
+              ff <- private$.activities$ES[to] - private$.activities$EF[i_from]
+              if(ff < private$.activities$free_float[i_from]) {
+                private$.activities$free_float[i_from] <- ff
               }
             }
           } else {
-            acts$free_float[i_from] <- acts$total_float[i_from]
+            private$.activities$free_float[i_from] <- private$.activities$total_float[i_from]
           }
         }
       }
 
       # Identify critical activity
-      acts$critical <- acts$total_float <= 0
+      private$.activities$critical <- private$.activities$total_float <= 0
 
       # Identify critical relation
-      rela$critical <- acts$critical[rela$i_from] & acts$critical[rela$i_to]
+      rela$critical <- private$.activities$critical[rela$i_from] & private$.activities$critical[rela$i_to]
 
 
       ###################
-      private$.activities <- acts
+      #####private$.activities <- acts
       private$.relations <- rela
     }
 
@@ -460,6 +443,7 @@ Schedule <- R6::R6Class("Schedule",
     #'      - sets a title for a project.
     #'    - \code{Sechedule$title}
     #'      - gets the title of the project.
+    #'
     title = function(value) {
       if(missing(value)) {
         return(private$info$title)
@@ -586,7 +570,7 @@ Schedule <- R6::R6Class("Schedule",
     #'    - **from:** Predecessor activity id from a relation.
     #'    - **to:** Successor activity id from a relation.
     #'    - **type:** The type of relation between activities.
-    #'    Its value may be: FS, FF, SS, SF, as described in [schedule_from_data_frame]
+    #'    Its value may be: FS, FF, SS, SF.
     #'    - **lag:** The time period between activity predecessor and
     #'    activity successor activity
     #'    - **critical:** A critical relation formed by two activity critical:

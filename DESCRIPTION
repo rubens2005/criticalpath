@@ -20,7 +20,14 @@ Description:
     late start, late finish, total float and free float. Beside, it permits 
     to quantify the complexity of network diagram through the analysis of 
     topological indicators. Finally, it permits to change the activities duration 
-    to perform what-if scenario analysis.
+    to perform what-if scenario analysis. The package was built based on following 
+    references:
+    Csardi, G. & Nepusz, T. (2005) <https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research>;
+    Project Management Institute (2017) <https://www.pmi.org/pmbok-guide-standards/foundational/pmbok>;
+    Project Management Institute (2017) <https://www.pmi.org/pmbok-guide-standards/lexicon>;
+    Vanhoucke, M. (2009) <doi:10.1007/978-1-4419-1014-1>;
+    Vanhoucke, M. (2013) <doi:10.1007/978-3-642-40438-2>;
+    Vanhoucke, M. (2014) <doi:10.1007/978-3-319-04331-9>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
