@@ -26,6 +26,31 @@
 #'   Marcos dos Santos (\email{marcosdossantos@@ime.eb.br}),
 #'   Thiago Marques (\email{profestathimarques@@gmail.com})
 #'
+#' @references
+#'
+#' Csardi, G. & Nepusz, T. (2005).
+#' The Igraph Software Package for Complex Network Research.
+#' *InterJournal*. Complex Systems. 1695.
+#'
+#' Project Management Institute (2017)
+#' **A Guide to the Project Management Body of Knowledge (PMBOK Guide)**.
+#' Sixth Edition.
+#'
+#' Project Management Institute (2017)
+#' **PMI Lexicon of Project Management Terms:** Version 3.2.
+#'
+#' Vanhoucke, M. (2009) **Measuring Time**:
+#' Improving Project Performance Using Earned Value Management.
+#' Springer-Verlag US.
+#'
+#' Vanhoucke, M. (2013) **Project Management with Dynamic Scheduling**:
+#' Baseline Scheduling, Risk Analysis and Project Control.
+#' Springer-Verlag Berlin Heidelberg.
+#'
+#' Vanhoucke, M. (2014) **Integrated Project Management and Control**:
+#' First Comes the Theory, then the Practice.
+#' Springer International Publishing Switzerland.
+#'
 #' @seealso
 #' On vignette package there are more information with examples about:
 #' - Schedule Class Definition: [Schedule]

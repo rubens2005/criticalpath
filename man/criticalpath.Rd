@@ -27,6 +27,30 @@ With this package, you can calculate the following CPM parameters:
 \item Topological indicators
 }
 }
+\references{
+Csardi, G. & Nepusz, T. (2005).
+The Igraph Software Package for Complex Network Research.
+\emph{InterJournal}. Complex Systems. 1695.
+
+Project Management Institute (2017)
+\strong{A Guide to the Project Management Body of Knowledge (PMBOK Guide)}.
+Sixth Edition.
+
+Project Management Institute (2017)
+\strong{PMI Lexicon of Project Management Terms:} Version 3.2.
+
+Vanhoucke, M. (2009) \strong{Measuring Time}:
+Improving Project Performance Using Earned Value Management.
+Springer-Verlag US.
+
+Vanhoucke, M. (2013) \strong{Project Management with Dynamic Scheduling}:
+Baseline Scheduling, Risk Analysis and Project Control.
+Springer-Verlag Berlin Heidelberg.
+
+Vanhoucke, M. (2014) \strong{Integrated Project Management and Control}:
+First Comes the Theory, then the Practice.
+Springer International Publishing Switzerland.
+}
 \seealso{
 On vignette package there are more information with examples about:
 \itemize{

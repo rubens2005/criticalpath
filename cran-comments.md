@@ -1,12 +1,17 @@
 # criticalpath 0.1.0
 
+
+
+
 ## Cran comments Package Submission (22 de Janeiro de 2021 13:13)
 
 
 -> validar 
   - check()
+  - check_win_release()
   - check_win_devel()
-  - https://builder.r-hub.io/
+  - check_rhub()
+    - https://builder.r-hub.io/
 
 
 --->>> build()
