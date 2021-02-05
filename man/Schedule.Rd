@@ -653,7 +653,7 @@ First Comes the Theory, then the Practice.
 Springer International Publishing Switzerland.
 }
 \seealso{
-On vignette package there are more information with examples about:
+On vignette package there is more information with examples about:
 \itemize{
 \item Critical Path Method Package \link{criticalpath}.
 \item How to create a schedule:
@@ -721,7 +721,7 @@ or nothing. Its uses are:
 }
 }}
 
-\item{\code{has_any_activity}}{A logical value that indicate if the schedule
+\item{\code{has_any_activity}}{A logical value that indicates if the schedule
 has any activity. A TRUE value means that the schedule has some
 activity; a FALSE, means that the schedule is empty.
 \itemize{
@@ -734,17 +734,17 @@ activity; a FALSE, means that the schedule is empty.
 }}
 
 \item{\code{activities}}{Return a data frame with all activities of a schedule
-in a activity id order. This is the main information calculated by CPM.
+in an activity id order. This is the main information calculated by CPM.
 The data frame is formed by following structure:
 \itemize{
 \item \strong{id:} Activity id.
 \item \strong{name:} The name of activity.
 \item \strong{duration:} A number that represents the activity's duration.
 \item \strong{milestone:} A milestone is an activity with zero duration.
-This property indicates if a activity is a milestone or not:
+This property indicates if an activity is a milestone or not:
 \code{TRUE} indicates it is a milestone; \code{FALSE} indicates it is not.
 \item \strong{critical:} A critical activity is one with total float minor or equal
-to zero. This property indicates if a activity is critical:
+to zero. This property indicates if an activity is critical:
 \code{TRUE} indicates it is critical;
 \code{FALSE} indicates it is not critical.
 \item \strong{ES:} Early Start: is the earliest start period an activity can begin
@@ -805,7 +805,7 @@ activities data frame.
 \item Usage: \code{Schedule$relations}
 }}
 
-\item{\code{duration}}{An integer value that indicate the duration of a schedule.}
+\item{\code{duration}}{An integer value that indicates the duration of a schedule.}
 }
 \if{html}{\out{</div>}}
 }
@@ -868,12 +868,12 @@ It may be zero.
 
 \item{\code{relations}}{Data frame with precedence relations between activities.
 If it is informed, the activities has to be informed too.
-If is is not informed, the schedule will be created without any relation.
+If it is not informed, the schedule will be created without any relation.
 It is formed by predecessor activity e successor activity.
 Its structure is:
 \itemize{
-\item \strong{from:} The id of predecessor activity. Must exist a activity with from id.
-\item \strong{to:} The id of successor activity. Must exist a activity with to id.
+\item \strong{from:} The id of predecessor activity. Must exist an activity with from id.
+\item \strong{to:} The id of successor activity. Must exist an activity with to id.
 \item \strong{type:} Specifies the type of relation between activities.
 The default type is FS and its value may be: FS, FF, SS, SF, that means:
 \itemize{
@@ -951,7 +951,7 @@ relation between activities. It must be unique.}
 \item{\code{name}}{The name of activity. The default is an empty string.}
 
 \item{\code{duration}}{A number that represents the activity's duration.
-It must be equal or grater than zero. The default value is zero.}
+It must be equal or greater than zero. The default value is zero.}
 }
 \if{html}{\out{</div>}}
 }
@@ -1056,10 +1056,10 @@ Add a relation to a schedule.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{from}}{The id of predecessor activity.
-Must exist a activity with from.}
+Must exist an activity with from.}
 
 \item{\code{to}}{The id of successor activity.
-Must exist a activity with to.}
+Must exist an activity with to.}
 
 \item{\code{type}}{Specifies the type of relation between activities.
 The default type is FS and its value may be: FS, FF, SS, SF, that means:
@@ -1221,10 +1221,10 @@ Add an activity and her relations to a schedule.
 \item{\code{name}}{The name of activity.}
 
 \item{\code{duration}}{A number that represents the activity's duration.
-It must be equal or grater than zero.}
+It must be equal or greater than zero.}
 
 \item{\code{relations_id}}{A vector of ids such that will be linked with activity id.
-It may be a relations of successor or predecessors.}
+It may be relations of successor or predecessors.}
 
 \item{\code{direction}}{Direction of relations_id: It may be "succ" or "pred".
 If dir="succ" the relations_id will be the successor of the activity.
@@ -1529,18 +1529,18 @@ schedule$activities$duration
 \if{latex}{\out{\hypertarget{method-gantt_matrix}{}}}
 \subsection{Method \code{gantt_matrix()}}{
 Create a matrix that represents a Gantt chart,
-a matrix where "1" indicate that an activity is planned to be
+a matrix where "1" indicates that an activity is planned to be
 in execution.
 
-In this matrix, the rows represents activities,
-Whereas the columns represents the activity execution period.
+In this matrix, the rows represent activities,
+whereas the columns represents the activity execution period.
 So, the number of columns is equal to project duration.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$gantt_matrix()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-A matrix where "1" indicate that an activity is in execution.
+A matrix where "1" indicates that an activity is in execution.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
@@ -1716,7 +1716,7 @@ Measures the presence of long arcs based on the difference between
 the progressive level of the end activity and the start node
 of each relation.
 If LA is approximately equal zero, the progressive level between
-activities are as far as possible.
+activities is as far as possible.
 Otherwise, if LA is equal one, the relation distance are one.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Schedule$topoi_la()}\if{html}{\out{</div>}}

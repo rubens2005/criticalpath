@@ -6,7 +6,7 @@
 #' the minimum project duration and  determine the amount of scheduling flexibility
 #' on the logical network paths within the schedule model. The flexibility is in
 #' terms of early start, early finish, late start, late finish, total float and
-#' free float. Beside, it permits to quantify the complexity of network diagram
+#' free float. Besides, it permits to quantify the complexity of network diagram
 #' through the analysis of topological indicators. Finally, it permits to change
 #' the activities duration to perform what-if scenario analysis.
 #'

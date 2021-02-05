@@ -45,7 +45,7 @@
 #'   Thiago Marques (\email{profestathimarques@@gmail.com})
 #'
 #' @seealso
-#' On vignette package there are more information with examples about:
+#' On vignette package there is more information with examples about:
 #' - Critical Path Method Package [criticalpath].
 #' - How to create a schedule:
 #'   - Add activities and relations together to an schedule.
@@ -615,7 +615,7 @@ Schedule <- R6::R6Class("Schedule",
     },
 
     #' @field has_any_activity
-    #' A logical value that indicate if the schedule
+    #' A logical value that indicates if the schedule
     #' has any activity. A TRUE value means that the schedule has some
     #' activity; a FALSE, means that the schedule is empty.
     #'    - Usage: \code{Schedule$has_any_activity}
@@ -640,16 +640,16 @@ Schedule <- R6::R6Class("Schedule",
 
     #' @field activities
     #' Return a data frame with all activities of a schedule
-    #' in a activity id order. This is the main information calculated by CPM.
+    #' in an activity id order. This is the main information calculated by CPM.
     #' The data frame is formed by following structure:
     #'    - **id:** Activity id.
     #'    - **name:** The name of activity.
     #'    - **duration:** A number that represents the activity's duration.
     #'    - **milestone:** A milestone is an activity with zero duration.
-    #'    This property indicates if a activity is a milestone or not:
+    #'    This property indicates if an activity is a milestone or not:
     #'    \code{TRUE} indicates it is a milestone; \code{FALSE} indicates it is not.
     #'    - **critical:** A critical activity is one with total float minor or equal
-    #'    to zero. This property indicates if a activity is critical:
+    #'    to zero. This property indicates if an activity is critical:
     #'    \code{TRUE} indicates it is critical;
     #'    \code{FALSE} indicates it is not critical.
     #'    - **ES:** Early Start: is the earliest start period an activity can begin
@@ -743,7 +743,7 @@ Schedule <- R6::R6Class("Schedule",
     },
 
     #' @field duration
-    #' An integer value that indicate the duration of a schedule.
+    #' An integer value that indicates the duration of a schedule.
     #'
     duration = function(value) {
       if(base::missing(value)) {
@@ -779,11 +779,11 @@ Schedule <- R6::R6Class("Schedule",
     #' It may be zero.
     #' @param relations Data frame with precedence relations between activities.
     #' If it is informed, the activities has to be informed too.
-    #' If is is not informed, the schedule will be created without any relation.
+    #' If it is not informed, the schedule will be created without any relation.
     #' It is formed by predecessor activity e successor activity.
     #' Its structure is:
-    #' - **from:** The id of predecessor activity. Must exist a activity with from id.
-    #' - **to:** The id of successor activity. Must exist a activity with to id.
+    #' - **from:** The id of predecessor activity. Must exist an activity with from id.
+    #' - **to:** The id of successor activity. Must exist an activity with to id.
     #' - **type:** Specifies the type of relation between activities.
     #' The default type is FS and its value may be: FS, FF, SS, SF, that means:
     #'     - **FS:** Finish-Start relation.
@@ -857,7 +857,7 @@ Schedule <- R6::R6Class("Schedule",
     #' relation between activities. It must be unique.
     #' @param name The name of activity. The default is an empty string.
     #' @param duration A number that represents the activity's duration.
-    #' It must be equal or grater than zero. The default value is zero.
+    #' It must be equal or greater than zero. The default value is zero.
     #' @return A Schedule object with an activity added and
     #' the critical path calculated.
     #'
@@ -954,10 +954,10 @@ Schedule <- R6::R6Class("Schedule",
     #' @description Add a relation to a schedule.
     #' @param from
     #' The id of predecessor activity.
-    #' Must exist a activity with from.
+    #' Must exist an activity with from.
     #' @param to
     #' The id of successor activity.
-    #' Must exist a activity with to.
+    #' Must exist an activity with to.
     #' @param type
     #' Specifies the type of relation between activities.
     #' The default type is FS and its value may be: FS, FF, SS, SF, that means:
@@ -1131,9 +1131,9 @@ Schedule <- R6::R6Class("Schedule",
     #' Activity id. The id will be used to make relation between activities.
     #' @param name The name of activity.
     #' @param duration A number that represents the activity's duration.
-    #' It must be equal or grater than zero.
+    #' It must be equal or greater than zero.
     #' @param relations_id A vector of ids such that will be linked with activity id.
-    #' It may be a relations of successor or predecessors.
+    #' It may be relations of successor or predecessors.
     #' @param direction Direction of relations_id: It may be "succ" or "pred".
     #' If dir="succ" the relations_id will be the successor of the activity.
     #' If dir="pred" the relations_id will be the predecessor of the activity.
@@ -1483,13 +1483,13 @@ Schedule <- R6::R6Class("Schedule",
 
     #' @description
     #' Create a matrix that represents a Gantt chart,
-    #' a matrix where "1" indicate that an activity is planned to be
+    #' a matrix where "1" indicates that an activity is planned to be
     #' in execution.
     #'
-    #' In this matrix, the rows represents activities,
-    #' Whereas the columns represents the activity execution period.
+    #' In this matrix, the rows represent activities,
+    #' whereas the columns represents the activity execution period.
     #' So, the number of columns is equal to project duration.
-    #' @return A matrix where "1" indicate that an activity is in execution.
+    #' @return A matrix where "1" indicates that an activity is in execution.
     #'
     #' @examples
     #' activities <- data.frame(
@@ -1675,7 +1675,7 @@ Schedule <- R6::R6Class("Schedule",
     #' the progressive level of the end activity and the start node
     #' of each relation.
     #' If LA is approximately equal zero, the progressive level between
-    #' activities are as far as possible.
+    #' activities is as far as possible.
     #' Otherwise, if LA is equal one, the relation distance are one.
     #' @return A number between 0 and 1, inclusive.
     #'

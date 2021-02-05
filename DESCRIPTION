@@ -24,14 +24,14 @@ Description:
     references: To make topological sorting and other graph operation, we use 
     Csardi, G. & Nepusz, T. (2005) 
     <https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research>;
-    For schedule concept, the referece was Project Management Institute (2017) 
+    For schedule concept, the reference was Project Management Institute (2017) 
     <https://www.pmi.org/pmbok-guide-standards/foundational/pmbok>;
-    For stardart terms, we use Project Management Institute (2017) 
+    For standards terms, we use Project Management Institute (2017) 
     <https://www.pmi.org/pmbok-guide-standards/lexicon>;
     For algorithms on Critical Path Method development, we use 
     Vanhoucke, M. (2013) <doi:10.1007/978-3-642-40438-2> and 
     Vanhoucke, M. (2014) <doi:10.1007/978-3-319-04331-9>; 
-    And, finally, for topological definitios, we use
+    And, finally, for topological definitions, we use
     Vanhoucke, M. (2009) <doi:10.1007/978-1-4419-1014-1>.
 License: MIT + file LICENSE
 Encoding: UTF-8

@@ -8,10 +8,10 @@
 
 -> validar 
   - check()
-  - check_win_release()
-  - check_win_devel()
   - check_rhub()
     - https://builder.r-hub.io/
+  - check_win_release()
+  - ### este não --->>> check_win_devel()
 
 
 --->>> build()
