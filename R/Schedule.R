@@ -1517,10 +1517,11 @@ Schedule <- R6::R6Class("Schedule",
         stop("There is no Gantt Matrix for a schedule with zero duration!")
       }
       atvs <- private$.activities
+      iii <- which(atvs$duration > 0)
       duration <- self$duration
       qtdatvs <- self$nr_activities
-      gantt <- base::matrix(base::rep(0, duration * qtdatvs), nrow=qtdatvs)
-      for(i in 1:qtdatvs) {
+      gantt <- base::matrix(base::integer(duration * qtdatvs), nrow = qtdatvs)
+      for (i in iii) {
         inicio <- atvs$ES[i] + 1
         termino <- atvs$EF[i]
         gantt[i, inicio:termino] <- 1
@@ -1569,7 +1570,7 @@ Schedule <- R6::R6Class("Schedule",
       y <- base::floor(ii / pdur)
       x <- ii - y * pdur
       peso <- v[ii + 1]
-      base::matrix(c(x, y + 1, peso), ncol=3)
+      base::matrix(c(x + 1, y + 1, peso), ncol=3)
     },
 
 

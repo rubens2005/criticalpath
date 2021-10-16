@@ -1,6 +1,6 @@
 Package: criticalpath
 Title: An Implementation of the Critical Path Method
-Version: 0.1.0
+Version: 0.1.0.01
 Authors@R: c(
     person("Rubens Jose", "Rosa", role=c("aut", "cre"), email = "rubens@rubensjoserosa.com"),
     person("Marcos", "dos Santos", role="aut", email="marcosdossantos@ime.eb.br"),
@@ -37,7 +37,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Imports: 
     igraph,
     R6
