@@ -231,38 +231,38 @@ Schedule <- R6::R6Class("Schedule",
       if(!base::is.data.frame(obj))
          return(FALSE)
 
-      if(base::nrow(obj) == 0)
+      if(base::nrow(obj) == 0L)
         return(FALSE)
 
       TRUE
     },
 
-    new_activity = function(nr_activities=0) {
+    new_activity = function(nr_activities = 0L) {
       data.frame(
         id = integer(nr_activities),
         name = character(nr_activities),
-        duration = numeric(nr_activities),
+        duration = integer(nr_activities),
         milestone = logical(nr_activities),
         critical = logical(nr_activities),
-        ES = numeric(nr_activities),
-        EF = numeric(nr_activities),
-        LS = numeric(nr_activities),
-        LF = numeric(nr_activities),
-        total_float = numeric(nr_activities),
-        free_float = numeric(nr_activities)
+        ES = integer(nr_activities),
+        EF = integer(nr_activities),
+        LS = integer(nr_activities),
+        LF = integer(nr_activities),
+        total_float = integer(nr_activities),
+        free_float = integer(nr_activities)
       )
     },
 
-    new_relation = function(nr_relations=0) {
+    new_relation = function(nr_relations = 0L) {
       data.frame(
-        from = numeric(nr_relations),
-        to   = numeric(nr_relations),
+        from = integer(nr_relations),
+        to   = integer(nr_relations),
         type = character(nr_relations),
-        lag = numeric(nr_relations),
+        lag = integer(nr_relations),
         critical = logical(nr_relations),
-        ord = numeric(nr_relations),
-        i_from = numeric(nr_relations),
-        i_to = numeric(nr_relations)
+        ord = integer(nr_relations),
+        i_from = integer(nr_relations),
+        i_to = integer(nr_relations)
       )
     },
 
@@ -271,13 +271,13 @@ Schedule <- R6::R6Class("Schedule",
         title = "",
         reference = "",
 
-        nr_activities = 0,
+        nr_activities = 0L,
         has_any_activity = FALSE,
 
-        nr_relations = 0,
+        nr_relations = 0L,
         has_any_relation = FALSE,
 
-        duration = 0
+        duration = 0L
       )
     },
 
@@ -317,7 +317,7 @@ Schedule <- R6::R6Class("Schedule",
       from_exist <- private$.relations$from == from
       to_exist <- private$.relations$to == to
       u <- which(from_exist & to_exist)
-      if(length(u) == 0){
+      if(length(u) == 0L){
         stop(paste("Relation", from, "->", to, " must exist!"))
       }
     },
@@ -326,7 +326,7 @@ Schedule <- R6::R6Class("Schedule",
       from_exist <- private$.relations$from == from
       to_exist <- private$.relations$to == to
       u <- which(from_exist & to_exist)
-      if(length(u) > 0){
+      if(length(u) > 0L){
         stop(paste("Relations", from, "->", to, " must NOT exist!"))
       }
     },
@@ -356,7 +356,7 @@ Schedule <- R6::R6Class("Schedule",
       private$config$ends <- match(ids, private$.activities$id)
 
       # 4) Topological sorting
-      if(self$nr_relations > 0) {
+      if(self$nr_relations > 0L) {
 
         private$.relations$i_from <- match(private$.relations$from, private$.activities$id)
         private$.relations$i_to <- match(private$.relations$to, private$.activities$id)
@@ -366,7 +366,7 @@ Schedule <- R6::R6Class("Schedule",
           TRUE,
           private$.activities
         )
-        ts <- as.numeric(igraph::topo_sort(g, "out"))
+        ts <- as.integer(igraph::topo_sort(g, "out"))
         sorted_activity_id <- private$.activities$id[ts]
         topo_order <- order(
           match(private$.relations$from, sorted_activity_id),
@@ -379,14 +379,14 @@ Schedule <- R6::R6Class("Schedule",
       # 5) Calculate topological levels
 
       # Progressive Level
-      private$info$max_level <- 1
+      private$info$max_level <- 1L
       private$.activities$progr_level <- private$info$max_level
       # Forward calculate
       if(self$has_any_relation) {
         for(i in 1:self$nr_relations) {
           from <- private$.relations$i_from[i]
           to <- private$.relations$i_to[i]
-          next_level <- private$.activities$progr_level[from] + 1
+          next_level <- private$.activities$progr_level[from] + 1L
           if(next_level > private$.activities$progr_level[to]) {
             private$.activities$progr_level[to] <- next_level
             if(next_level > private$info$max_level) {
@@ -402,7 +402,7 @@ Schedule <- R6::R6Class("Schedule",
         for(i in self$nr_relations:1) {
           from <- private$.relations$i_from[i]
           to <- private$.relations$i_to[i]
-          prev_level <- private$.activities$regr_level[to] - 1
+          prev_level <- private$.activities$regr_level[to] - 1L
           if(prev_level < private$.activities$regr_level[from]) {
             private$.activities$regr_level[from] <- prev_level
           }
@@ -497,18 +497,18 @@ Schedule <- R6::R6Class("Schedule",
       rela <- private$.relations
 
       # Define milestone
-      private$.activities$milestone <- private$.activities$duration == 0
+      private$.activities$milestone <- private$.activities$duration == 0L
 
       # Init early start and finish values
       private$.activities$ES <- -Inf
       private$.activities$EF <- -Inf
 
       # arrumarPeriodoDasAtividadesIniciais
-      private$.activities$ES[private$config$starters] <- 0
+      private$.activities$ES[private$config$starters] <- 0L
       private$.activities$EF[private$config$starters] <- private$.activities$duration[private$config$starters]
 
       # Forward calculate
-      if(nrow(rela) > 0) {
+      if(nrow(rela) > 0L) {
         for(i in 1:nrow(rela)) {
           type <- rela$type[i]
           relation_type$forward[[type]](
@@ -531,7 +531,7 @@ Schedule <- R6::R6Class("Schedule",
       private$.activities$LS[private$config$ends] <- private$.activities$LF[private$config$ends] - private$.activities$duration[private$config$ends]
 
       # Backward calculate
-      if(nrow(rela) > 0) {
+      if(nrow(rela) > 0L) {
         for(i in nrow(rela):1) {
           type <- rela$type[i]
           relation_type$backward[[type]](
@@ -547,10 +547,10 @@ Schedule <- R6::R6Class("Schedule",
 
       # Calculate free_float
       private$.activities$free_float <- private$.activities$total_float  ## Acho que aqui tem que ser a TOTAL_FLOAT !!!
-      if(nrow(private$.activities) > 0) {
+      if(nrow(private$.activities) > 0L) {
         for(i_from in 1:nrow(private$.activities)) {
           succesors <- rela[rela$i_from == i_from, ]
-          if(nrow(succesors) > 0) {
+          if(nrow(succesors) > 0L) {
             for(j in 1:nrow(succesors)) {
               to <- succesors$i_to[j]
               ff <- private$.activities$ES[to] - private$.activities$EF[i_from]
@@ -565,7 +565,7 @@ Schedule <- R6::R6Class("Schedule",
       }
 
       # Identify critical activity
-      private$.activities$critical <- private$.activities$total_float <= 0
+      private$.activities$critical <- private$.activities$total_float <= 0L
 
       # Identify critical relation
       rela$critical <- private$.activities$critical[rela$i_from] & private$.activities$critical[rela$i_to]
@@ -622,7 +622,7 @@ Schedule <- R6::R6Class("Schedule",
     #'
     has_any_activity = function(value) {
       if(missing(value)) {
-        return(self$nr_activities > 0)
+        return(self$nr_activities > 0L)
       }
       stop("Can't set `$has_any_activity`", call. = FALSE)
     },
@@ -872,7 +872,7 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$add_activity(7, "Task 7", 4)
     #' schedule$duration
     #' schedule$activities
-    add_activity = function(id, name="", duration=0) {
+    add_activity = function(id, name="", duration = 0L) {
       private$assert_activity_id_is_valid(id)
       private$assert_activity_id_does_not_exist(id)
 
@@ -881,18 +881,18 @@ Schedule <- R6::R6Class("Schedule",
       new_activity <- data.frame(
         id        = id,
         name      = ifelse(base::is.null(name), base::paste0("a", id), name),
-        duration  = ifelse(base::is.null(duration), 0, duration),
+        duration  = ifelse(base::is.null(duration), 0L, duration),
         milestone = FALSE,
         critical = FALSE,
         ES =  -Inf,
         EF =  -Inf,
         LS =  +Inf,
         LF =  +Inf,
-        total_float = 0,
-        free_float = 0,
+        total_float = 0L,
+        free_float = 0L,
         progr_level = -Inf,
         regr_level = +Inf,
-        topo_float = 0
+        topo_float = 0L
       )
 
       private$.activities <- rbind(old_activities, new_activity)
@@ -1034,7 +1034,7 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$duration
     #' schedule$activities
     #' schedule$relations
-    add_relation = function(from, to, type="FS", lag=0) {
+    add_relation = function(from, to, type = "FS", lag = 0L) {
       private$assert_activity_id_is_valid(from)
       private$assert_activity_id_exist(from)
 
@@ -1053,7 +1053,7 @@ Schedule <- R6::R6Class("Schedule",
         type = type,
         lag = lag,
         critical = FALSE,
-        ord = base::nrow(old_relations) + 1,
+        ord = base::nrow(old_relations) + 1L,
         i_from = NA,
         i_to = NA
       )
@@ -1061,7 +1061,7 @@ Schedule <- R6::R6Class("Schedule",
       private$.relations <- base::rbind(old_relations, new_relation)
 
       private$info$nr_relations <- base::nrow(private$.relations)
-      private$info$has_any_relation <- private$info$nr_relations > 0
+      private$info$has_any_relation <- private$info$nr_relations > 0L
 
       ## Topological organization
       private$topological_organization()
@@ -1111,7 +1111,7 @@ Schedule <- R6::R6Class("Schedule",
         relations$type <- "FS"
       }
       if(base::is.null(relations$lag)) {
-        relations$lag <- 0
+        relations$lag <- 0L
       }
       relations$critical <- FALSE
       relations$redundant <- FALSE
@@ -1175,7 +1175,7 @@ Schedule <- R6::R6Class("Schedule",
       self$add_activity(id, name, duration)
 
       n <- length(relations_id)
-      if(n > 0) {
+      if(n > 0L) {
         if(any(duplicated(relations_id))) {
           stop("Must NOT EXISTS duplicated id in relations_id!")
         }
@@ -1183,15 +1183,15 @@ Schedule <- R6::R6Class("Schedule",
         #1 Add temp relations
         if(base::is.null(private$config$temp_relations)) {
           private$config$temp_relations <- data.frame(
-            from = numeric(),
-            to   = numeric(),
+            from = integer(),
+            to   = integer(),
             type = character(),
-            lag = numeric(),
+            lag = integer(),
             critical = logical(),
             redundant = logical(),
-            ord = numeric(),
-            i_from = numeric(),
-            i_to = numeric()
+            ord = integer(),
+            i_from = integer(),
+            i_to = integer()
           )
         }
         if(direction == "succ") {
@@ -1202,7 +1202,7 @@ Schedule <- R6::R6Class("Schedule",
                 from = id,
                 to   = relations_id[i],
                 type = "FS",
-                lag = 0,
+                lag = 0L,
                 critical = FALSE,
                 redundant = FALSE,
                 ord = NA,
@@ -1219,7 +1219,7 @@ Schedule <- R6::R6Class("Schedule",
                 from = relations_id[i],
                 to   = id,
                 type = "FS",
-                lag = 0,
+                lag = 0L,
                 critical = FALSE,
                 redundant = FALSE,
                 ord = NA,
@@ -1235,10 +1235,10 @@ Schedule <- R6::R6Class("Schedule",
 
       temp_n <- ifelse(
         base::is.null(private$config$temp_relations),
-        0,
+        0L,
         nrow(private$config$temp_relations)
       )
-      if(temp_n > 0) {
+      if(temp_n > 0L) {
         private$config$temp_relations$keep <- TRUE
         for(i in 1:temp_n) {
           from <- private$config$temp_relations$from[i]
@@ -1335,7 +1335,7 @@ Schedule <- R6::R6Class("Schedule",
           a_list <- c(a_list, temp_relation$to[i])
         }
       }
-      base::rev(base::unique(base::rev(a_list[-1])))
+      base::rev(base::unique(base::rev(a_list[-1L])))
     },
 
     #' @description
@@ -1389,7 +1389,7 @@ Schedule <- R6::R6Class("Schedule",
           a_list <- c(a_list, temp_relation$from[i])
         }
       }
-      rev(unique(rev(a_list[-1])))
+      rev(unique(rev(a_list[-1L])))
     },
 
     #' @description
@@ -1513,18 +1513,18 @@ Schedule <- R6::R6Class("Schedule",
     #' plot(cumsum(colSums(gantt)), type="l", lwd=3)
     #'
     gantt_matrix = function() {
-      if(self$duration == 0) {
+      if(self$duration == 0L) {
         stop("There is no Gantt Matrix for a schedule with zero duration!")
       }
       atvs <- private$.activities
-      iii <- which(atvs$duration > 0)
+      iii <- which(atvs$duration > 0L)
       duration <- self$duration
       qtdatvs <- self$nr_activities
       gantt <- base::matrix(base::integer(duration * qtdatvs), nrow = qtdatvs)
       for (i in iii) {
-        inicio <- atvs$ES[i] + 1
+        inicio <- atvs$ES[i] + 1L
         termino <- atvs$EF[i]
-        gantt[i, inicio:termino] <- 1
+        gantt[i, inicio:termino] <- 1L
       }
       class(gantt) <- base::unique(c("Gantt", class(gantt)))
 
@@ -1565,12 +1565,12 @@ Schedule <- R6::R6Class("Schedule",
       }
       qtdatvs <- base::nrow(gantt)
       pdur <- base::ncol(gantt)
-      v <- as.numeric(t(gantt))
-      ii <- which(v > 0) - 1
+      v <- as.integer(t(gantt))
+      ii <- which(v > 0L) - 1L
       y <- base::floor(ii / pdur)
       x <- ii - y * pdur
-      peso <- v[ii + 1]
-      base::matrix(c(x + 1, y + 1, peso), ncol=3)
+      peso <- v[ii + 1L]
+      base::matrix(c(x + 1L, y + 1L, peso), ncol = 3L)
     },
 
 
@@ -1608,11 +1608,11 @@ Schedule <- R6::R6Class("Schedule",
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
 
-      if(nr_act == 0) {
+      if(nr_act == 0L) {
         return(NA)
       }
 
-      if(nr_act == 1) {
+      if(nr_act == 1L) {
         return(1)
       }
 
@@ -1654,11 +1654,11 @@ Schedule <- R6::R6Class("Schedule",
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
 
-      if(nr_act == 0) {
+      if(nr_act == 0L) {
         return(NA)
       }
 
-      if(max_level == 1 || max_level == nr_act) {
+      if(max_level == 1L || max_level == nr_act) {
         return(0);
       }
 
@@ -1708,25 +1708,25 @@ Schedule <- R6::R6Class("Schedule",
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
 
-      if(nr_act == 0) {
+      if(nr_act == 0L) {
         return(NA)
       }
 
       # Activities quantities by level: they are called width, width by level
-      wi <- as.numeric(base::table(private$.activities$progr_level))
+      wi <- as.integer(base::table(private$.activities$progr_level))
 
-      D <- base::sum(wi[-base::length(wi)] * wi[-1])
+      D <- base::sum(wi[-base::length(wi)] * wi[-1L])
 
-      if(D == nr_act - wi[1]) {
+      if(D == nr_act - wi[1L]) {
         return(1)
       }
 
-      len <- 1
+      len <- 1L
       levels_from <- private$.activities$progr_level[private$.relations$i_from]
       levels_to <- private$.activities$progr_level[private$.relations$i_to]
       arcs_qty <- base::sum(levels_to - levels_from == len)
 
-      (arcs_qty - nr_act + wi[1]) / (D - nr_act + wi[1])
+      (arcs_qty - nr_act + wi[1L]) / (D - nr_act + wi[1L])
     },
 
     #' @description **TF Topological Float Indicator:**
@@ -1764,11 +1764,11 @@ Schedule <- R6::R6Class("Schedule",
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
 
-      if(nr_act == 0) {
+      if(nr_act == 0L) {
         return(NA)
       }
 
-      if(max_level == 1 || max_level == nr_act) {
+      if(max_level == 1L || max_level == nr_act) {
         return(0);
       }
 
