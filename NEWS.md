@@ -1,5 +1,9 @@
 # criticalpath 0.1.0.01
 
+20/12/2021
+- All numeric value was transformed to integer value.
+
+
 16/10/2021
 
 Fixed some bugs:

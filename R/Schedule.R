@@ -500,8 +500,8 @@ Schedule <- R6::R6Class("Schedule",
       private$.activities$milestone <- private$.activities$duration == 0L
 
       # Init early start and finish values
-      private$.activities$ES <- -Inf
-      private$.activities$EF <- -Inf
+      private$.activities$ES <- -2000000000L
+      private$.activities$EF <- -2000000000L
 
       # arrumarPeriodoDasAtividadesIniciais
       private$.activities$ES[private$config$starters] <- 0L
@@ -523,8 +523,8 @@ Schedule <- R6::R6Class("Schedule",
       private$info$duration <- base::max(private$.activities$EF) - base::min(private$.activities$ES)
 
       # Init late start and finish values
-      private$.activities$LF <- +Inf
-      private$.activities$LS <- +Inf
+      private$.activities$LF <- +2000000000L
+      private$.activities$LS <- +2000000000L
 
       # arrumarPeriodoDasAtividadesFinais
       private$.activities$LF[private$config$ends] <- base::max(private$.activities$EF)
@@ -884,14 +884,14 @@ Schedule <- R6::R6Class("Schedule",
         duration  = ifelse(base::is.null(duration), 0L, duration),
         milestone = FALSE,
         critical = FALSE,
-        ES =  -Inf,
-        EF =  -Inf,
-        LS =  +Inf,
-        LF =  +Inf,
+        ES =  -2000000000L,
+        EF =  -2000000000L,
+        LS =  +2000000000L,
+        LF =  +2000000000L,
         total_float = 0L,
         free_float = 0L,
-        progr_level = -Inf,
-        regr_level = +Inf,
+        progr_level = -2000000000L,
+        regr_level = +2000000000L,
         topo_float = 0L
       )
 
@@ -1054,8 +1054,8 @@ Schedule <- R6::R6Class("Schedule",
         lag = lag,
         critical = FALSE,
         ord = base::nrow(old_relations) + 1L,
-        i_from = NA,
-        i_to = NA
+        i_from = NA_integer_,
+        i_to = NA_integer_
       )
 
       private$.relations <- base::rbind(old_relations, new_relation)
@@ -1115,6 +1115,9 @@ Schedule <- R6::R6Class("Schedule",
       }
       relations$critical <- FALSE
       relations$redundant <- FALSE
+      relations$from <- as.integer(relations$from)
+      relations$to <- as.integer(relations$to)
+      relations$lag <- as.integer(relations$lag)
       for(i in 1:base::nrow(relations)) {
         self$add_relation(
           relations$from[i],
@@ -1205,9 +1208,9 @@ Schedule <- R6::R6Class("Schedule",
                 lag = 0L,
                 critical = FALSE,
                 redundant = FALSE,
-                ord = NA,
-                i_from = NA,
-                i_to = NA
+                ord = NA_integer_,
+                i_from = NA_integer_,
+                i_to = NA_integer_
               )
             )
           }
@@ -1222,9 +1225,9 @@ Schedule <- R6::R6Class("Schedule",
                 lag = 0L,
                 critical = FALSE,
                 redundant = FALSE,
-                ord = NA,
-                i_from = NA,
-                i_to = NA
+                ord = NA_integer_,
+                i_from = NA_integer_,
+                i_to = NA_integer_
               )
             )
           }
@@ -1475,7 +1478,7 @@ Schedule <- R6::R6Class("Schedule",
     change_durations = function(new_durations) {
       # TODO verificar se os tamanhos são os mesmos
       # TODO verificar se não tem nenhum NULL ou NA
-      private$.activities$duration <- new_durations
+      private$.activities$duration <- as.integer(new_durations)
       private$calculate_critical_path()
 
       invisible(self)
@@ -1518,8 +1521,8 @@ Schedule <- R6::R6Class("Schedule",
       }
       atvs <- private$.activities
       iii <- which(atvs$duration > 0L)
-      duration <- self$duration
-      qtdatvs <- self$nr_activities
+      duration <- private$info$duration
+      qtdatvs <- private$info$nr_activities
       gantt <- base::matrix(base::integer(duration * qtdatvs), nrow = qtdatvs)
       for (i in iii) {
         inicio <- atvs$ES[i] + 1L
@@ -1557,7 +1560,7 @@ Schedule <- R6::R6Class("Schedule",
     #' xyw
     #' plot(xyw[, 1:2])
     #'
-    xy_gantt_matrix = function(gantt=NULL) {
+    xy_gantt_matrix = function(gantt = NULL) {
       if(base::is.null(gantt)) {
         gantt <- self$gantt_matrix()
       } else {
