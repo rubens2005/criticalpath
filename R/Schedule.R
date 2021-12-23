@@ -1521,20 +1521,23 @@ Schedule <- R6::R6Class("Schedule",
       }
       atvs <- private$.activities
       iii <- which(atvs$duration > 0L)
+
+      delta <- abs(min(atvs$ES))
+
       duration <- private$info$duration
       qtdatvs <- private$info$nr_activities
       gantt <- base::matrix(base::integer(duration * qtdatvs), nrow = qtdatvs)
       for (i in iii) {
-        inicio <- atvs$ES[i] + 1L
-        termino <- atvs$EF[i]
-        gantt[i, inicio:termino] <- 1L
+        start  <- atvs$ES[i] + delta + 1L
+        finish <- atvs$EF[i] + delta
+        gantt[i, start:finish] <- 1L
       }
       class(gantt) <- base::unique(c("Gantt", class(gantt)))
 
       row.names(gantt) <- atvs$id
-      colnames(gantt) <- 1:duration
+      colnames(gantt) <- (min(atvs$ES) + 1L) : (max(atvs$EF))
 
-      gantt
+      return(gantt)
     },
 
     #' @description

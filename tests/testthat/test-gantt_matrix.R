@@ -342,3 +342,34 @@ test_that("First and last activity's durations equal zero, and durations chagend
   expect_true(identical(as.numeric(gantt[11,]), c(0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0)))
   expect_true(identical(as.numeric(gantt[12,]), c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)))
 })
+
+
+
+
+test_that("Período com número negativo deve funcionar.", {
+  activities <- data.frame(
+    id       = c(  1L,  2L,  3L),
+    name     = c( "A", "B", "C"),
+    duration = c(  5L,  8L, 10L)
+  )
+
+  relations <- data.frame(
+    from = c(  1L,   2L),
+    to   = c(  2L,   3L),
+    type = c("FF", "FF"),
+    lag  = c(  0L,   0L)
+  )
+
+  schedule <- Schedule$new(activities, relations)
+  schedule$title <- "A project"
+  schedule$reference <- "From criticalpath"
+
+  gantt <- schedule$gantt_matrix()
+
+  expect_true(identical(as.numeric(colnames(gantt)), c(-4, -3, -2, -1, 0, 1, 2, 3, 4, 5)))
+
+  expect_true(identical(as.numeric(gantt[ 1,]), c(0,0,0,0,0,1,1,1,1,1)))
+  expect_true(identical(as.numeric(gantt[ 2,]), c(0,0,1,1,1,1,1,1,1,1)))
+  expect_true(identical(as.numeric(gantt[ 3,]), c(1,1,1,1,1,1,1,1,1,1)))
+})
+
