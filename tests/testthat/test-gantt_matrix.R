@@ -372,4 +372,3 @@ test_that("Período com número negativo deve funcionar.", {
   expect_true(identical(as.numeric(gantt[ 2,]), c(0,0,1,1,1,1,1,1,1,1)))
   expect_true(identical(as.numeric(gantt[ 3,]), c(1,1,1,1,1,1,1,1,1,1)))
 })
-

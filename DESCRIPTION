@@ -40,7 +40,10 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     igraph,
-    R6
+    magrittr,
+    R6,
+    stringr,
+    tibble
 Suggests: 
     DiagrammeR,
     knitr,

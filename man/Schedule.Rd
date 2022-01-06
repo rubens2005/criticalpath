@@ -939,7 +939,7 @@ schedule$relations
 \subsection{Method \code{add_activity()}}{
 Add an activity to a schedule.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_activity(id, name = "", duration = 0)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_activity(id, name = "", duration = 0L)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -1049,7 +1049,7 @@ or an error if activity id doesn't exist.
 \subsection{Method \code{add_relation()}}{
 Add a relation to a schedule.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_relation(from, to, type = "FS", lag = 0)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Schedule$add_relation(from, to, type = "FS", lag = 0L)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
