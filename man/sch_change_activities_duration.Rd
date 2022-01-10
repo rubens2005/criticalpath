@@ -17,7 +17,7 @@ A schedule object with new durations.
 \description{
 Change activities duration and calculates critical path.
 This way is faster than creating a new schedule with new durations.
-The order of duration is the same of activities.
+The order of duration is the insertion order of activities.
 }
 \examples{
 sch <- sch_new() \%>\%

@@ -218,12 +218,6 @@ schedule$duration
 schedule$activities
 
 ## ------------------------------------------------
-## Method `Schedule$get_activity`
-## ------------------------------------------------
-
-x <- runif(1)
-
-## ------------------------------------------------
 ## Method `Schedule$add_relation`
 ## ------------------------------------------------
 
@@ -1034,14 +1028,6 @@ frame with one line about activity.
 A data frame with one line with the activity,
 or an error if activity id doesn't exist.
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- runif(1)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_relation"></a>}}

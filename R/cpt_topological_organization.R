@@ -1,10 +1,4 @@
-#'
-#' FALAR QUE "A ORDEM DOS RELACIONAMENTOS MUDA
-#' PARA FICAR DE ACORDO COM A ORDENAÇÃO TOPOLÓGICA".
-#'
-#' Para voltar na ordem original, basta utilizar a propriedade `$ord`.
-#'
-#'
+#' @noRd
 cpt_topological_organization <- function(sch) {
   cpt_assert_schedule_object_valid(sch)
 

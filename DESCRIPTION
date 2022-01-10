@@ -1,6 +1,6 @@
 Package: criticalpath
 Title: An Implementation of the Critical Path Method
-Version: 0.1.0.01
+Version: 0.2.0
 Authors@R: c(
     person("Rubens Jose", "Rosa", role=c("aut", "cre"), email = "rubens@rubensjoserosa.com"),
     person("Marcos", "dos Santos", role="aut", email="marcosdossantos@ime.eb.br"),
@@ -13,7 +13,7 @@ URL: https://rubensjoserosa.com/criticalpath,
      https://github.com/rubens2005/criticalpath
 BugReports: https://github.com/rubens2005/criticalpath/issues
 Description: 
-    An R6 object oriented implementation of the Critical Path Method (CPM).
+    An R implementation of the Critical Path Method (CPM).
     CPM is a method used to estimate the minimum project duration and determine 
     the amount of scheduling flexibility on the logical network paths within the 
     schedule model. The flexibility is in terms of early start, early finish, 
@@ -39,6 +39,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
+    dplyr,
     igraph,
     magrittr,
     R6,
@@ -51,5 +52,14 @@ Suggests:
     testthat
 Collate: 
     'Schedule.R'
+    'utils-pipe.R'
     'criticalpath.R'
+    'cpt_calculate_critical_path.R'
+    'cpt_schedule_status.R'
+    'cpt_topological_organization.R'
+    'cpt_utils.R'
+    'sch_activity.R'
+    'sch_relation.R'
+    'sch_schedule.R'
+    'sch_topological_indicators.R'
 VignetteBuilder: knitr

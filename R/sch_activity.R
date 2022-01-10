@@ -115,7 +115,7 @@ sch_add_activities <- function(sch, id, name, duration, ...) {
     stop("The length of `duration` must be equal `id`'s length!")
   }
 
-  activites_tib <- tibble::tibble(
+  activities_tib <- tibble::tibble(
     id = id,
     name = name,
     duration = duration,
@@ -132,16 +132,16 @@ sch_add_activities <- function(sch, id, name, duration, ...) {
   extras <- list(...)
   extras <- cpt_collect_extra_vectors(nr_activities, extras)
   if (inherits(extras, "tbl_df")) {
-    activites_tib %<>% dplyr::bind_cols(extras)
+    activities_tib %<>% dplyr::bind_cols(extras)
   }
 
   if(sch$info$nr_activities > 0) {
-     activites_tib <- dplyr::bind_rows(sch$activities, activites_tib)
+     activities_tib <- dplyr::bind_rows(sch$activities, activities_tib)
   }
 
   sch$info$status <- "SOME_ACTIVITY"
-  sch$activities <- activites_tib
-  sch$info$nr_activities <- nrow(activites_tib)
+  sch$activities <- activities_tib
+  sch$info$nr_activities <- nrow(activities_tib)
   sch$info$has_any_activity = TRUE
 
   return(sch)
@@ -256,7 +256,7 @@ sch_add_activity <- function(sch, id, name, duration, ..., direction = "succ") {
 #' or an error if activity id doesn't exist.
 #'
 #' @seealso [sch_activities()], [sch_duration()], [sch_nr_activities()],
-#' [sch_add_activities()], [sch_critical_activites()], [sch_has_any_activity()],
+#' [sch_add_activities()], [sch_critical_activities()], [sch_has_any_activity()],
 #' [sch_change_activities_duration()], [sch_add_activity()].
 #'
 #' @examples
@@ -271,6 +271,7 @@ sch_add_activity <- function(sch, id, name, duration, ..., direction = "succ") {
 #'
 #' @export
 sch_get_activity <- function(sch, aid) {
+  id <- NULL
   act <- sch_activities(sch) %>%
     dplyr::filter(id == aid)
   if(nrow(act) == 1) {
@@ -284,7 +285,7 @@ sch_get_activity <- function(sch, aid) {
 #'
 #' Change activities duration and calculates critical path.
 #' This way is faster than creating a new schedule with new durations.
-#' The order of duration is the same of activities.
+#' The order of duration is the insertion order of activities.
 #'
 #' @param sch A schedule object.
 #' @param new_durations A vector with new activities' duration.
@@ -371,7 +372,7 @@ sch_change_activities_duration <- function(sch, new_durations) {
 #' - TRUE: The schedule has any activity;
 #' - FALSE: The schedule do not have any activity.
 #'
-#' @seealso [sch_nr_activities()], [sch_critical_activites()],
+#' @seealso [sch_nr_activities()], [sch_critical_activities()],
 #' [sch_add_activities()], [sch_change_activities_duration()],
 #' [sch_activities()], [sch_nr_relations()], [sch_has_any_relation()],
 #' [sch_add_activity()].
@@ -400,7 +401,7 @@ sch_has_any_activity <- function(sch) {
 #'
 #' @seealso [sch_add_activity()], [sch_nr_relations()], [sch_add_activities()],
 #' [sch_activities()], [sch_change_activities_duration()],
-#' [sch_critical_activites()], [sch_get_activity()], [sch_has_any_relation()].
+#' [sch_critical_activities()], [sch_get_activity()], [sch_has_any_relation()].
 #'
 #' @examples
 #' sch <- sch_new()
@@ -459,7 +460,7 @@ sch_nr_activities <- function(sch) {
 #' @return A tibble with activities.
 #'
 #' @seealso [sch_has_any_activity()], [sch_change_activities_duration()],
-#' [sch_add_activity()], [sch_nr_activities()], [sch_critical_activites()],
+#' [sch_add_activity()], [sch_nr_activities()], [sch_critical_activities()],
 #' [sch_add_activities()], [sch_get_activity()], [sch_duration()].
 #'
 #' @examples
@@ -488,7 +489,7 @@ sch_activities <- function(sch) {
   return(sch$activities)
 }
 
-#' Critical Activites
+#' Critical Activities
 #'
 #' Return a tibble with all critical activities of a schedule in an insertion order.
 #'
@@ -497,7 +498,7 @@ sch_activities <- function(sch) {
 #' @return A tibble with critical activities.
 #'
 #' @seealso [sch_get_activity()], [sch_add_activities()], [sch_activities()],
-#' [sch_add_activity()], [sch_nr_activities()], [sch_non_critical_activites()],
+#' [sch_add_activity()], [sch_nr_activities()], [sch_non_critical_activities()],
 #' [sch_has_any_activity()].
 #'
 #' @examples
@@ -519,10 +520,11 @@ sch_activities <- function(sch) {
 #'   sch_add_activity( 11L, "a11", 3L, 12) %>%
 #'   sch_add_activity( 12L, "a12", 0L) %>%
 #'   sch_plan()
-#' sch_critical_activites(sch)
+#' sch_critical_activities(sch)
 #'
 #' @export
-sch_critical_activites <- function(sch) {
+sch_critical_activities <- function(sch) {
+  critical <- NULL
   return(
     sch %>%
       sch_activities() %>%
@@ -530,7 +532,7 @@ sch_critical_activites <- function(sch) {
   )
 }
 
-#' Non Critical Activites
+#' Non Critical Activities
 #'
 #' Return a tibble with all non critical activities of a schedule
 #' in an insertion order.
@@ -540,7 +542,7 @@ sch_critical_activites <- function(sch) {
 #' @return A tibble with non critical activities.
 #'
 #' @seealso [sch_get_activity()], [sch_add_activity()], [sch_activities()],
-#' [sch_critical_activites()], [sch_has_any_activity()], [sch_nr_activities()],
+#' [sch_critical_activities()], [sch_has_any_activity()], [sch_nr_activities()],
 #' [sch_add_activities()].
 #'
 #' @examples
@@ -562,10 +564,11 @@ sch_critical_activites <- function(sch) {
 #'   sch_add_activity( 11L, "a11", 3L, 12) %>%
 #'   sch_add_activity( 12L, "a12", 0L) %>%
 #'   sch_plan()
-#' sch_non_critical_activites(sch)
+#' sch_non_critical_activities(sch)
 #'
 #' @export
-sch_non_critical_activites <- function(sch) {
+sch_non_critical_activities <- function(sch) {
+  critical <- NULL
   return(
     sch %>%
       sch_activities() %>%

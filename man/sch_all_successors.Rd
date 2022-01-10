@@ -46,6 +46,6 @@ sch_all_successors(sch, 10) # 12
 }
 \seealso{
 \code{\link[=sch_predecessors]{sch_predecessors()}}, \code{\link[=sch_activities]{sch_activities()}},
-\code{\link[=sch_non_critical_activites]{sch_non_critical_activites()}}, \code{\link[=sch_successors]{sch_successors()}},
+\code{\link[=sch_non_critical_activities]{sch_non_critical_activities()}}, \code{\link[=sch_successors]{sch_successors()}},
 \code{\link[=sch_relations]{sch_relations()}}, \code{\link[=sch_is_redundant]{sch_is_redundant()}}, \code{\link[=sch_all_predecessors]{sch_all_predecessors()}}.
 }

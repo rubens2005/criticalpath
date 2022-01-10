@@ -26,7 +26,7 @@ test_that("Project 2: sch duration is 25", {
 
 test_that("Project 2: sch critical activities are identified", {
   atb <- vanhoucke2014_project_2() %>%
-    sch_critical_activites()
+    sch_critical_activities()
   critical_activities <- paste0(atb$id, collapse=",")
   expected <- paste0(c(1,2,3,4,5,6,7,8,10,14,16), collapse = ",")
   expect_equal(critical_activities, expected)
@@ -34,7 +34,7 @@ test_that("Project 2: sch critical activities are identified", {
 
 test_that("Project 2: sch NON critical activities are identified", {
   atb <- vanhoucke2014_project_2() %>%
-    sch_non_critical_activites()
+    sch_non_critical_activities()
   non_critical_activities <- paste0(atb$id, collapse=",")
   expected <- paste0(c(9,11,12,13,15,17), collapse = ",")
   expect_equal(non_critical_activities, expected)
@@ -169,7 +169,7 @@ test_that("Project 2: Durations changed! sch duration is 28", {
 test_that("Project 2: Durations changed! sch critical activities are identified", {
   atb <- vanhoucke2014_project_2() %>%
     sch_change_activities_duration(new_durations) %>%
-    sch_critical_activites()
+    sch_critical_activities()
   critical_activities <- base::paste0(atb$id, collapse=",")
   expected <- base::paste0(c(1,2,3, 4,5, 8, 10,11, 14, 17), collapse = ",")
   expect_equal(critical_activities, expected)
@@ -178,7 +178,7 @@ test_that("Project 2: Durations changed! sch critical activities are identified"
 test_that("Project 2: Durations changed! sch NON critical activities are identified", {
   atb <- vanhoucke2014_project_2() %>%
     sch_change_activities_duration(new_durations) %>%
-    sch_non_critical_activites()
+    sch_non_critical_activities()
 
   non_critical_activities <- paste0(atb$id, collapse=",")
   expected <- paste0(c(6,7, 9,12,13, 15,16), collapse = ",")

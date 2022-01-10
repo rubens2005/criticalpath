@@ -79,11 +79,7 @@ with \code{igraph} object tha support the schedule.
 }
 
 \strong{Attention:} You must identify and correct all errors
-before call \code{sch_plan(plan)}.
-}
-\examples{
-runif(1)
-
+before call \code{sch_plan(plan)}!
 }
 \seealso{
 \code{\link[=sch_add_relation]{sch_add_relation()}}, \code{\link[=sch_relations]{sch_relations()}}, \code{\link[=sch_add_relations]{sch_add_relations()}},

@@ -115,7 +115,7 @@ test_that("Schedule duration is 11", {
 
 test_that("Schedule critical activities are identified", {
   atb <- vanhoucke2014_project_1() %>%
-    sch_critical_activites()
+    sch_critical_activities()
 
   critical_activities <- paste0(atb$id, collapse=",")
   expected <- paste0(c(1, 2, 4, 11, 16), collapse = ",")
@@ -124,7 +124,7 @@ test_that("Schedule critical activities are identified", {
 
 test_that("Schedule NON critical activities are identified", {
   atb <- vanhoucke2014_project_1() %>%
-    sch_non_critical_activites()
+    sch_non_critical_activities()
 
   non_critical_activities <- paste0(atb$id, collapse=",")
   expected <- paste0(c(3, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 17), collapse = ",")

@@ -5,12 +5,9 @@
 #'
 #' @return A list with schedule definition.
 #'
-#' @importFrom magrittr %>%
-#' @importFrom magrittr %<>%
-#'
 #' @seealso [sch_reference()], [sch_add_activities()], [sch_duration()],
 #' [sch_xy_gantt_matrix()], [sch_plan()], [sch_add_relations()],
-#' [sch_validate()], [sch_non_critical_activites()], [sch_title()].
+#' [sch_validate()], [sch_non_critical_activities()], [sch_title()].
 #'
 #' @examples
 #' sch <- sch_new() %>%
@@ -136,13 +133,6 @@ sch_plan <- function(sch) {
 #' A title for project identification.
 #' It depends on user of the class. It is used to set or get project's title.
 #'
-#' @usage
-#' sch <- sch_title(sch, "New title")
-#'   - Sets the title.
-#'
-#' sch_title(sch)
-#'   - Gets the title.
-#'
 #' @param sch A schedule object.
 #' @param new_value A new title.
 #'
@@ -185,13 +175,6 @@ sch_title <- function(sch, new_value) {
 #' A reference from project origin, for example, a book, a paper, a corporation,
 #' or nothing.
 #'
-#' @usage
-#' sch <- sch_reference(sch, "This schedule is from...")
-#'   - Sets the reference.
-#'
-#' sch_reference(sch)
-#'   - Gets the reference.
-#'
 #' @param sch A schedule object.
 #' @param new_value A new reference.
 #'
@@ -220,7 +203,7 @@ sch_title <- function(sch, new_value) {
 #' sch_reference(sch)
 #'
 #' @export
-sch_reference <- function(sch, new_value) {
+sch_reference <- function(sch, new_value = NULL) {
   if(missing(new_value)) {
     return(sch$info$reference)
   }
@@ -321,9 +304,6 @@ sch_duration <- function(sch) {
 #' @seealso [sch_add_relation()], [sch_relations()], [sch_add_relations()],
 #' [sch_add_activities()], [sch_add_activity()], [sch_activities()],
 #' [sch_plan()].
-#'
-#' @examples
-#' runif(1)
 #'
 #' @export
 sch_validate <- function(sch) {
@@ -563,6 +543,7 @@ sch_validate <- function(sch) {
 #' cumsum(colSums(gantt))
 #' plot(cumsum(colSums(gantt)), type="l", lwd=3)
 #'
+#' @export
 sch_gantt_matrix <- function(sch) {
   if(sch_duration(sch) == 0L) {
     stop("There is no Gantt Matrix for a schedule with zero duration!")
@@ -625,6 +606,7 @@ sch_gantt_matrix <- function(sch) {
 #' xyw
 #' plot(xyw[, 1:2])
 #'
+#' @export
 sch_xy_gantt_matrix <- function(sch, gantt = NULL) {
   if(base::is.null(gantt)) {
     gantt <- sch_gantt_matrix(sch)

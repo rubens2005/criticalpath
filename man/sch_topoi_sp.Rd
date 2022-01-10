@@ -14,8 +14,8 @@ A number between 0 and 1, inclusive.
 }
 \description{
 Shows the closeness of a network to a serial or parallel graph.
-As the network becomes serial, the SP increase, until one,
-when the network totally serial.
+As the network becomes serial, the SP increase, until one;
+As the network becomes parallel, the SP decrease until zero.
 }
 \examples{
 sch <- sch_new() \%>\%

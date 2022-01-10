@@ -7,6 +7,8 @@
 sch_add_relation(sch, from, to, type = "FS", lag = 0L)
 }
 \arguments{
+\item{sch}{A schedule object.}
+
 \item{from}{The id of predecessor activity.
 Must exist an activity with from.}
 

@@ -79,7 +79,7 @@ test_that("Add activities works, with mean duration equal SIX", {
 
 })
 
-test_that("Add activites is equal to new Schedule with activities", {
+test_that("Add activities is equal to new Schedule with activities", {
   activities <- data.frame(
     id        = 1:17,
     name      = paste("a", as.character(1:17), sep=""),

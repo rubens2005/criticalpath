@@ -1,12 +1,12 @@
-#' criticalpath: Object Oriented Critical Path Method Implementation
+#' criticalpath: Critical Path Method R Implementation
 #'
-#' @description
-#' criticalpath package is an object oriented implementation of the
-#' Critical Path Method (CPM) in R with R6 library. CPM is a method used to estimate
-#' the minimum project duration and  determine the amount of scheduling flexibility
+#' `criticalpath` package is an R implementation of the
+#' Critical Path Method (CPM). CPM is a method used to estimate
+#' the minimum project duration and  determine the amount of scheduling
+#' flexibility
 #' on the logical network paths within the schedule model. The flexibility is in
 #' terms of early start, early finish, late start, late finish, total float and
-#' free float. Besides, it permits to quantify the complexity of network diagram
+#' free float. Beside, it permits to quantify the complexity of network diagram
 #' through the analysis of topological indicators. Finally, it permits to change
 #' the activities duration to perform what-if scenario analysis.
 #'
@@ -53,24 +53,47 @@
 #'
 #' @seealso
 #' On vignette package there are more information with examples about:
-#' - Schedule Class Definition: [Schedule]
 #' - How to create a schedule:
+#'   - Create a new schedule without any information.
+#'     - [sch_new()]
 #'   - Add activities and relations together to an schedule.
+#'     - [sch_add_activities()]
+#'     - [sch_add_relations()]
 #'   - Add activities to a schedule.
+#'     - [sch_add_activity()]
 #'   - Add relations to a schedule.
-#'   - Create a schedule object from data frames.
+#'     - [sch_add_relation()]
 #'  - How to get schedule information:
-#'    - Title, Reference and Schedule Duration.
+#'    - Title
+#'      - [sch_title()]
+#'    - Reference
+#'      - [sch_reference()]
+#'    - Duration
+#'      - [sch_duration()]
 #'  - How to get activities properties:
 #'    - Activity Properties.
+#'      - [sch_activities()]
+#'      - [sch_get_activity()]
 #'    - Gantt Matrix.
+#'      - [sch_gantt_matrix()]
+#'      - [sch_xy_gantt_matrix()]
 #'  - How to change activities duration:
 #'    - Change Activities Duration.
+#'      - [sch_change_activities_duration()]
 #'  - How to get relations properties:
 #'    - Relation Properties
+#'      - [sch_relations()]
 #'    - Successors and Predecessors.
+#'      - [sch_all_successors()]
+#'      - [sch_successors()]
+#'      - [sch_all_predecessors()]
+#'      - [sch_predecessors()]
 #'  - How to get topological properties:
 #'    - Topological Indicators.
+#'      - [sch_topoi_sp()]
+#'      - [sch_topoi_ad()]
+#'      - [sch_topoi_la()]
+#'      - [sch_topoi_tf()]
 #'
 #' @name criticalpath
 #' @docType package

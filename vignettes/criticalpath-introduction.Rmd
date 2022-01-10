@@ -3,10 +3,11 @@ title: criticalpath - R Package Implementation of Critical Path Method
 output: 
   rmarkdown::html_vignette:
     toc: TRUE
+    number_sections: true
     toc_depth: 3
 author:
   Rubens Jose Rosa, Marcos dos Santos, Thiago Marques
-date: 2021-01-22
+date: 2022-01-10
 vignette: >
   %\VignetteIndexEntry{criticalpath Package Introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,12 +27,8 @@ library(criticalpath)
 ```
 
 
-# Introduction
-
-## Critical Path Method
-
-criticalpath package is an object oriented implementation of the
-Critical Path Method (CPM) in R with R6 library. CPM is a method used to estimate
+`criticalpath` package is an R implementation of the
+Critical Path Method (CPM). CPM is a method used to estimate
 the minimum project duration and  determine the amount of scheduling flexibility
 on the logical network paths within the schedule model. The flexibility is in
 terms of early start, early finish, late start, late finish, total float and
@@ -41,366 +38,314 @@ the activities duration to perform what-if scenario analysis.
 
 With this package, you can calculate the following CPM parameters:
 
-- Schedule duration
-- Early start and finish date of each activity
-- Late start and finish date of each activity
-- Critical activities
-- Critical path
-- Total float and free float
-- Gantt Matrix
-- What-if scenario analysis
-- Topological indicators
+- Schedule duration;
+- Early start and finish date of each activity;
+- Late start and finish date of each activity;
+- Critical activities;
+- Critical path;
+- Total float and free float;
+- Gantt Matrix;
+- What-if scenario analysis;
+- Topological indicators.
 
 
-The aim of this package is to apply critical path method, for the researcher to make experiments with CPM parameters.
+The aim of this package is to apply critical path method, for project managers
+and researchers to make experiments with CPM parameters.
 
 # How to create a schedule
 
-You have the following alternatives to create a schedule:
+To create a schedule, you need to add activities and their relations in it.
+Optionally, you may define a title and a reference. You have the following
+alternatives to create a schedule:
 
-1. Create an empty schedule and add activities to i.
-1. Create an empty schedule, add activities and relations to it.
-1. Create an empty schedule and add activities at the same time that add relations to it.
-1. Create an schedule from activities data frame and relations data frame.
+1. Create a schedule with activities and relations.
+1. Create a schedule, add activities and relations to it.
+1. Create a schedule and add activities at the same time that 
+add relations to it.
+1. Create a schedule and add activities to it.
 
-Lets discuss each one.
+Lets see example from each one.
 
 
-## Add activities to a schedule
+## Create a schedule with activities and relations
 
-- `Schedule$add_activity(id, name, duration)` : 
-adds an activity to a schedule.
+Make a schedule with activities and relations between activities. 
+For this, you have the following steps:
 
-- `Schedule$add_activities(activities)` : adds an activities data frame to a schedule.
+1. create an empty schedule:
+   - `sch_new()`
+1. define the title of the schedule:
+   - `sch_title()`
+1. define the reference of the schedule:
+   - `sch_reference()`
+1. add activities to the schedule:
+   - `sch_add_activities()`
+1. add relations to the schedule:
+   - `sch_add_relations()`
+1. plan the schedule
+   - `sch_plan()`
 
-Usage:
+**Attention:** The `sch_plan()` function is crucial:
+it responsible to apply the Critical Path Method (CPM).
 
-- Schedule$add_activity(id, name, duration)
-- Schedule$add_activities(activities)
+Example:
 
-Parameters:
-
-- `id` Activity id, an integer number that must be unique within a schedule.
-It will be used to make relation between activities.
-- `name` The name of activity. The default is an empty string.
-- `duration` A number that represents the activity's duration.
-It is integer number without time unit.
-It must be equal or grater than zero. The default value is zero.
-- `activities` Data frame with activities.
-If it is not informed, the schedule will be created without any activity.
-Its structure is defined in [schedule_from_data_frame]
 
 ```{r}
-# Activities added one by one
-schedule <- Schedule$new()
-schedule$add_activity(1, "Task 1", 5)
-schedule$add_activity(2, "Task 2", 6)
-schedule$add_activity(3, "Task 3", 8)
-schedule$add_activity(4, "Task 4", 6)
-schedule$add_activity(5, "Task 5", 9)
-schedule$add_activity(6, "Task 6", 3)
-schedule$add_activity(7, "Task 7", 4)
-schedule$duration
-schedule$activities
+sch <- sch_new() %>% 
+  sch_title("Project 1: Cost Information System") %>% 
+  sch_reference("VANHOUCKE, Mario.
+    Integrated project management and control:
+    first comes the theory, then the practice.
+    Gent: Springer, 2014, p. 6") %>% 
+  sch_add_activities(
+    id        = 1:17,
+    name      = paste("a", as.character(1:17), sep=""),
+    duration  = c(1L,2L,2L,4L,3L,3L,3L,2L,1L,1L,2L,1L,1L,1L,1L,2L,1L)
+  ) %>% 
+  sch_add_relations(
+  from = c(1L, 1L, 2L, 2L, 2L, 3L, 3L, 3L,  3L,  4L,  5L,  6L,
+           7L,  8L,  9L, 10L, 11L, 11L, 12L, 12L, 13L, 13L, 14L, 14L, 15L, 15L),
+  to   = c(2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 11L, 11L,
+           12L, 13L, 14L, 15L, 16L, 17L, 16L, 17L, 16L, 17L, 16L, 17L, 16L, 17L)
+  ) %>% 
+  sch_plan()
 
-# Activities add once for all
-activities <- data.frame(
-  id        = 1:17,
-  name      = paste("a", as.character(1:17), sep=""),
-  duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
-)
-schedule <- Schedule$new()
-schedule$add_activities(activities)
-schedule$duration
-schedule$activities
-
+sch_duration(sch)
+sch_activities(sch)
+sch_relations(sch)
 ```
 
 
-## Add relations to a schedule
 
-- Schedule$add_relation(from, to, type="FS", lag=0) : adds a relation to a schedule.
+## Create a schedule, add activities and relations to it
 
-- Schedule$add_relations(relations) : adds a relations data frame to a schedule.
+Create a schedule and add each activity to it, one by one.
+Also, add each relation to it, one by one, too.
+Steps:
 
-Usage
+1. create an empty schedule:
+   - `sch_new()`
+1. define the title of the schedule:
+   - `sch_title()`
+1. define the reference of the schedule:
+   - `sch_reference()`
+1. add each activity to the schedule:
+   - `sch_add_activity()`
+1. add each relation to the schedule:
+   - `sch_add_relation()`
+1. plan the schedule
+   - `sch_plan()`
 
-- Schedule$add_relation(from, to, type="FS", lag=0)
-- Schedule$add_relations(relations)
+**Attention:** The `sch_plan()` function is crucial:
+it responsible to apply the Critical Path Method (CPM).
 
-Parameters: 
-
-- `from` The id of predecessor activity. Must exist a activity with from id.
-- `to` The id of successor activity. Must exist a activity with to.
-- `type` Specifies the type of relation between activities. The default type is FS and its value may be: FS, FF, SS, SF, that means:
-
-  - **FS:** Finish-Start relation.
-Activity 'to' id can only start after the finish of activity 'from' id.
-
-  - **FF:** Finish-Finish relation.
-Activity 'to' id must finish together with activity 'from' id.
-
-  - **SS:** Start-Start relation.
-Activity 'to' id must start together with activity 'from' id.
-
-  - **SF:** Start-Finish relation.
-Activity 'to' id must finish when activity 'from' id starts.
-
-- `lag` The time period between activities that the successor activity
-'to' must be advanced after activity 'from' has been finished.
-The value may be negative, in such case, the activity 'to' will be
-anticipated 'lag' time periods.
-It must be an integer, less than, equal or greater than zero.
-If lag is not informed, it is assumed to be zero.
-- `relations` Data frame with precedence relations between activities.
-It is formed by predecessor activity e successor activity.
-Its structure is defined in [schedule_from_data_frame].
+Example:
 
 ```{r}
-# First, create an empty schedule
-schedule <- Schedule$new()
-schedule$title <- "Project 3: Old Carriage House Renovation"
-schedule$reference <-
+sch <- sch_new() %>% 
+  sch_title("Project 3: Old Carriage House Renovation") %>% 
+  sch_reference(
   "VANHOUCKE, Mario. Integrated project management and control:
-  first comes the theory, then the practice. Gent: Springer, 2014, p. 11"
+  first comes the theory, then the practice. Gent: Springer, 2014, p. 11") %>% 
+  sch_add_activity( 1L, "a1" , 2L) %>% 
+  sch_add_activity( 2L, "a2" , 2L) %>% 
+  sch_add_activity( 3L, "a3" , 4L) %>% 
+  sch_add_activity( 4L, "a4" , 3L) %>% 
+  sch_add_activity( 5L, "a5" , 4L) %>% 
+  sch_add_activity( 6L, "a6" , 1L) %>% 
+  sch_add_activity( 7L, "a7" , 1L) %>% 
+  sch_add_activity( 8L, "a8" , 1L) %>% 
+  sch_add_activity( 9L, "a9" , 1L) %>% 
+  sch_add_activity(10L, "a10", 1L) %>% 
+  sch_add_activity(11L, "a11", 3L) %>% 
+  sch_add_activity(12L, "a12", 2L) %>% 
+  sch_add_activity(13L, "a13", 1L) %>% 
+  sch_add_activity(14L, "a14", 1L) %>% 
+  sch_add_activity(15L, "a15", 2L) %>% 
+  sch_add_activity(16L, "a16", 1L) %>% 
+  sch_add_activity(17L, "a17", 1L) %>% 
+  sch_add_relation( 1L,  2L) %>% 
+  sch_add_relation( 2L,  3L) %>% 
+  sch_add_relation( 3L,  4L) %>% 
+  sch_add_relation( 4L,  5L) %>% 
+  sch_add_relation( 5L,  6L) %>% 
+  sch_add_relation( 6L,  7L) %>% 
+  sch_add_relation( 6L,  8L) %>% 
+  sch_add_relation( 6L,  9L) %>% 
+  sch_add_relation( 7L, 10L) %>% 
+  sch_add_relation( 8L, 10L) %>% 
+  sch_add_relation( 9L, 10L) %>% 
+  sch_add_relation(10L, 11L) %>% 
+  sch_add_relation(10L, 13L) %>% 
+  sch_add_relation(11L, 12L) %>% 
+  sch_add_relation(12L, 15L) %>% 
+  sch_add_relation(13L, 14L) %>% 
+  sch_add_relation(14L, 15L) %>% 
+  sch_add_relation(15L, 16L) %>% 
+  sch_add_relation(16L, 17L) %>% 
+  sch_plan()
 
-# Second, add activities to it
-schedule$add_activity(1, "a1" , 2)
-schedule$add_activity(2, "a2" , 2)
-schedule$add_activity(3, "a3" , 4)
-schedule$add_activity(4, "a4" , 3)
-schedule$add_activity(5, "a5" , 4)
-schedule$add_activity(6, "a6" , 1)
-schedule$add_activity(7, "a7" , 1)
-schedule$add_activity(8, "a8" , 1)
-schedule$add_activity(9, "a9" , 1)
-schedule$add_activity(10, "a10", 1)
-schedule$add_activity(11, "a11", 3)
-schedule$add_activity(12, "a12", 2)
-schedule$add_activity(13, "a13", 1)
-schedule$add_activity(14, "a14", 1)
-schedule$add_activity(15, "a15", 2)
-schedule$add_activity(16, "a16", 1)
-schedule$add_activity(17, "a17", 1)
-
-# Finaly, add relations to it
-schedule$add_relation( 1, 2)
-schedule$add_relation( 2, 3)
-schedule$add_relation( 3, 4)
-schedule$add_relation( 4, 5)
-schedule$add_relation( 5, 6)
-schedule$add_relation( 6, 7)
-schedule$add_relation( 6, 8)
-schedule$add_relation( 6, 9)
-schedule$add_relation( 7, 10)
-schedule$add_relation( 8, 10)
-schedule$add_relation( 9, 10)
-schedule$add_relation( 10, 11)
-schedule$add_relation( 10, 13)
-schedule$add_relation( 11, 12)
-schedule$add_relation( 12, 15)
-schedule$add_relation( 13, 14)
-schedule$add_relation( 14, 15)
-schedule$add_relation( 15, 16)
-schedule$add_relation( 16, 17)
-schedule$duration
-schedule$activities
-schedule$relations
+sch_duration(sch)
+sch_activities(sch)
+sch_relations(sch)
 ```
 
-
-## Add activities and relations together to an schedule
+## Create a schedule and add activities at the same time that add relations to it
 
 Add an activity to a schedule in the same time that adds relations.
+The steps are:
 
-Usage
+1. create an empty schedule:
+   - `sch_new()`
+1. define the title of the schedule:
+   - `sch_title()`
+1. define the reference of the schedule:
+   - `sch_reference()`
+1. add each activity to the schedule 
+and, in the same time, the activity's relation:
+   - `sch_add_activity()`
+1. plan the schedule
+   - `sch_plan()`
 
-- Schedule$add_act_rel(id, name, duration, relations_id=c(), direction="succ")
+**Attention:** The `sch_plan()` function is crucial:
+it responsible to apply the Critical Path Method (CPM).
 
-Parameters:
-
-- `id` Activity id, an integer number that
-must be unique within a schedule.
-It will be used to make relation between activities.
-- `name` The name of activity.
-- `duration` A number that represents the activity's duration.
-It must be equal or grater than zero.
-- `relations_id` A vector of ids such that will be linked with activity.
-It may be a relations of successor or predecessors.
-- `direction` Direction of relations_id: It may be "succ" or "pred".
-  - **succ:** the relations_id vector will be the successor of the activity.
-  - **pred:** the relations_id vector will be the predecessor of the activity.
+Example:
 
 ```{r}
 # Create a schedule
-schedule <- Schedule$new()
-schedule$title <- "Fictitious Project Example"
-schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+sch <- sch_new() %>% 
+  sch_title("Fictitious Project Example") %>% 
+  sch_reference("VANHOUCKE, Mario. Measuring time:
   improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18"
+  Gent: Springer, 2009, p. 18") %>% 
+  sch_add_activity( 1L, "a1" , 0L,  2L,3L,4L) %>% 
+  sch_add_activity( 2L, "a2" , 4L,  5L) %>% 
+  sch_add_activity( 3L, "a3" , 9L, 10L) %>% 
+  sch_add_activity( 4L, "a4" , 1L,  6L) %>% 
+  sch_add_activity( 5L, "a5" , 4L,  9L) %>% 
+  sch_add_activity( 6L, "a6" , 5L,  7L) %>% 
+  sch_add_activity( 7L, "a7" , 1L,  8L,11L) %>% 
+  sch_add_activity( 8L, "a8" , 7L, 12L) %>% 
+  sch_add_activity( 9L, "a9" , 8L, 12L) %>% 
+  sch_add_activity(10L, "a10", 3L, 12L) %>% 
+  sch_add_activity(11L, "a11", 3L, 12L) %>% 
+  sch_add_activity(12L, "a12", 0L) %>% 
+  sch_plan()
 
-# Add activities and relations to it.
-schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-schedule$add_act_rel(  2, "a2" , 4, c(5))
-schedule$add_act_rel(  3, "a3" , 9, c(10))
-schedule$add_act_rel(  4, "a4" , 1, c(6))
-schedule$add_act_rel(  5, "a5" , 4, c(9))
-schedule$add_act_rel(  6, "a6" , 5, c(7))
-schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-schedule$add_act_rel(  8, "a8" , 7, c(12))
-schedule$add_act_rel(  9, "a9" , 8, c(12))
-schedule$add_act_rel( 10, "a10", 3, c(12))
-schedule$add_act_rel( 11, "a11", 3, c(12))
-schedule$add_act_rel( 12, "a12", 0)
-schedule$duration
-schedule$activities
-schedule$relations
+sch_duration(sch)
+sch_activities(sch)
+sch_relations(sch)
 ```
 
 
 
+## Create a schedule and add activities to it
 
-## Create a schedule object from data frames
+Creates a schedule only with activities. 
+The steps are:
 
-Make a schedule with activities and relations between activities.
-The method `Schedule$new(activities, relations)`
-creates an schedule object from two data frames,
-one containing activities lists and the other the precedence relations
-between activities.
-After creation, it is applied the Critical Path Method (CPM).
+1. create an empty schedule:
+   - `sch_new()`
+1. define the title of the schedule:
+   - `sch_title()`
+1. define the reference of the schedule:
+   - `sch_reference()`
+1. add each activity to the schedule :
+   - `sch_add_activity()`
+1. plan the schedule
+   - `sch_plan()`
 
-It is possible to create a empty schedule, without any activity or relation
-with the constructor `Schedule$new()`.
-After that, it is possible to add activity with `add_activity`
-and relation with `add_relation` methods.
+**Attention:** The `sch_plan()` function is crucial:
+it responsible to apply the Critical Path Method (CPM).
 
-Parameters:
-
-- `activities` Data frame with activities.
-If it is not informed, the schedule will be created without any activity.
-Its structure is:
-  - **id:** Activity id, an integer number that
-must be unique within a schedule.
-It will be used to make relation between activities.
-  - **name:** The name of activity. The default is an empty string.
-  - **duration:** A number that represents the activity's duration.
-It is integer number without time unit.
-It must be equal or grater than zero. The default value is zero.
-- `relations` Data frame with precedence relations between activities.
-If it is informed, the activities has to be informed too.
-If is is not informed, the schedule will be created without any relation.
-It is formed by predecessor activity e successor activity.
-Its structure is:
-  - **from:** The id of predecessor activity. Must exist a activity with from id.
-  - **to:** The id of successor activity. Must exist a activity with to id.
-  - **type:** Specifies the type of relation between activities.
-The default type is FS and its value may be: FS, FF, SS, SF, that means:
-      - **FS:** Finish-Start relation.
-Activity 'to' id can only start after the finish of activity 'from' id.
-      - **FF:** Finish-Finish relation.
-Activity 'to' id must finish together with activity 'from' id.
-      - **SS:** Start-Start relation.
-Activity 'to' id must start together with activity 'from' id.
-      - **SF:** Start-Finish relation.
-Activity 'to' id must finish when activity 'from' id starts.
-  - **lag:** The time period between activities that the successor activity
-'to' must be advanced after activity 'from' has been finished.
-The value may be negative, in such case, the activity 'to' will be
-anticipated 'lag' time periods.
-It must be an integer, less than, equal or greater than zero.
-If it is not informed, it will be zero.
+Example:
 
 ```{r}
-
-# An empty schedule.
-schedule <- Schedule$new()
-schedule$duration
-schedule$activities
-schedule$relations
-
-# A schedule with activities and relations.
-activities <- data.frame(
-  id        = 1:17,
-  name      = paste("a", as.character(1:17), sep=""),
-  duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
-)
-
-relations <- data.frame(
-  from = c(1, 1, 2, 2, 2, 3, 3, 3,  3,  4,  5,  6,
-           7,  8,  9, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15),
-  to   = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11,
-           12, 13, 14, 15, 16, 17, 16, 17, 16, 17, 16, 17, 16, 17)
-)
-schedule <- Schedule$new(activities, relations)
-schedule$title <- "Project 1: Cost Information System"
-schedule$reference <- "VANHOUCKE, Mario.
-Integrated project management and control:
-  first comes the theory, then the practice.
-  Gent: Springer, 2014, p. 6"
-schedule$duration
-schedule$activities
-schedule$relations
+# Activities added one by one
+sch <- sch_new() %>% 
+  sch_add_activity(1L, "Task 1", 5L) %>% 
+  sch_add_activity(2L, "Task 2", 6L) %>% 
+  sch_add_activity(3L, "Task 3", 8L) %>% 
+  sch_add_activity(4L, "Task 4", 6L) %>% 
+  sch_add_activity(5L, "Task 5", 9L) %>% 
+  sch_add_activity(6L, "Task 6", 3L) %>% 
+  sch_add_activity(7L, "Task 7", 4L) %>% 
+  sch_plan()
+sch_duration(sch)
+sch_activities(sch)
 ```
+
+
+## Observations
+
+- You must always to call `sch_plan()` function.
+- You may have a schedule without relation.
+In this case, by CPM definition, all activities are parallel.
+
 
 
 
 # How to get schedule information
 
-## Title, Reference and Schedule Duration
-After a schedule is created, it is possible access several type of information:
+After schedule creation, it is possible access several type of information,
+such as Title, Reference and Schedule Duration.
 
-- **title:**
+## Title
+
 A project title for identification. It depends on
 user of the class. Its use are:
 
-   - `Sechedule$title <- "A title"` : sets a title for a project.
-   - `Sechedule$title` : gets the title of the project.
+   - `sch %>% sch_title("A title")` : sets a title for a project.
+   - `sch_title(sch)` : gets the title of the project.
 
-- **reference:**
+## Reference
+
 A reference from project origin, for example, a book, a paper, a corporation,
 or nothing.
-   - `Sechedule$reference <- "A reference"` : sets a reference for a project.
-   - `Sechedule$title` : gets the reference of the project.
 
-- **duration:**
-An integer value that indicate the project duration
-calculated by CPM. Every time you include an activity or a relation
-to a schedule, the duration is calculated. You can only read
-the schedule duration.
-   - `Sechedule$duration` : gets the duration of the project.
+   - `sch %>% sch_reference("A reference")` : sets a reference for a project.
+   - `sch_reference(sch)` : gets the reference of the project.
+
+## Duration
+
+An integer value that indicate the project duration calculated by CPM, that is
+made by `sch_plan(sch)` function. You can only read the schedule duration.
+
+   - `sch_duration(sch)` : gets the duration of the project.
+
+## Example
 
 ```{r}
 # Create a schedule
-schedule <- Schedule$new()
-schedule$title <- "Fictitious Project Example"
-schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18"
-
+sch <- sch_new() %>% 
+  sch_title("Fictitious Project Example") %>% 
+  sch_reference("VANHOUCKE, Mario. Measuring time:
+    improving project performance using earned value management.
+    Gent: Springer, 2009, p. 18") %>% 
 # Add activities and relations to it.
-schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-schedule$add_act_rel(  2, "a2" , 4, c(5))
-schedule$add_act_rel(  3, "a3" , 9, c(10))
-schedule$add_act_rel(  4, "a4" , 1, c(6))
-schedule$add_act_rel(  5, "a5" , 4, c(9))
-schedule$add_act_rel(  6, "a6" , 5, c(7))
-schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-schedule$add_act_rel(  8, "a8" , 7, c(12))
-schedule$add_act_rel(  9, "a9" , 8, c(12))
-schedule$add_act_rel( 10, "a10", 3, c(12))
-schedule$add_act_rel( 11, "a11", 3, c(12))
-schedule$add_act_rel( 12, "a12", 0)
-schedule$title
-schedule$reference
-schedule$duration
+  sch_add_activity(  1L, "a1" , 0L,  2L,3L,4L) %>% 
+  sch_add_activity(  2L, "a2" , 4L,  5L) %>% 
+  sch_add_activity(  3L, "a3" , 9L,  10L) %>% 
+  sch_add_activity(  4L, "a4" , 1L,  6L) %>% 
+  sch_add_activity(  5L, "a5" , 4L,  9L) %>% 
+  sch_add_activity(  6L, "a6" , 5L,  7L) %>% 
+  sch_add_activity(  7L, "a7" , 1L,  8L,11L) %>% 
+  sch_add_activity(  8L, "a8" , 7L, 12L) %>% 
+  sch_add_activity(  9L, "a9" , 8L, 12L) %>% 
+  sch_add_activity( 10L, "a10", 3L, 12L) %>% 
+  sch_add_activity( 11L, "a11", 3L, 12L) %>% 
+  sch_add_activity( 12L, "a12", 0L) %>% 
+  sch_plan()
+sch_title(sch)
+sch_reference(sch) %>% cat()
+sch_duration(sch)
 ```
 
 
 
 # How to get activities properties
-
-
-## Activity Properties
 
 There several methods about activities that you can use to get
 information about them. After you add activities to a schedule, you may
@@ -408,26 +353,33 @@ want to know how much activities has in a schedule or when each activity
 is planned to start or to finish.
 In this section, we will explain how you can find these information.
 
-- **Has Any Activity:**
+## Has Any Activity
+
 A logical value that indicate if the schedule
 has any activity. A TRUE value means that the schedule has some
 activity; a FALSE, means that the schedule is empty.
-   - Usage: `Schedule$has_any_activity`
 
-- **Number of Activities:**
+   - `sch_has_any_activity(sch)`
+
+## Number of Activities
+
 Number of activities in a schedule as an integer value.
-   - Usage: `Schedule$nr_activities`
 
-- **Get activity:**
-Gets an activity by id. It returns a data
-frame with one line about activity. The structure of a data is
-described in next topic.
-   - Usage: `Schedule$get_activity(id)`
+   - `sch_nr_activities(sch)`
 
-- **Activities:**
-Return a data frame with all activities of a schedule
-in a activity id order. This is the main information calculated by CPM.
-The data frame is formed by following structure:
+## Get Activity
+
+Gets an activity by id. It returns a tibble  with one line about activity.
+The structure of a data is described in next topic.
+
+   - `sch_get_activity(sch, id)`
+
+## Activities
+
+Return a tibble with all activities of a schedule.
+This is the main information calculated by CPM.
+The tibble is formed by following columns:
+
    - **id:** Activity id.
    - **name:** The name of activity.
    - **duration:** A number that represents the activity's duration.
@@ -438,15 +390,15 @@ The data frame is formed by following structure:
    to zero. This property indicates if a activity is critical:
    `TRUE` indicates it is critical;
    `FALSE` indicates it is not critical.
-   - **ES:** Early Start: is the earliest start period an activity can begin
+   - **early_start:** Early Start: is the earliest start period an activity can begin
    after its predecessors without violating precedence relation.
-   - **EF:** Early Finish: is the early start plus activity duration.
-   - **LS:** Late Start: is the late finish minus activity duration.
-   - **LF:** Late Finish: is the latest finish an activity can finish
+   - **early_finish:** Early Finish: is the early start plus activity duration.
+   - **late_start:** Late Start: is the late finish minus activity duration.
+   - **late_finish:** Late Finish: is the latest finish an activity can finish
    before their successors without violating precedence relation.
    - **total_float:** It is the amount of period an activity can be
    delayed without violating the project duration. Its formula is:
-   LS - ES or LF - EF.
+   `late_start - early_star` or `late_finish - late_start`.
    - **free_float:** It is the amount of period an activity can be
    delayed without violating the start time of the successors activities.
    - **progr_level:** Progressive level is the rank of activities counted
@@ -460,40 +412,40 @@ The data frame is formed by following structure:
    - **topo_float:** It is the difference between progressive level
     and regressive level.
 
-   - Usage: `Schedule$activities`
-
-   - Usage: `Schedule$get_activity(id)`
+   - Usage: `sch_activities(sch)`
 
 ```{r}
 # Create a schedule
-schedule <- Schedule$new()
-schedule$title <- "Fictitious Project Example"
-schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18"
+sch <- sch_new() %>% 
+  sch_title("Fictitious Project Example") %>% 
+  sch_reference("VANHOUCKE, Mario. Measuring time:
+    improving project performance using earned value management.
+    Gent: Springer, 2009, p. 18") 
 
-schedule$has_any_activity  # FALSE
-schedule$nr_activities     # 0
+sch_has_any_activity(sch)  # FALSE
+sch_nr_activities(sch)     # 0
 
 # Add activities and relations to it.
-schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-schedule$add_act_rel(  2, "a2" , 4, c(5))
-schedule$add_act_rel(  3, "a3" , 9, c(10))
-schedule$add_act_rel(  4, "a4" , 1, c(6))
-schedule$add_act_rel(  5, "a5" , 4, c(9))
-schedule$add_act_rel(  6, "a6" , 5, c(7))
-schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-schedule$add_act_rel(  8, "a8" , 7, c(12))
-schedule$add_act_rel(  9, "a9" , 8, c(12))
-schedule$add_act_rel( 10, "a10", 3, c(12))
-schedule$add_act_rel( 11, "a11", 3, c(12))
-schedule$add_act_rel( 12, "a12", 0)
+sch %<>% 
+  sch_add_activity(  1L, "a1" , 0L,  2L,3L,4L) %>% 
+  sch_add_activity(  2L, "a2" , 4L,  5L) %>% 
+  sch_add_activity(  3L, "a3" , 9L,  10L) %>% 
+  sch_add_activity(  4L, "a4" , 1L,  6L) %>% 
+  sch_add_activity(  5L, "a5" , 4L,  9L) %>% 
+  sch_add_activity(  6L, "a6" , 5L,  7L) %>% 
+  sch_add_activity(  7L, "a7" , 1L,  8L,11L) %>% 
+  sch_add_activity(  8L, "a8" , 7L, 12L) %>% 
+  sch_add_activity(  9L, "a9" , 8L, 12L) %>% 
+  sch_add_activity( 10L, "a10", 3L, 12L) %>% 
+  sch_add_activity( 11L, "a11", 3L, 12L) %>% 
+  sch_add_activity( 12L, "a12", 0L) %>% 
+  sch_plan()
 
-schedule$has_any_activity  # TRUE
-schedule$nr_activities     # 12
+sch_has_any_activity(sch)  # TRUE
+sch_nr_activities(sch)     # 12
 
-schedule$get_activity(10)
-schedule$activities
+sch_get_activity(sch, 10L)
+sch_activities(sch)
 ```
 
 
@@ -503,39 +455,45 @@ Create a matrix that represents a Gantt chart,
 a matrix where "1" indicate that an activity is planned to be
 in execution.
 
-In this matrix, the rows represents activities,
-Whereas the columns represents the activity execution period.
+In this matrix, the rows represent activities,
+whereas the columns represents the activity execution period.
 So, the number of columns is equal to project duration.
 
-- `Schedule$gantt_matrix()` Return the Gantt matrix.
+- `sch_gantt_matrix(sch)` Return the Gantt matrix.
 
-- `Schedule$xy_gantt_matrix(gantt=NULL)`
+- `sch_xy_gantt_matrix(sch, gantt=NULL)`
 Transform a Gantt matrix in x, y coordinates and the weight one.
 Each point greater than zero in a Gantt matrix becomes a x, y coordinate.
 
 ```{r}
-activities <- data.frame(
-  id        = c( 1,   2,   3,   4 ),
-  name      = c("A", "B", "C", "D"),
-  duration  = c( 2,   3,   1,   2 )
-)
-relations <- data.frame(
-  from = c(1, 2, 4, 4),
-  to   = c(3, 3, 1, 2)
-)
-schedule <- Schedule$new(activities, relations)
-schedule$title <- "A project"
-schedule$reference <- "From criticalpath"
-gantt <- schedule$gantt_matrix()
+sch <- sch_new() %>% 
+  sch_title("A project") %>%
+  sch_reference("From criticalpath") %>% 
+  sch_add_activities(
+    id        = c( 1L,   2L,   3L,   4L ),
+    name      = c("A", "B", "C", "D"),
+    duration  = c( 2L,   3L,   1L,   2L )
+  ) %>% 
+  sch_add_relations(
+    from = c(1L, 2L, 4L, 4L),
+    to   = c(3L, 3L, 1L, 2L)
+  ) %>% 
+  sch_plan()
+
+gantt <- sch_gantt_matrix(sch)
+
 gantt
+
 # What is the effort by time period?
 colSums(gantt) # 1 1 2 2 1 1
+
 # What is the duration by activities?
 rowSums(gantt) # 2 3 1 2
+
 # what is the S curve
 cumsum(colSums(gantt))
 plot(cumsum(colSums(gantt)), type="l", lwd=3)
-xyw <- schedule$xy_gantt_matrix()
+xyw <- sch_xy_gantt_matrix(sch)
 xyw
 plot(xyw[, 1:2])
 ```
@@ -543,48 +501,80 @@ plot(xyw[, 1:2])
 
 # How to change activities duration
 
-## Change Activities Duration
+Change activities duration and calculates critical path.
+This way is faster than creating a new schedule with new duration.
+The order of duration is the insertion order of activities.
 
-Change activities duration and calculate critical path.
-This way is faster than creating a new schedule with new durations.
-  new_durations A vector with new activities' duration.
-
-**Attention:** The vector duration must be ordered by activity id.
-
-- **Usage:** `Schedule$change_durations(new_durations)`
+- `sch %<>% sch_change_durations(new_durations)`
 
 ```{r}
-activities <- data.frame(
-  id        = 1:17,
-  name      = paste("a", as.character(1:17), sep=""),
-  duration  = c(1,1,3,2, 2,2,2,1, 4,5,3,3, 4,5,1,5,2)
-)
-
-relations <- data.frame(
-  from = c(1, 2, 3, 3, 4, 5, 6, 7, 8,  8,  8,
-    8,  8,  9, 10, 11, 12, 13, 13, 14, 14, 15, 15),
-  to   = c(2, 3, 4, 6, 5, 8, 7, 8, 9, 10, 11,
-   12, 13, 14, 14, 14, 14, 14, 15, 16, 17, 16, 17)
-)
-
-schedule <- Schedule$new(activities, relations)
-schedule$title <- "Project 2: Patient Transport System"
-schedule$reference <-
+sch <- sch_new() %>% 
+  sch_title("Project 2: Patient Transport System") %>% 
+  sch_reference(
   "VANHOUCKE, Mario. Integrated project management and control:
-  first comes the theory, then the practice. Gent: Springer, 2014, p. 9"
+  first comes the theory, then the practice. Gent: Springer, 2014, p. 9") %>% 
+  sch_add_activities(
+    id        = 1:17,
+    name      = paste("a", as.character(1:17), sep=""),
+    duration  = c(1L,1L,3L,2L, 2L,2L,2L,1L, 4L,5L,3L,3L, 4L,5L,1L,5L,2L)
+  ) %>% 
+  sch_add_relations(
+    from = c(1L, 2L, 3L, 3L, 4L, 5L, 6L, 7L, 8L,  8L,  8L,
+      8L,  8L,  9L, 10L, 11L, 12L, 13L, 13L, 14L, 14L, 15L, 15L),
+    to   = c(2L, 3L, 4L, 6L, 5L, 8L, 7L, 8L, 9L, 10L, 11L,
+     12L, 13L, 14L, 14L, 14L, 14L, 14L, 15L, 16L, 17L, 16L, 17L)
+  ) %>% 
+  sch_plan()
+
 #Project duration
-schedule$duration # 25
-#Activities duration
-schedule$activities$duration
+sch_duration(sch) # 25
 
-new_durations <- c(1,2,5, 4,3, 2,1, 5, 3,5,5,3,4, 2,1, 2,4)
-schedule$change_durations(new_durations)
+#Activities duration
+sch_activities(sch)$duration
+
+new_durations <- c(1L,2L,5L, 4L,3L, 2L,1L, 5L, 3L,5L,5L,3L,4L, 2L,1L, 2L,4L)
+sch %<>% 
+  sch_change_activities_duration(new_durations)
 
 #Project duration
-schedule$duration # 31
+sch_duration(sch) # 31
 #Activities duration
-schedule$activities$duration
+sch_activities(sch)$duration
 
+```
+
+Now, we will create the same schedule, but with activities insertion in random
+order. The relation between activities will be the same.
+
+Then, will change the activities duration with the same data as above.
+The new schedule duration will be the same.
+
+```{r}
+n <- sch %>% sch_nr_activities()
+set.seed(45678)
+i <- sample(n)
+
+another_schedule <- sch_new() %>% 
+  sch_add_activities(
+    id        = sch_activities(sch)$id[i],
+    name      = sch_activities(sch)$name[i],
+    duration  = sch_activities(sch)$duration[i]
+  ) %>%
+  sch_add_relations(
+    from = c(1L, 2L, 3L, 3L, 4L, 5L, 6L, 7L, 8L,  8L,  8L,
+             8L,  8L,  9L, 10L, 11L, 12L, 13L, 13L, 14L, 14L, 15L, 15L),
+    to   = c(2L, 3L, 4L, 6L, 5L, 8L, 7L, 8L, 9L, 10L, 11L,
+             12L, 13L, 14L, 14L, 14L, 14L, 14L, 15L, 16L, 17L, 16L, 17L)
+  ) %>%
+  sch_plan()
+
+
+another_schedule %<>% sch_change_activities_duration(new_durations[i])
+# Second schedule.
+sch_duration(another_schedule)
+
+# First schedule.
+sch_duration(sch)
 ```
 
 
@@ -592,7 +582,7 @@ schedule$activities$duration
 
 ## Relation Properties
 
-There several methods about relations that you can use to get
+There are several methods about relations that you can use to get
 information about them. After you add activities and relations
 to a schedule, you may want to know how much relations has in a
 schedule or which relations belong to critical path.
@@ -602,20 +592,20 @@ In this section, we will explain how you can find these information.
 A logical value that indicates if the schedule
 has any relation. A TRUE value means that the schedule has some
 relation; a FALSE, means that the schedule does not have any relation.
-   - Usage: `Schedule$has_any_relation`
+   - `sch_has_any_relation(sch)`
 
 - **Number of Relations:**
 Number of relations in a schedule as an integer value.
-   - Usage: `Schedule$nr_relations`
+   - `sch_nr_relations(sch)`
 
 - **Relations:**
-Return a data frame with all relations of a schedule
+Return a tibble with all relations of a schedule
 in topological order. This is the main information calculated by CPM.
-The data frame is formed by following structure:
+The tibble is formed by following structure:
    - **from:** Predecessor activity id from a relation.
    - **to:** Successor activity id from a relation.
    - **type:** The type of relation between activities.
-   Its value may be: FS, FF, SS, SF, as described in [schedule_from_data_frame]
+   Its value may be: FS, FF, SS, SF.
    - **lag:** The time period between activity predecessor and
    activity successor activity
    - **critical:** A critical relation formed by two activity critical:
@@ -628,37 +618,39 @@ The data frame is formed by following structure:
    - **i_to:** It the index of successor activity in the
    activities data frame.
 
-   - Usage: `Schedule$relations`
+   - Usage: `sch_relations(sch)`
 
 ```{r}
 # Create a schedule
-schedule <- Schedule$new()
-schedule$title <- "Fictitious Project Example"
-schedule$reference <- "VANHOUCKE, Mario. Measuring time:
+sch <- sch_new() %>% 
+  sch_title("Fictitious Project Example") %>% 
+  sch_reference("VANHOUCKE, Mario. Measuring time:
   improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18"
+  Gent: Springer, 2009, p. 18")
 
-schedule$has_any_relation  # FALSE
-schedule$nr_relations      # 0
+sch_has_any_relation(sch)  # FALSE
+sch_nr_relations(sch)      # 0
 
-# Add activities and relations to it.
-schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-schedule$add_act_rel(  2, "a2" , 4, c(5))
-schedule$add_act_rel(  3, "a3" , 9, c(10))
-schedule$add_act_rel(  4, "a4" , 1, c(6))
-schedule$add_act_rel(  5, "a5" , 4, c(9))
-schedule$add_act_rel(  6, "a6" , 5, c(7))
-schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-schedule$add_act_rel(  8, "a8" , 7, c(12))
-schedule$add_act_rel(  9, "a9" , 8, c(12))
-schedule$add_act_rel( 10, "a10", 3, c(12))
-schedule$add_act_rel( 11, "a11", 3, c(12))
-schedule$add_act_rel( 12, "a12", 0)
+sch %<>% 
+  sch_add_activity( 1L, "a1" , 0L,  2L,3L,4L) %>% 
+  sch_add_activity( 2L, "a2" , 4L,  5L) %>% 
+  sch_add_activity( 3L, "a3" , 9L, 10L) %>% 
+  sch_add_activity( 4L, "a4" , 1L,  6L) %>% 
+  sch_add_activity( 5L, "a5" , 4L,  9L) %>% 
+  sch_add_activity( 6L, "a6" , 5L,  7L) %>% 
+  sch_add_activity( 7L, "a7" , 1L,  8L,11L) %>% 
+  sch_add_activity( 8L, "a8" , 7L, 12L) %>% 
+  sch_add_activity( 9L, "a9" , 8L, 12L) %>% 
+  sch_add_activity(10L, "a10", 3L, 12L) %>% 
+  sch_add_activity(11L, "a11", 3L, 12L) %>% 
+  sch_add_activity(12L, "a12", 0L) %>% 
+  sch_plan()
 
-schedule$has_any_relation  # TRUE
-schedule$nr_relations      # 14
 
-schedule$relations
+sch_has_any_relation(sch)  # TRUE
+sch_nr_relations(sch)      # 14
+
+sch_relations(sch)
 ```
 
 
@@ -666,85 +658,89 @@ schedule$relations
 
 A schedule is structured by activities and each activity has
 zero, one or more successors and predecessors. Besides, a relation
-may be redundant.
+may be redundant. In `criticalpath` package there are several methods
+to deal these properties.
 
 - **All Successors:**
 List all successors from an activity: direct and indirect successors.
-   - Usage: `Schedule$all_successors(id, ign_to=NULL)`
-     - **id** Activity id to be listed.
-     - **ign_to** A relation to be ignored: id -> ign_to.
-     Activities from this relation will be ignored.
+   - `sch_all_successors(sch, id)`
+   
+- **Successors:**
+List direct successors from an activity.
+   - `sch_successors(sch, id)`
 
 - **All Predecessors:**
 List all predecessors from an activity: direct or indirect predecessors.
-   - Usage: `Schedule$all_predecessors(id, ign_from=NULL)`
-     - **id** Activity id to be listed.
-     - **ign_from** A relation to be ignored: ign_from -> id.
-     Activities from this relation will be ignored.
+   - `sch_all_predecessors(sch, id)`
+
+- **Predecessors:**
+List directe predecessors from an activity.
+   - `sch_all_predecessors(sch, id)`
 
 - **Is Redundant:**
 Verify if a relation between two activities is redundant.
 A relation A->C is redundant if there are A->C, A->B, B->C relations.
 It returns a logical `TRUE` if an arc is redundant;
 `FALSE` if it is not.
-   - Usage: `Schedule$is_redundant(id_from, id_to)`
-     - **id_from** From activity id.
-     - **id_to** To activity id.
+   - `sch_is_redundant(sch, id_from, id_to)`
 
 ```{r}
 # Create a schedule
-schedule <- Schedule$new()
-schedule$title <- "Fictitious Project Example"
-schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18"
+sch <- sch_new() %>% 
+  sch_title("Fictitious Project Example") %>% 
+  sch_reference("VANHOUCKE, Mario. Measuring time:
+    improving project performance using earned value management.
+    Gent: Springer, 2009, p. 18") %>% 
+  sch_add_activity( 2L, "a2" , 4L,  5L, 12L) %>% 
+  sch_add_activity( 3L, "a3" , 9L, 10L) %>% 
+  sch_add_activity( 4L, "a4" , 1L,  6L) %>% 
+  sch_add_activity( 5L, "a5" , 4L,  9L) %>% 
+  sch_add_activity( 6L, "a6" , 5L,  7L) %>% 
+  sch_add_activity( 7L, "a7" , 1L,  8L,11L) %>% 
+  sch_add_activity( 8L, "a8" , 7L, 12L) %>% 
+  sch_add_activity( 9L, "a9" , 8L, 12L) %>% 
+  sch_add_activity(10L, "a10", 3L, 12L) %>% 
+  sch_add_activity(11L, "a11", 3L, 12L) %>% 
+  sch_add_activity(12L, "a12", 0L) %>% 
+  sch_plan()
 
-# Add activities and relations to it.
-schedule$add_act_rel(  2, "a2" , 4, c(5, 12))
-schedule$add_act_rel(  3, "a3" , 9, c(10))
-schedule$add_act_rel(  4, "a4" , 1, c(6))
-schedule$add_act_rel(  5, "a5" , 4, c(9))
-schedule$add_act_rel(  6, "a6" , 5, c(7))
-schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-schedule$add_act_rel(  8, "a8" , 7, c(12))
-schedule$add_act_rel(  9, "a9" , 8, c(12))
-schedule$add_act_rel( 10, "a10", 3, c(12))
-schedule$add_act_rel( 11, "a11", 3, c(12))
-schedule$add_act_rel( 12, "a12", 0)
+sch_all_successors(sch, 2) # 5, 9, 12
+sch_all_successors(sch, 7) # 8, 11, 12
+sch_all_successors(sch, 10) # 12
 
-schedule$all_successors(2) # 5, 9, 12
-schedule$all_successors(7) # 8, 11, 12
-schedule$all_successors(10) # 12
+sch_successors(sch, 2) # 5, 12
+sch_successors(sch, 7) # 8, 11
+sch_successors(sch, 10) # 12
 
-schedule$all_predecessors(2) # nothing
-schedule$all_predecessors(7) # 6, 4
-schedule$all_predecessors(10) # 3
+sch_all_predecessors(sch, 2) # nothing
+sch_all_predecessors(sch, 7) # 6, 4
+sch_all_predecessors(sch, 10) # 3
 
-schedule$is_redundant(2, 5)  #FALSE
-schedule$is_redundant(2, 12) #TRUE
+sch_predecessors(sch, 2) # nothing
+sch_predecessors(sch, 7) # 6
+sch_predecessors(sch, 10) # 3
+
+sch_is_redundant(sch, 2, 5)  #FALSE
+sch_is_redundant(sch, 2, 12) #TRUE
 
 ```
 
-
-
-# How to get topological properties
-
-## Topological Indicators
+# How to get topological properties: Topological Indicators
 
 Shows information about network structure. It may be of four type:
 
 **SP Serial or Parallel:**
 It shows the closeness of a network to a serial or parallel graph.
-As the network becomes serial, the SP increase, until one,
-when the network totally serial.
-   - Usage: `Schedule$topoi_sp()`
+As the network becomes serial, the SP increase, until one;
+As the network becomes parallel, the SP decrease until zero.
+   - `sch_topoi_sp()`
 
 **AD Activity Distribution:**
 Measures the distribution of the activities over the levels.
 If AD is approximately equal zero, each level has same numbers of activities.
 Otherwise, if AD is equal one, the quantity of each level is not
 uniformly distributed.
-   - Usage: `Schedule$topoi_ad()`
+   - `sch_topoi_ad()`
 
 **LA Length of Arcs:**
 Measures the presence of long arcs based on the difference between
@@ -753,44 +749,42 @@ of each relation.
 If LA is approximately equal zero, the progressive level between
 activities are as far as possible.
 Otherwise, if LA is equal one, the relation distance are one.
-   - Usage: `Schedule$topoi_la()`
+   - `sch_topoi_la()`
 
 **TF Topological Float Indicator:**
 Measures the topological float of each activity.
 If TF = 0, there is no float between activities.
 If TF = 1, there is float between activities
-and they be shift without affecting other activities.
-   - Usage: `Schedule$topoi_tf()`
+and they may be shift without affecting other activities.
+   - `sch_topoi_tf()`
 
 ```{r}
 # Create a schedule
-schedule <- Schedule$new()
-schedule$title <- "Fictitious Project Example"
-schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18"
+sch <- sch_new() %>% 
+  sch_title("Fictitious Project Example") %>%
+  sch_reference("VANHOUCKE, Mario. Measuring time:
+    improving project performance using earned value management.
+    Gent: Springer, 2009, p. 18") %>% 
+  # Add activities and relations to it.
+  sch_add_activity( 1L, "a1" , 0L,  2L,3L,4L) %>% 
+  sch_add_activity( 2L, "a2" , 4L,  5L) %>% 
+  sch_add_activity( 3L, "a3" , 9L, 10L) %>% 
+  sch_add_activity( 4L, "a4" , 1L,  6L) %>% 
+  sch_add_activity( 5L, "a5" , 4L,  9L) %>% 
+  sch_add_activity( 6L, "a6" , 5L,  7L) %>% 
+  sch_add_activity( 7L, "a7" , 1L,  8L,11L) %>% 
+  sch_add_activity( 8L, "a8" , 7L, 12L) %>% 
+  sch_add_activity( 9L, "a9" , 8L, 12L) %>% 
+  sch_add_activity(10L, "a10", 3L, 12L) %>% 
+  sch_add_activity(11L, "a11", 3L, 12L) %>% 
+  sch_add_activity(12L, "a12", 0L) %>% 
+  sch_plan()
 
-# Add activities and relations to it.
-schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-schedule$add_act_rel(  2, "a2" , 4, c(5))
-schedule$add_act_rel(  3, "a3" , 9, c(10))
-schedule$add_act_rel(  4, "a4" , 1, c(6))
-schedule$add_act_rel(  5, "a5" , 4, c(9))
-schedule$add_act_rel(  6, "a6" , 5, c(7))
-schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-schedule$add_act_rel(  8, "a8" , 7, c(12))
-schedule$add_act_rel(  9, "a9" , 8, c(12))
-schedule$add_act_rel( 10, "a10", 3, c(12))
-schedule$add_act_rel( 11, "a11", 3, c(12))
-schedule$add_act_rel( 12, "a12", 0)
-
-schedule$topoi_sp()
-schedule$topoi_ad()
-schedule$topoi_la()
-schedule$topoi_tf()
+sch_topoi_sp(sch)
+sch_topoi_ad(sch)
+sch_topoi_la(sch)
+sch_topoi_tf(sch)
 ```
-
-
 
 # References
 

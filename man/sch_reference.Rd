@@ -4,11 +4,7 @@
 \alias{sch_reference}
 \title{Reference}
 \usage{
-sch <- sch_reference(sch, "This schedule is from...")
-  - Sets the reference.
-
-sch_reference(sch)
-  - Gets the reference.
+sch_reference(sch, new_value = NULL)
 }
 \arguments{
 \item{sch}{A schedule object.}

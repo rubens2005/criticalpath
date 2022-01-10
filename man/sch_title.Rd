@@ -4,11 +4,7 @@
 \alias{sch_title}
 \title{Title}
 \usage{
-sch <- sch_title(sch, "New title")
-  - Sets the title.
-
-sch_title(sch)
-  - Gets the title.
+sch_title(sch, new_value)
 }
 \arguments{
 \item{sch}{A schedule object.}

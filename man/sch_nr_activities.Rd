@@ -28,5 +28,5 @@ sch_nr_activities(sch) # 1
 \seealso{
 \code{\link[=sch_add_activity]{sch_add_activity()}}, \code{\link[=sch_nr_relations]{sch_nr_relations()}}, \code{\link[=sch_add_activities]{sch_add_activities()}},
 \code{\link[=sch_activities]{sch_activities()}}, \code{\link[=sch_change_activities_duration]{sch_change_activities_duration()}},
-\code{\link[=sch_critical_activites]{sch_critical_activites()}}, \code{\link[=sch_get_activity]{sch_get_activity()}}, \code{\link[=sch_has_any_relation]{sch_has_any_relation()}}.
+\code{\link[=sch_critical_activities]{sch_critical_activities()}}, \code{\link[=sch_get_activity]{sch_get_activity()}}, \code{\link[=sch_has_any_relation]{sch_has_any_relation()}}.
 }

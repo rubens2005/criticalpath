@@ -3,17 +3,19 @@
 \docType{package}
 \name{criticalpath}
 \alias{criticalpath}
-\title{criticalpath: Object Oriented Critical Path Method Implementation}
+\title{criticalpath: Critical Path Method R Implementation}
 \description{
-criticalpath package is an object oriented implementation of the
-Critical Path Method (CPM) in R with R6 library. CPM is a method used to estimate
-the minimum project duration and  determine the amount of scheduling flexibility
+\code{criticalpath} package is an R implementation of the
+Critical Path Method (CPM). CPM is a method used to estimate
+the minimum project duration and  determine the amount of scheduling
+flexibility
 on the logical network paths within the schedule model. The flexibility is in
 terms of early start, early finish, late start, late finish, total float and
-free float. Besides, it permits to quantify the complexity of network diagram
+free float. Beside, it permits to quantify the complexity of network diagram
 through the analysis of topological indicators. Finally, it permits to change
 the activities duration to perform what-if scenario analysis.
-
+}
+\details{
 With this package, you can calculate the following CPM parameters:
 \itemize{
 \item Schedule duration
@@ -54,35 +56,84 @@ Springer International Publishing Switzerland.
 \seealso{
 On vignette package there are more information with examples about:
 \itemize{
-\item Schedule Class Definition: \link{Schedule}
 \item How to create a schedule:
 \itemize{
+\item Create a new schedule without any information.
+\itemize{
+\item \code{\link[=sch_new]{sch_new()}}
+}
 \item Add activities and relations together to an schedule.
+\itemize{
+\item \code{\link[=sch_add_activities]{sch_add_activities()}}
+\item \code{\link[=sch_add_relations]{sch_add_relations()}}
+}
 \item Add activities to a schedule.
+\itemize{
+\item \code{\link[=sch_add_activity]{sch_add_activity()}}
+}
 \item Add relations to a schedule.
-\item Create a schedule object from data frames.
+\itemize{
+\item \code{\link[=sch_add_relation]{sch_add_relation()}}
+}
 }
 \item How to get schedule information:
 \itemize{
-\item Title, Reference and Schedule Duration.
+\item Title
+\itemize{
+\item \code{\link[=sch_title]{sch_title()}}
+}
+\item Reference
+\itemize{
+\item \code{\link[=sch_reference]{sch_reference()}}
+}
+\item Duration
+\itemize{
+\item \code{\link[=sch_duration]{sch_duration()}}
+}
 }
 \item How to get activities properties:
 \itemize{
 \item Activity Properties.
+\itemize{
+\item \code{\link[=sch_activities]{sch_activities()}}
+\item \code{\link[=sch_get_activity]{sch_get_activity()}}
+}
 \item Gantt Matrix.
+\itemize{
+\item \code{\link[=sch_gantt_matrix]{sch_gantt_matrix()}}
+\item \code{\link[=sch_xy_gantt_matrix]{sch_xy_gantt_matrix()}}
+}
 }
 \item How to change activities duration:
 \itemize{
 \item Change Activities Duration.
+\itemize{
+\item \code{\link[=sch_change_activities_duration]{sch_change_activities_duration()}}
+}
 }
 \item How to get relations properties:
 \itemize{
 \item Relation Properties
+\itemize{
+\item \code{\link[=sch_relations]{sch_relations()}}
+}
 \item Successors and Predecessors.
+\itemize{
+\item \code{\link[=sch_all_successors]{sch_all_successors()}}
+\item \code{\link[=sch_successors]{sch_successors()}}
+\item \code{\link[=sch_all_predecessors]{sch_all_predecessors()}}
+\item \code{\link[=sch_predecessors]{sch_predecessors()}}
+}
 }
 \item How to get topological properties:
 \itemize{
 \item Topological Indicators.
+\itemize{
+\item \code{\link[=sch_topoi_sp]{sch_topoi_sp()}}
+\item \code{\link[=sch_topoi_ad]{sch_topoi_ad()}}
+\item \code{\link[=sch_topoi_la]{sch_topoi_la()}}
+\item \code{\link[=sch_topoi_tf]{sch_topoi_tf()}}
+}
 }
 }
 }

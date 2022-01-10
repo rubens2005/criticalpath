@@ -90,6 +90,7 @@ cpt_is_valid_tibble <- function(obj) {
 #'
 #' @noRd
 sch_activity_id_exist <- function(sch, activity_id) {
+  id <- NULL
   n <- sch$activities %>%
     dplyr::filter(id == activity_id) %>%
     dplyr::count()

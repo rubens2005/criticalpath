@@ -31,6 +31,6 @@ sch_get_activity(sch, 7)
 }
 \seealso{
 \code{\link[=sch_activities]{sch_activities()}}, \code{\link[=sch_duration]{sch_duration()}}, \code{\link[=sch_nr_activities]{sch_nr_activities()}},
-\code{\link[=sch_add_activities]{sch_add_activities()}}, \code{\link[=sch_critical_activites]{sch_critical_activites()}}, \code{\link[=sch_has_any_activity]{sch_has_any_activity()}},
+\code{\link[=sch_add_activities]{sch_add_activities()}}, \code{\link[=sch_critical_activities]{sch_critical_activities()}}, \code{\link[=sch_has_any_activity]{sch_has_any_activity()}},
 \code{\link[=sch_change_activities_duration]{sch_change_activities_duration()}}, \code{\link[=sch_add_activity]{sch_add_activity()}}.
 }

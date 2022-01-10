@@ -50,7 +50,8 @@
 #' sch <- sch_new() %>%
 #'   sch_title("Project 1: Cost Information System") %>%
 #'   sch_reference(
-#'     "VANHOUCKE, Mario. Integrated project management and control: first comes the theory, then the practice.Gent: Springer, 2014, p. 6"
+#'     "VANHOUCKE, Mario. Integrated project management and control:
+#'     first comes the theory, then the practice.Gent: Springer, 2014, p. 6"
 #'   ) %>%
 #'   sch_add_activities(
 #'     id        = 1:17,
@@ -154,6 +155,7 @@ sch_add_relations <- function(sch, from, to, type = "FS", lag = 0L, ...) {
 #'
 #' Add a relation to a schedule.
 #'
+#' @param sch A schedule object.
 #' @param from
 #' The id of predecessor activity.
 #' Must exist an activity with from.
@@ -351,7 +353,7 @@ sch_nr_relations <- function(sch) {
 #'
 #' @seealso [sch_add_activities()], [sch_has_any_relation()], [sch_topoi_tf()],
 #' [sch_gantt_matrix()], [sch_activities()], [sch_add_relations()],
-#' [sch_topoi_sp()], [sch_topoi_la()], [sch_non_critical_activites()],
+#' [sch_topoi_sp()], [sch_topoi_la()], [sch_non_critical_activities()],
 #' [sch_topoi_ad()], [sch_nr_relations()].
 #'
 #' @examples
@@ -414,6 +416,154 @@ sch_relations <- function(sch, order = "topological") {
 }
 
 
+#' Critical Relations
+#'
+#' Return a tibble with critical relations of a schedule in topological order.
+#'
+#' @param sch A schedule object.
+#' @param order Indicates the order of relations:
+#'    - **`"topological"`:** The relations tibble is in topological order.
+#'    - **`"insert"`:** The relations tibble is in insert order.
+#'
+#' @return A tibble with critical relations.
+#'
+#' @seealso [sch_relations()], [sch_add_activities()], [sch_has_any_relation()],
+#' [sch_topoi_tf()], [sch_gantt_matrix()], [sch_activities()], [sch_topoi_la()],
+#' [sch_add_relations()], [sch_topoi_sp()], [sch_non_critical_activities()],
+#' [sch_topoi_ad()], [sch_nr_relations()], [sch_non_critical_relations()].
+#'
+#' @examples
+#' sch <- sch_new() %>%
+#'   sch_title("Project 3: Old Carriage House Renovation") %>%
+#'   sch_reference(
+#'     "VANHOUCKE, Mario. Integrated project management and control:
+#'   first comes the theory, then the practice. Gent: Springer, 2014, p. 11") %>%
+#'   sch_add_activity( 1L, "a1" , 2L) %>%
+#'   sch_add_activity( 2L, "a2" , 2L) %>%
+#'   sch_add_activity( 3L, "a3" , 4L) %>%
+#'   sch_add_activity( 4L, "a4" , 3L) %>%
+#'   sch_add_activity( 5L, "a5" , 4L) %>%
+#'   sch_add_activity( 6L, "a6" , 1L) %>%
+#'   sch_add_activity( 7L, "a7" , 1L) %>%
+#'   sch_add_activity( 8L, "a8" , 1L) %>%
+#'   sch_add_activity( 9L, "a9" , 1L) %>%
+#'   sch_add_activity(10L, "a10", 1L) %>%
+#'   sch_add_activity(11L, "a11", 3L) %>%
+#'   sch_add_activity(12L, "a12", 2L) %>%
+#'   sch_add_activity(13L, "a13", 1L) %>%
+#'   sch_add_activity(14L, "a14", 1L) %>%
+#'   sch_add_activity(15L, "a15", 2L) %>%
+#'   sch_add_activity(16L, "a16", 1L) %>%
+#'   sch_add_activity(17L, "a17", 1L) %>%
+#'   sch_add_relation(14L, 15L) %>%
+#'   sch_add_relation( 9L, 10L) %>%
+#'   sch_add_relation( 2L,  3L) %>%
+#'   sch_add_relation( 8L, 10L) %>%
+#'   sch_add_relation(10L, 13L) %>%
+#'   sch_add_relation( 5L,  6L) %>%
+#'   sch_add_relation(11L, 12L) %>%
+#'   sch_add_relation(15L, 16L) %>%
+#'   sch_add_relation( 6L,  8L) %>%
+#'   sch_add_relation( 3L,  4L) %>%
+#'   sch_add_relation(16L, 17L) %>%
+#'   sch_add_relation( 6L,  7L) %>%
+#'   sch_add_relation(10L, 11L) %>%
+#'   sch_add_relation(13L, 14L) %>%
+#'   sch_add_relation( 4L,  5L) %>%
+#'   sch_add_relation( 7L, 10L) %>%
+#'   sch_add_relation(12L, 15L) %>%
+#'   sch_add_relation( 6L,  9L) %>%
+#'   sch_add_relation( 1L,  2L) %>%
+#'   sch_plan()
+#' # In "topological" order.
+#' sch_critical_relations(sch)
+#' # In "insert" order.
+#' sch_critical_relations(sch, order = "insert")
+#'
+#' @export
+sch_critical_relations <- function(sch, order = "topological") {
+  critical <- NULL
+  return(
+    sch_relations(sch, order) %>%
+      dplyr::filter(critical)
+  )
+}
+
+
+#' Non Critical Relations
+#'
+#' Return a tibble with non critical relations of a schedule in topological order.
+#'
+#' @param sch A schedule object.
+#' @param order Indicates the order of relations:
+#' - **`"topological"`:** The relations tibble is in topological order.
+#' - **`"insert"`:** The relations tibble is in insert order.
+#'
+#' @return A tibble with non critical relations.
+#'
+#' @seealso [sch_relations()], [sch_add_activities()], [sch_has_any_relation()],
+#' [sch_topoi_tf()], [sch_gantt_matrix()], [sch_activities()], [sch_topoi_la()],
+#' [sch_add_relations()], [sch_topoi_sp()], [sch_non_critical_activities()],
+#' [sch_topoi_ad()], [sch_nr_relations()], [sch_critical_relations()].
+#'
+#' @examples
+#' sch <- sch_new() %>%
+#'   sch_title("Project 3: Old Carriage House Renovation") %>%
+#'   sch_reference(
+#'     "VANHOUCKE, Mario. Integrated project management and control:
+#'   first comes the theory, then the practice. Gent: Springer, 2014, p. 11") %>%
+#'   sch_add_activity( 1L, "a1" , 2L) %>%
+#'   sch_add_activity( 2L, "a2" , 2L) %>%
+#'   sch_add_activity( 3L, "a3" , 4L) %>%
+#'   sch_add_activity( 4L, "a4" , 3L) %>%
+#'   sch_add_activity( 5L, "a5" , 4L) %>%
+#'   sch_add_activity( 6L, "a6" , 1L) %>%
+#'   sch_add_activity( 7L, "a7" , 1L) %>%
+#'   sch_add_activity( 8L, "a8" , 1L) %>%
+#'   sch_add_activity( 9L, "a9" , 1L) %>%
+#'   sch_add_activity(10L, "a10", 1L) %>%
+#'   sch_add_activity(11L, "a11", 3L) %>%
+#'   sch_add_activity(12L, "a12", 2L) %>%
+#'   sch_add_activity(13L, "a13", 1L) %>%
+#'   sch_add_activity(14L, "a14", 1L) %>%
+#'   sch_add_activity(15L, "a15", 2L) %>%
+#'   sch_add_activity(16L, "a16", 1L) %>%
+#'   sch_add_activity(17L, "a17", 1L) %>%
+#'   sch_add_relation(14L, 15L) %>%
+#'   sch_add_relation( 9L, 10L) %>%
+#'   sch_add_relation( 2L,  3L) %>%
+#'   sch_add_relation( 8L, 10L) %>%
+#'   sch_add_relation(10L, 13L) %>%
+#'   sch_add_relation( 5L,  6L) %>%
+#'   sch_add_relation(11L, 12L) %>%
+#'   sch_add_relation(15L, 16L) %>%
+#'   sch_add_relation( 6L,  8L) %>%
+#'   sch_add_relation( 3L,  4L) %>%
+#'   sch_add_relation(16L, 17L) %>%
+#'   sch_add_relation( 6L,  7L) %>%
+#'   sch_add_relation(10L, 11L) %>%
+#'   sch_add_relation(13L, 14L) %>%
+#'   sch_add_relation( 4L,  5L) %>%
+#'   sch_add_relation( 7L, 10L) %>%
+#'   sch_add_relation(12L, 15L) %>%
+#'   sch_add_relation( 6L,  9L) %>%
+#'   sch_add_relation( 1L,  2L) %>%
+#'   sch_plan()
+#' # In "topological" order.
+#' sch_non_critical_relations(sch)
+#' # In "insert" order.
+#' sch_non_critical_relations(sch, order = "insert")
+#'
+#' @export
+sch_non_critical_relations <- function(sch, order = "topological") {
+  critical <- NULL
+  return(
+    sch_relations(sch, order) %>%
+      dplyr::filter(!critical)
+  )
+}
+
+
 #' All Successors
 #'
 #' List all successors from an activity: direct and indirect successors.
@@ -426,7 +576,7 @@ sch_relations <- function(sch, order = "topological") {
 #' @return A vector with all activities ids.
 #'
 #' @seealso [sch_predecessors()], [sch_activities()],
-#' [sch_non_critical_activites()], [sch_successors()],
+#' [sch_non_critical_activities()], [sch_successors()],
 #' [sch_relations()], [sch_is_redundant()], [sch_all_predecessors()].
 #'
 #' @examples
@@ -514,6 +664,7 @@ sch_all_successors = function(sch, id, ign_to = NULL) {
 #'
 #' @export
 sch_successors = function(sch, id) {
+  from <- NULL
   cpt_assert_activity_id_exist(sch, id)
 
   temp_relation <- sch_relations(sch) %>%
@@ -534,7 +685,7 @@ sch_successors = function(sch, id) {
 #' @return A vector with all activities ids.
 #'
 #' @seealso [sch_successors()], [sch_relations()], [sch_is_redundant()],
-#' [sch_all_successors()], [sch_activities()], [sch_non_critical_activites()],
+#' [sch_all_successors()], [sch_activities()], [sch_non_critical_activities()],
 #' [sch_predecessors()].
 #'
 #' @examples
@@ -621,6 +772,7 @@ sch_all_predecessors <- function(sch, id, ign_from = NULL) {
 #'
 #' @export
 sch_predecessors <- function(sch, id) {
+  to <- NULL
   cpt_assert_activity_id_exist(sch, id)
 
   temp_relation <- sch_relations(sch) %>%

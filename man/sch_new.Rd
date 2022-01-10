@@ -31,5 +31,5 @@ sch_duration(sch) # 16
 \seealso{
 \code{\link[=sch_reference]{sch_reference()}}, \code{\link[=sch_add_activities]{sch_add_activities()}}, \code{\link[=sch_duration]{sch_duration()}},
 \code{\link[=sch_xy_gantt_matrix]{sch_xy_gantt_matrix()}}, \code{\link[=sch_plan]{sch_plan()}}, \code{\link[=sch_add_relations]{sch_add_relations()}},
-\code{\link[=sch_validate]{sch_validate()}}, \code{\link[=sch_non_critical_activites]{sch_non_critical_activites()}}, \code{\link[=sch_title]{sch_title()}}.
+\code{\link[=sch_validate]{sch_validate()}}, \code{\link[=sch_non_critical_activities]{sch_non_critical_activities()}}, \code{\link[=sch_title]{sch_title()}}.
 }

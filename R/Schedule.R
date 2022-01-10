@@ -2,8 +2,6 @@
 #' @name Schedule
 #' @aliases schedule
 #'
-#' @export
-#'
 #' @description
 #'
 #' This class is a representation of Precedence Diagramming Method (PDM).
@@ -205,6 +203,9 @@
 #' schedule$add_act_rel(4, "a4" , 1)
 #' schedule$relations
 #'
+#' @import R6
+#'
+#' @export
 Schedule <- R6::R6Class("Schedule",
 
   private = list(
@@ -589,6 +590,8 @@ Schedule <- R6::R6Class("Schedule",
     #'      - gets the title of the project.
     #'
     title = function(value) {
+      .Deprecated("sch_title")
+
       if(missing(value)) {
         return(private$info$title)
       } else {
@@ -606,6 +609,8 @@ Schedule <- R6::R6Class("Schedule",
     #'      - gets the reference of the project.
     #'
     reference = function(value) {
+      .Deprecated("sch_reference")
+
       if(missing(value)) {
         return(private$info$reference)
       } else {
@@ -621,6 +626,8 @@ Schedule <- R6::R6Class("Schedule",
     #'    - Usage: \code{Schedule$has_any_activity}
     #'
     has_any_activity = function(value) {
+      .Deprecated("sch_has_any_activity")
+
       if(missing(value)) {
         return(self$nr_activities > 0L)
       }
@@ -632,6 +639,8 @@ Schedule <- R6::R6Class("Schedule",
     #'    - Usage: \code{Schedule$nr_activities}
     #'
     nr_activities = function(value) {
+      .Deprecated("sch_nr_activities")
+
       if(missing(value)) {
         return(private$info$nr_activities)
       }
@@ -677,6 +686,8 @@ Schedule <- R6::R6Class("Schedule",
     #'  - Usage: \code{Schedule$activities}
     #'
     activities = function(value) {
+      .Deprecated("sch_activities")
+
       if(missing(value)) {
         if(self$has_any_activity) {
           return(private$.activities[order(private$.activities$id), ])
@@ -695,6 +706,8 @@ Schedule <- R6::R6Class("Schedule",
     #'    - Usage: \code{Schedule$has_any_relation}
     #'
     has_any_relation = function(value) {
+      .Deprecated("sch_has_any_relation")
+
       if(missing(value)) {
         return(private$info$has_any_relation)
       }
@@ -706,6 +719,8 @@ Schedule <- R6::R6Class("Schedule",
     #'    - Usage: \code{Schedule$nr_relations}
     #'
     nr_relations = function(value) {
+      .Deprecated("sch_nr_relations")
+
       if(missing(value)) {
         return(private$info$nr_relations)
       }
@@ -735,6 +750,8 @@ Schedule <- R6::R6Class("Schedule",
     #'    - Usage: \code{Schedule$relations}
     #'
     relations = function(value) {
+      .Deprecated("sch_relations")
+
       if(missing(value)) {
         return(private$.relations)
       }
@@ -746,6 +763,8 @@ Schedule <- R6::R6Class("Schedule",
     #' An integer value that indicates the duration of a schedule.
     #'
     duration = function(value) {
+      .Deprecated("sch_duration")
+
       if(base::missing(value)) {
         return(private$info$duration)
       }
@@ -830,6 +849,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$relations
     #'
     initialize = function(activities=NULL, relations=NULL) {
+      .Deprecated("sch_new")
+
       exist_activites <- private$is_valid_data_frame(activities)
       exist_relations <- private$is_valid_data_frame(relations)
       if(exist_relations) {
@@ -873,6 +894,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$duration
     #' schedule$activities
     add_activity = function(id, name="", duration = 0L) {
+      .Deprecated("sch_add_activity")
+
       private$assert_activity_id_is_valid(id)
       private$assert_activity_id_does_not_exist(id)
 
@@ -923,6 +946,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$duration
     #' schedule$activities
     add_activities = function(activities) {
+      .Deprecated("sch_add_activities")
+
       if(!private$is_valid_data_frame(activities)) {
         stop("Activities is empty.")
       }
@@ -944,9 +969,9 @@ Schedule <- R6::R6Class("Schedule",
     #' @return A data frame with one line with the activity,
     #' or an error if activity id doesn't exist.
     #'
-    #' @examples
-    #' x <- runif(1)
     get_activity = function(id) {
+      .Deprecated("sch_get_activity")
+
       private$assert_activity_id_exist(id)
       private$.activities[match(id, private$.activities$id), ]
     },
@@ -1035,6 +1060,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$activities
     #' schedule$relations
     add_relation = function(from, to, type = "FS", lag = 0L) {
+      .Deprecated("sch_add_relation")
+
       private$assert_activity_id_is_valid(from)
       private$assert_activity_id_exist(from)
 
@@ -1103,6 +1130,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$relations # Not empty
     #'
     add_relations = function(relations) {
+      .Deprecated("sch_add_relations")
+
       if(!private$is_valid_data_frame(relations)) {
         stop("Relations is empty.")
       }
@@ -1167,6 +1196,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$activities
     #' schedule$relations
     add_act_rel = function(id, name, duration, relations_id=c(), direction="succ") {
+      .Deprecated("sch_add_activity")
+
       if(direction != "succ" && direction != "pred") {
         msg <- base::paste(
           "Invalid '", direction, "' direction!",
@@ -1320,6 +1351,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$all_successors(10) # 12
     #'
     all_successors = function(id, ign_to=NULL) {
+      .Deprecated("sch_all_successors")
+
       private$assert_activity_id_exist(id)
       if(!base::is.null(ign_to)) {
         private$assert_activity_id_exist(ign_to)
@@ -1374,6 +1407,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$all_predecessors(10) # 3
     #'
     all_predecessors = function(id, ign_from=NULL) {
+      .Deprecated("sch_all_predecessors")
+
       private$assert_activity_id_exist(id)
       if(!base::is.null(ign_from)) {
         private$assert_activity_id_exist(ign_from)
@@ -1428,6 +1463,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$is_redundant(2, 12) #TRUE
     #'
     is_redundant = function(id_from, id_to) {
+      .Deprecated("sch_is_redundant")
+
       private$assert_activity_id_exist(id_from)
       private$assert_activity_id_exist(id_to)
       private$assert_relation_exist(id_from, id_to)
@@ -1476,6 +1513,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$activities$duration
     #'
     change_durations = function(new_durations) {
+      .Deprecated("sch_change_activities_duration")
+
       # TODO verificar se os tamanhos são os mesmos
       # TODO verificar se não tem nenhum NULL ou NA
       private$.activities$duration <- as.integer(new_durations)
@@ -1516,6 +1555,8 @@ Schedule <- R6::R6Class("Schedule",
     #' plot(cumsum(colSums(gantt)), type="l", lwd=3)
     #'
     gantt_matrix = function() {
+      .Deprecated("sch_gantt_matrix")
+
       if(self$duration == 0L) {
         stop("There is no Gantt Matrix for a schedule with zero duration!")
       }
@@ -1564,6 +1605,8 @@ Schedule <- R6::R6Class("Schedule",
     #' plot(xyw[, 1:2])
     #'
     xy_gantt_matrix = function(gantt = NULL) {
+      .Deprecated("sch_xy_gantt_matrix")
+
       if(base::is.null(gantt)) {
         gantt <- self$gantt_matrix()
       } else {
@@ -1611,6 +1654,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$topoi_sp()
     #'
     topoi_sp = function() {
+      .Deprecated("sch_topoi_sp")
+
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
 
@@ -1657,6 +1702,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$topoi_ad()
     #'
     topoi_ad = function() {
+      .Deprecated("sch_topoi_ad")
+
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
 
@@ -1711,6 +1758,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$topoi_la()
     #'
     topoi_la = function() {
+      .Deprecated("sch_topoi_la")
+
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
 
@@ -1767,6 +1816,8 @@ Schedule <- R6::R6Class("Schedule",
     #' schedule$topoi_tf()
     #'
     topoi_tf = function() {
+      .Deprecated("sch_topoi_tf")
+
       max_level <- private$info$max_level
       nr_act <- self$nr_activities
 

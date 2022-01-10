@@ -64,7 +64,8 @@ part of the rtb, so long as they follow the aforementioned columns.
 sch <- sch_new() \%>\%
   sch_title("Project 1: Cost Information System") \%>\%
   sch_reference(
-    "VANHOUCKE, Mario. Integrated project management and control: first comes the theory, then the practice.Gent: Springer, 2014, p. 6"
+    "VANHOUCKE, Mario. Integrated project management and control:
+    first comes the theory, then the practice.Gent: Springer, 2014, p. 6"
   ) \%>\%
   sch_add_activities(
     id        = 1:17,
