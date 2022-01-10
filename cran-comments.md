@@ -1,6 +1,20 @@
 # criticalpath 0.2.0
 
 
+I have transformed the package 'criticalpath' in functional.
+This permits chained call to functions and made the schedule manipulation faster with pipe "%>%".
+
+It was created all function to work with schedule.
+
+The Schedule class was deprecated.
+All the function in Schedule class was deprecated too.
+
+For this reason, there are several message about 'deprecated'.
+
+In next release, I will remove all class Schedule and her functions.
+
+
+Thanks.
 
 
 
