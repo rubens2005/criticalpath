@@ -63,146 +63,6 @@
 #'  - How to get topological properties:
 #'    - Topological Indicators.
 #'
-#' @examples
-#' ## ------------------------------------------------
-#' ## Property `Schedule$title`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#' schedule$title <- "Fictitious Project Example"
-#' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-#'   improving project performance using earned value management.
-#'   Gent: Springer, 2009, p. 18"
-#' schedule$title
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$reference`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-#'   improving project performance using earned value management.
-#'   Gent: Springer, 2009, p. 18"
-#' schedule$reference
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$duration`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#' schedule$title <- "Fictitious Project Example"
-#' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-#'   improving project performance using earned value management.
-#'   Gent: Springer, 2009, p. 18"
-#'
-#' # Add activities and relations to it.
-#' schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-#' schedule$add_act_rel(  2, "a2" , 4, c(5))
-#' schedule$add_act_rel(  3, "a3" , 9, c(10))
-#' schedule$add_act_rel(  4, "a4" , 1, c(6))
-#' schedule$add_act_rel(  5, "a5" , 4, c(9))
-#' schedule$add_act_rel(  6, "a6" , 5, c(7))
-#' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-#' schedule$add_act_rel(  8, "a8" , 7, c(12))
-#' schedule$add_act_rel(  9, "a9" , 8, c(12))
-#' schedule$add_act_rel( 10, "a10", 3, c(12))
-#' schedule$add_act_rel( 11, "a11", 3, c(12))
-#' schedule$add_act_rel( 12, "a12", 0)
-#' schedule$duration
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$has_any_activity`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#' schedule$has_any_activity  # FALSE
-#'
-#' # Add one activity.
-#' schedule$add_activity( 1, "a1" , 0)
-#' schedule$has_any_activity  # TRUE
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$nr_activities`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#' schedule$nr_activities     # 0
-#'
-#' # Add one activity.
-#' schedule$add_activity( 1, "a1" , 0)
-#' schedule$nr_activities     # 1
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$activities`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#'
-#' # Add activities and relations to it.
-#' schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-#' schedule$add_act_rel(  2, "a2" , 4, c(5))
-#' schedule$add_act_rel(  3, "a3" , 9, c(6))
-#' schedule$add_act_rel(  4, "a4" , 1, c(6))
-#' schedule$add_act_rel(  5, "a5" , 4, c(6))
-#' schedule$add_act_rel(  6, "a6" , 5)
-#' schedule$activities
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$get_activity(id)`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#'
-#' # Add activities and relations to it.
-#' schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-#' schedule$add_act_rel(  2, "a2" , 4, c(5))
-#' schedule$add_act_rel(  3, "a3" , 9, c(6))
-#' schedule$add_act_rel(  4, "a4" , 1, c(6))
-#' schedule$add_act_rel(  5, "a5" , 4, c(6))
-#' schedule$add_act_rel(  6, "a6" , 5)
-#' schedule$get_activity(4)
-#' schedule$get_activity(6)
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$has_any_relation`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#' schedule$has_any_relation   #FALSE
-#'
-#' # Add activities and relations to it.
-#' schedule$add_act_rel(1, "a1" , 0, c(2,3,4))
-#' schedule$add_act_rel(2, "a2" , 4)
-#' schedule$add_act_rel(3, "a3" , 9)
-#' schedule$add_act_rel(4, "a4" , 1)
-#' schedule$has_any_relation   # TRUE
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$nr_relations`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#' schedule$nr_relations   # 0
-#'
-#' # Add activities and relations to it.
-#' schedule$add_act_rel(1, "a1" , 0, c(2,3,4))
-#' schedule$add_act_rel(2, "a2" , 4)
-#' schedule$add_act_rel(3, "a3" , 9)
-#' schedule$add_act_rel(4, "a4" , 1)
-#' schedule$nr_relations   # 3
-#'
-#' ## ------------------------------------------------
-#' ## Property `Schedule$relations`
-#' ## ------------------------------------------------
-#' # Create a schedule
-#' schedule <- Schedule$new()
-#' # Add activities and relations to it.
-#' schedule$add_act_rel(1, "a1" , 0, c(2,3,4))
-#' schedule$add_act_rel(2, "a2" , 4)
-#' schedule$add_act_rel(3, "a3" , 9)
-#' schedule$add_act_rel(4, "a4" , 1)
-#' schedule$relations
-#'
 #' @import R6
 #'
 #' @export
@@ -818,36 +678,6 @@ Schedule <- R6::R6Class("Schedule",
     #' It must be an integer, less than, equal or greater than zero.
     #' @return A Schedule object with CPM parameters calculated.
     #'
-    #' @examples
-    #' # An empty schedule.
-    #' schedule <- Schedule$new()
-    #' schedule$duration
-    #' schedule$activities
-    #' schedule$relations
-    #'
-    #' # A schedule with activities and relations.
-    #' activities <- data.frame(
-    #'   id        = 1:17,
-    #'   name      = paste("a", as.character(1:17), sep=""),
-    #'   duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
-    #' )
-    #'
-    #' relations <- data.frame(
-    #'   from = c(1, 1, 2, 2, 2, 3, 3, 3,  3,  4,  5,  6,
-    #'            7,  8,  9, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15),
-    #'   to   = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11,
-    #'            12, 13, 14, 15, 16, 17, 16, 17, 16, 17, 16, 17, 16, 17)
-    #' )
-    #' schedule <- Schedule$new(activities, relations)
-    #' schedule$title <- "Project 1: Cost Information System"
-    #' schedule$reference <- "VANHOUCKE, Mario.
-    #' Integrated project management and control:
-    #'   first comes the theory, then the practice.
-    #'   Gent: Springer, 2014, p. 6"
-    #' schedule$duration
-    #' schedule$activities
-    #' schedule$relations
-    #'
     initialize = function(activities=NULL, relations=NULL) {
       .Deprecated("sch_new")
 
@@ -882,17 +712,6 @@ Schedule <- R6::R6Class("Schedule",
     #' @return A Schedule object with an activity added and
     #' the critical path calculated.
     #'
-    #' @examples
-    #' schedule <- Schedule$new()
-    #' schedule$add_activity(1, "Task 1", 5)
-    #' schedule$add_activity(2, "Task 2", 6)
-    #' schedule$add_activity(3, "Task 3", 8)
-    #' schedule$add_activity(4, "Task 4", 6)
-    #' schedule$add_activity(5, "Task 5", 9)
-    #' schedule$add_activity(6, "Task 6", 3)
-    #' schedule$add_activity(7, "Task 7", 4)
-    #' schedule$duration
-    #' schedule$activities
     add_activity = function(id, name="", duration = 0L) {
       .Deprecated("sch_add_activity")
 
@@ -935,16 +754,6 @@ Schedule <- R6::R6Class("Schedule",
     #' @param activities A data frame with the activities to be added.
     #' @return A Schedule object with activities added and CPM calculated.
     #'
-    #' @examples
-    #' activities <- data.frame(
-    #'   id        = 1:17,
-    #'   name      = paste("a", as.character(1:17), sep=""),
-    #'   duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
-    #' )
-    #' schedule <- Schedule$new()
-    #' schedule$add_activities(activities)
-    #' schedule$duration
-    #' schedule$activities
     add_activities = function(activities) {
       .Deprecated("sch_add_activities")
 
@@ -1009,56 +818,6 @@ Schedule <- R6::R6Class("Schedule",
     #' If lag is not defined, it is assumed to be zero.
     #' @return A Schedule object with CPM parameters calculated.
     #'
-    #' @examples
-    #' # First, create an empty schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Project 3: Old Carriage House Renovation"
-    #' schedule$reference <-
-    #'   "VANHOUCKE, Mario. Integrated project management and control:
-    #'   first comes the theory, then the practice. Gent: Springer, 2014, p. 11"
-    #'
-    #' # Second, add activities to it
-    #' schedule$add_activity(1, "a1" , 2)
-    #' schedule$add_activity(2, "a2" , 2)
-    #' schedule$add_activity(3, "a3" , 4)
-    #' schedule$add_activity(4, "a4" , 3)
-    #' schedule$add_activity(5, "a5" , 4)
-    #' schedule$add_activity(6, "a6" , 1)
-    #' schedule$add_activity(7, "a7" , 1)
-    #' schedule$add_activity(8, "a8" , 1)
-    #' schedule$add_activity(9, "a9" , 1)
-    #' schedule$add_activity(10, "a10", 1)
-    #' schedule$add_activity(11, "a11", 3)
-    #' schedule$add_activity(12, "a12", 2)
-    #' schedule$add_activity(13, "a13", 1)
-    #' schedule$add_activity(14, "a14", 1)
-    #' schedule$add_activity(15, "a15", 2)
-    #' schedule$add_activity(16, "a16", 1)
-    #' schedule$add_activity(17, "a17", 1)
-    #'
-    #' # Finally, add relations to it
-    #' schedule$add_relation( 1, 2)
-    #' schedule$add_relation( 2, 3)
-    #' schedule$add_relation( 3, 4)
-    #' schedule$add_relation( 4, 5)
-    #' schedule$add_relation( 5, 6)
-    #' schedule$add_relation( 6, 7)
-    #' schedule$add_relation( 6, 8)
-    #' schedule$add_relation( 6, 9)
-    #' schedule$add_relation( 7, 10)
-    #' schedule$add_relation( 8, 10)
-    #' schedule$add_relation( 9, 10)
-    #' schedule$add_relation( 10, 11)
-    #' schedule$add_relation( 10, 13)
-    #' schedule$add_relation( 11, 12)
-    #' schedule$add_relation( 12, 15)
-    #' schedule$add_relation( 13, 14)
-    #' schedule$add_relation( 14, 15)
-    #' schedule$add_relation( 15, 16)
-    #' schedule$add_relation( 16, 17)
-    #' schedule$duration
-    #' schedule$activities
-    #' schedule$relations
     add_relation = function(from, to, type = "FS", lag = 0L) {
       .Deprecated("sch_add_relation")
 
@@ -1104,31 +863,6 @@ Schedule <- R6::R6Class("Schedule",
     #' @param relations A data frame with the relations to be added.
     #' @return A Schedule object with relations added and CPM calculated.
     #'
-    #' @examples
-    #' # A schedule with activities and relations.
-    #' activities <- data.frame(
-    #'   id        = 1:17,
-    #'   name      = paste("a", as.character(1:17), sep=""),
-    #'   duration  = c(1,2,2,4,3,3,3,2,1,1,2,1,1,1,1,2,1)
-    #' )
-    #'
-    #' relations <- data.frame(
-    #'   from = c(1, 1, 2, 2, 2, 3, 3, 3,  3,  4,  5,  6,
-    #'            7,  8,  9, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15),
-    #'   to   = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 11, 11,
-    #'            12, 13, 14, 15, 16, 17, 16, 17, 16, 17, 16, 17, 16, 17)
-    #' )
-    #' schedule <- Schedule$new(activities)
-    #' schedule$title <- "Project 1: Cost Information System"
-    #' schedule$reference <- "VANHOUCKE, Mario.
-    #' Integrated project management and control:
-    #'   first comes the theory, then the practice.
-    #'   Gent: Springer, 2014, p. 6"
-    #' schedule$relations # Empty
-    #'
-    #' schedule$add_relations(relations)
-    #' schedule$relations # Not empty
-    #'
     add_relations = function(relations) {
       .Deprecated("sch_add_relations")
 
@@ -1171,30 +905,6 @@ Schedule <- R6::R6Class("Schedule",
     #' If dir="pred" the relations_id will be the predecessor of the activity.
     #' @return A Schedule object.
     #'
-    #' @examples
-    #' # Create a schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #'
-    #' # Add activities and relations to it.
-    #' schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-    #' schedule$add_act_rel(  2, "a2" , 4, c(5))
-    #' schedule$add_act_rel(  3, "a3" , 9, c(10))
-    #' schedule$add_act_rel(  4, "a4" , 1, c(6))
-    #' schedule$add_act_rel(  5, "a5" , 4, c(9))
-    #' schedule$add_act_rel(  6, "a6" , 5, c(7))
-    #' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-    #' schedule$add_act_rel(  8, "a8" , 7, c(12))
-    #' schedule$add_act_rel(  9, "a9" , 8, c(12))
-    #' schedule$add_act_rel( 10, "a10", 3, c(12))
-    #' schedule$add_act_rel( 11, "a11", 3, c(12))
-    #' schedule$add_act_rel( 12, "a12", 0)
-    #' schedule$duration
-    #' schedule$activities
-    #' schedule$relations
     add_act_rel = function(id, name, duration, relations_id=c(), direction="succ") {
       .Deprecated("sch_add_activity")
 
@@ -1302,13 +1012,6 @@ Schedule <- R6::R6Class("Schedule",
     #' @param ... Variable parameters
     #' @return A String .
     #'
-    #' @examples
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #' schedule
     print = function(...) {
       cat("Schedule: \n")
       cat("      Title: ", private$info$title, "\n", sep = "")
@@ -1323,32 +1026,6 @@ Schedule <- R6::R6Class("Schedule",
     #' @param ign_to A relation to be ignored: id -> ign_to.
     #' Activities from this relation will be ignored.
     #' @return A vector whith all activities ids.
-    #'
-    #' @examples
-    #'
-    #' # Create a schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #'
-    #' # Add activities and relations to it.
-    #' schedule$add_act_rel(  2, "a2" , 4, c(5, 12))
-    #' schedule$add_act_rel(  3, "a3" , 9, c(10))
-    #' schedule$add_act_rel(  4, "a4" , 1, c(6))
-    #' schedule$add_act_rel(  5, "a5" , 4, c(9))
-    #' schedule$add_act_rel(  6, "a6" , 5, c(7))
-    #' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-    #' schedule$add_act_rel(  8, "a8" , 7, c(12))
-    #' schedule$add_act_rel(  9, "a9" , 8, c(12))
-    #' schedule$add_act_rel( 10, "a10", 3, c(12))
-    #' schedule$add_act_rel( 11, "a11", 3, c(12))
-    #' schedule$add_act_rel( 12, "a12", 0)
-    #'
-    #' schedule$all_successors(2) # 5, 9, 12
-    #' schedule$all_successors(7) # 8, 11, 12
-    #' schedule$all_successors(10) # 12
     #'
     all_successors = function(id, ign_to=NULL) {
       .Deprecated("sch_all_successors")
@@ -1380,32 +1057,6 @@ Schedule <- R6::R6Class("Schedule",
     #' @param ign_from A relation to be ignored: ign_from -> id.
     #' Activities from this relation will be ignored.
     #' @return A vector with all activities ids.
-    #' @examples
-    #'
-    #' # Create a schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #'
-    #' # Add activities and relations to it.
-    #' schedule$add_act_rel(  2, "a2" , 4, c(5, 12))
-    #' schedule$add_act_rel(  3, "a3" , 9, c(10))
-    #' schedule$add_act_rel(  4, "a4" , 1, c(6))
-    #' schedule$add_act_rel(  5, "a5" , 4, c(9))
-    #' schedule$add_act_rel(  6, "a6" , 5, c(7))
-    #' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-    #' schedule$add_act_rel(  8, "a8" , 7, c(12))
-    #' schedule$add_act_rel(  9, "a9" , 8, c(12))
-    #' schedule$add_act_rel( 10, "a10", 3, c(12))
-    #' schedule$add_act_rel( 11, "a11", 3, c(12))
-    #' schedule$add_act_rel( 12, "a12", 0)
-    #'
-    #' schedule$all_predecessors(2) # nothing
-    #' schedule$all_predecessors(7) # 6, 4
-    #' schedule$all_predecessors(10) # 3
-    #'
     all_predecessors = function(id, ign_from=NULL) {
       .Deprecated("sch_all_predecessors")
 
@@ -1437,30 +1088,6 @@ Schedule <- R6::R6Class("Schedule",
     #' @param id_to To activity id.
     #' @return A logical \code{TRUE} if an arc is redundant;
     #' \code{FALSE} if it is not.
-    #' @examples
-    #'
-    #' # Create a schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #'
-    #' # Add activities and relations to it.
-    #' schedule$add_act_rel(  2, "a2" , 4, c(5, 12))
-    #' schedule$add_act_rel(  3, "a3" , 9, c(10))
-    #' schedule$add_act_rel(  4, "a4" , 1, c(6))
-    #' schedule$add_act_rel(  5, "a5" , 4, c(9))
-    #' schedule$add_act_rel(  6, "a6" , 5, c(7))
-    #' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-    #' schedule$add_act_rel(  8, "a8" , 7, c(12))
-    #' schedule$add_act_rel(  9, "a9" , 8, c(12))
-    #' schedule$add_act_rel( 10, "a10", 3, c(12))
-    #' schedule$add_act_rel( 11, "a11", 3, c(12))
-    #' schedule$add_act_rel( 12, "a12", 0)
-    #'
-    #' schedule$is_redundant(2, 5)  #FALSE
-    #' schedule$is_redundant(2, 12) #TRUE
     #'
     is_redundant = function(id_from, id_to) {
       .Deprecated("sch_is_redundant")
@@ -1478,39 +1105,6 @@ Schedule <- R6::R6Class("Schedule",
     #' This way is faster than creating a new schedule with new durations.
     #' @param new_durations A vector with new activities' duration.
     #' @return A Schedule object.
-    #'
-    #' @examples
-    #' activities <- data.frame(
-    #'   id        = 1:17,
-    #'   name      = paste("a", as.character(1:17), sep=""),
-    #'   duration  = c(1,1,3,2, 2,2,2,1, 4,5,3,3, 4,5,1,5,2)
-    #' )
-    #'
-    #' relations <- data.frame(
-    #'   from = c(1, 2, 3, 3, 4, 5, 6, 7, 8,  8,  8,
-    #'     8,  8,  9, 10, 11, 12, 13, 13, 14, 14, 15, 15),
-    #'   to   = c(2, 3, 4, 6, 5, 8, 7, 8, 9, 10, 11,
-    #'    12, 13, 14, 14, 14, 14, 14, 15, 16, 17, 16, 17)
-    #' )
-    #'
-    #' schedule <- Schedule$new(activities, relations)
-    #' schedule$title <- "Project 2: Patient Transport System"
-    #' schedule$reference <-
-    #'   "VANHOUCKE, Mario. Integrated project management and control:
-    #'   first comes the theory, then the practice. Gent: Springer, 2014, p. 9"
-    #' #Project duration
-    #' schedule$duration # 25
-    #' #Activities duration
-    #' schedule$activities$duration
-    #'
-    #' # Now, change activities duration
-    #' new_durations <- c(1,2,5, 4,3, 2,1, 5, 3,5,5,3,4, 2,1, 2,4)
-    #' schedule$change_durations(new_durations)
-    #'
-    #' #Project duration
-    #' schedule$duration # 31
-    #' #Activities duration
-    #' schedule$activities$duration
     #'
     change_durations = function(new_durations) {
       .Deprecated("sch_change_activities_duration")
@@ -1532,27 +1126,6 @@ Schedule <- R6::R6Class("Schedule",
     #' whereas the columns represents the activity execution period.
     #' So, the number of columns is equal to project duration.
     #' @return A matrix where "1" indicates that an activity is in execution.
-    #'
-    #' @examples
-    #' activities <- data.frame(
-    #'   id        = c( 1,   2,   3,   4 ),
-    #'   name      = c("A", "B", "C", "D"),
-    #'   duration  = c( 2,   3,   1,   2 )
-    #' )
-    #' relations <- data.frame(
-    #'   from = c(1, 2, 4, 4),
-    #'   to   = c(3, 3, 1, 2)
-    #' )
-    #' schedule <- Schedule$new(activities, relations)
-    #' gantt <- schedule$gantt_matrix()
-    #' gantt
-    #' # What is the effort by time period?
-    #' colSums(gantt) # 1 1 2 2 1 1
-    #' # What is the duration by activities?
-    #' rowSums(gantt) # 2 3 1 2
-    #' # what is the S curve
-    #' cumsum(colSums(gantt))
-    #' plot(cumsum(colSums(gantt)), type="l", lwd=3)
     #'
     gantt_matrix = function() {
       .Deprecated("sch_gantt_matrix")
@@ -1588,22 +1161,6 @@ Schedule <- R6::R6Class("Schedule",
     #' \code{gantt_matrix()} before this function.
     #' @return A matrix x, y and weight.
     #'
-    #' @examples
-    #' activities <- data.frame(
-    #'   id        = c( 1,   2,   3,   4 ),
-    #'   name      = c("A", "B", "C", "D"),
-    #'   duration  = c( 2,   3,   1,   2 )
-    #' )
-    #' relations <- data.frame(
-    #'   from = c(1, 2, 4, 4),
-    #'   to   = c(3, 3, 1, 2)
-    #' )
-    #' schedule <- Schedule$new(activities, relations)
-    #' gantt <- schedule$gantt_matrix()
-    #' xyw <- schedule$xy_gantt_matrix()
-    #' xyw
-    #' plot(xyw[, 1:2])
-    #'
     xy_gantt_matrix = function(gantt = NULL) {
       .Deprecated("sch_xy_gantt_matrix")
 
@@ -1629,30 +1186,6 @@ Schedule <- R6::R6Class("Schedule",
     #' when the network totally serial.
     #' @return A number between 0 and 1, inclusive.
     #'
-    #' @examples
-    #' # Create a schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #'
-    #' # Add activities and relations to it.
-    #' schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-    #' schedule$add_act_rel(  2, "a2" , 4, c(5))
-    #' schedule$add_act_rel(  3, "a3" , 9, c(10))
-    #' schedule$add_act_rel(  4, "a4" , 1, c(6))
-    #' schedule$add_act_rel(  5, "a5" , 4, c(9))
-    #' schedule$add_act_rel(  6, "a6" , 5, c(7))
-    #' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-    #' schedule$add_act_rel(  8, "a8" , 7, c(12))
-    #' schedule$add_act_rel(  9, "a9" , 8, c(12))
-    #' schedule$add_act_rel( 10, "a10", 3, c(12))
-    #' schedule$add_act_rel( 11, "a11", 3, c(12))
-    #' schedule$add_act_rel( 12, "a12", 0)
-    #'
-    #' schedule$topoi_sp()
-    #'
     topoi_sp = function() {
       .Deprecated("sch_topoi_sp")
 
@@ -1676,30 +1209,6 @@ Schedule <- R6::R6Class("Schedule",
     #' Otherwise, if AD is equal one, the quantity of each level is not
     #' uniformly distributed.
     #' @return A number between 0 and 1, inclusive.
-    #'
-    #' @examples
-    #' # Create a schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #'
-    #' # Add activities and relations to it.
-    #' schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-    #' schedule$add_act_rel(  2, "a2" , 4, c(5))
-    #' schedule$add_act_rel(  3, "a3" , 9, c(10))
-    #' schedule$add_act_rel(  4, "a4" , 1, c(6))
-    #' schedule$add_act_rel(  5, "a5" , 4, c(9))
-    #' schedule$add_act_rel(  6, "a6" , 5, c(7))
-    #' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-    #' schedule$add_act_rel(  8, "a8" , 7, c(12))
-    #' schedule$add_act_rel(  9, "a9" , 8, c(12))
-    #' schedule$add_act_rel( 10, "a10", 3, c(12))
-    #' schedule$add_act_rel( 11, "a11", 3, c(12))
-    #' schedule$add_act_rel( 12, "a12", 0)
-    #'
-    #' schedule$topoi_ad()
     #'
     topoi_ad = function() {
       .Deprecated("sch_topoi_ad")
@@ -1732,30 +1241,6 @@ Schedule <- R6::R6Class("Schedule",
     #' activities is as far as possible.
     #' Otherwise, if LA is equal one, the relation distance are one.
     #' @return A number between 0 and 1, inclusive.
-    #'
-    #' @examples
-    #' # Create a schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #'
-    #' # Add activities and relations to it.
-    #' schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-    #' schedule$add_act_rel(  2, "a2" , 4, c(5))
-    #' schedule$add_act_rel(  3, "a3" , 9, c(10))
-    #' schedule$add_act_rel(  4, "a4" , 1, c(6))
-    #' schedule$add_act_rel(  5, "a5" , 4, c(9))
-    #' schedule$add_act_rel(  6, "a6" , 5, c(7))
-    #' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-    #' schedule$add_act_rel(  8, "a8" , 7, c(12))
-    #' schedule$add_act_rel(  9, "a9" , 8, c(12))
-    #' schedule$add_act_rel( 10, "a10", 3, c(12))
-    #' schedule$add_act_rel( 11, "a11", 3, c(12))
-    #' schedule$add_act_rel( 12, "a12", 0)
-    #'
-    #' schedule$topoi_la()
     #'
     topoi_la = function() {
       .Deprecated("sch_topoi_la")
@@ -1790,30 +1275,6 @@ Schedule <- R6::R6Class("Schedule",
     #' If TF = 1, there is float between activities
     #' and they be shift without affecting other activities.
     #' @return A number between 0 and 1, inclusive.
-    #'
-    #' @examples
-    #' # Create a schedule
-    #' schedule <- Schedule$new()
-    #' schedule$title <- "Fictitious Project Example"
-    #' schedule$reference <- "VANHOUCKE, Mario. Measuring time:
-    #'   improving project performance using earned value management.
-    #'   Gent: Springer, 2009, p. 18"
-    #'
-    #' # Add activities and relations to it.
-    #' schedule$add_act_rel(  1, "a1" , 0, c(2,3,4))
-    #' schedule$add_act_rel(  2, "a2" , 4, c(5))
-    #' schedule$add_act_rel(  3, "a3" , 9, c(10))
-    #' schedule$add_act_rel(  4, "a4" , 1, c(6))
-    #' schedule$add_act_rel(  5, "a5" , 4, c(9))
-    #' schedule$add_act_rel(  6, "a6" , 5, c(7))
-    #' schedule$add_act_rel(  7, "a7" , 1, c(8,11))
-    #' schedule$add_act_rel(  8, "a8" , 7, c(12))
-    #' schedule$add_act_rel(  9, "a9" , 8, c(12))
-    #' schedule$add_act_rel( 10, "a10", 3, c(12))
-    #' schedule$add_act_rel( 11, "a11", 3, c(12))
-    #' schedule$add_act_rel( 12, "a12", 0)
-    #'
-    #' schedule$topoi_tf()
     #'
     topoi_tf = function() {
       .Deprecated("sch_topoi_tf")

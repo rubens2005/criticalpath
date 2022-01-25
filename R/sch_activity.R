@@ -245,6 +245,39 @@ sch_add_activity <- function(sch, id, name, duration, ..., direction = "succ") {
   )
 }
 
+#' Add Activities Tibble
+#'
+#' Add activities tibble to a schedule.
+#'
+#' @param sch A schedule object.
+#'
+#' @param atb A tibble with activities definitions.
+#'
+#' @return A schedule with a activity tibble (atb) added.
+#'
+#' @examples
+#' atb <- tibble::tibble(
+#'   id        = 1:17,
+#'   name      = paste("a", as.character(1:17), sep=""),
+#'   duration  = c(1L,2L,2L,4L,3L,3L,3L,2L,1L,1L,2L,1L,1L,1L,1L,2L,1L)
+#' )
+#' sch <- sch_new() %>%
+#'   sch_add_activities_tibble(atb) %>%
+#'   sch_plan()
+#' sch_duration(sch) #4
+#' # sch_activities(sch)
+#'
+#' @export
+sch_add_activities_tibble <- function(sch, atb) {
+  return(
+    sch %>% sch_add_activities(
+      id = atb$id,
+      name = atb$name,
+      duration = atb$duration
+    )
+  )
+}
+
 #' Get Activity
 #'
 #' Gets an activity by id.

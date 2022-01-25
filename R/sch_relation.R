@@ -250,6 +250,48 @@ sch_add_relation <- function(sch, from, to, type = "FS", lag = 0L) {
 }
 
 
+#' Add Relations Tibble
+#'
+#' Add relations tibble to a schedule.
+#'
+#' @param sch A schedule object.
+#'
+#' @param rtb A tibble or data frame with relations definitions.
+#'
+#' @return A Schedule object with a relation added.
+#'
+#' @examples
+#' atb <- tibble::tibble(
+#'   id        = 1:17,
+#'   name      = paste("a", as.character(1:17), sep=""),
+#'   duration  = c(1L,2L,2L,4L,3L,3L,3L,2L,1L,1L,2L,1L,1L,1L,1L,2L,1L)
+#' )
+#' rtb <- data.frame(
+#'   from = c(1L, 1L, 2L, 2L, 2L, 3L, 3L, 3L,  3L,  4L,  5L,  6L,
+#'            7L,  8L,  9L, 10L, 11L, 11L, 12L, 12L, 13L, 13L, 14L, 14L, 15L, 15L),
+#'   to   = c(2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 11L, 11L,
+#'            12L, 13L, 14L, 15L, 16L, 17L, 16L, 17L, 16L, 17L, 16L, 17L, 16L, 17L)
+#' )
+#' sch <- sch_new() %>%
+#'   sch_add_activities_tibble(atb) %>%
+#'   sch_add_relations_tibble(rtb) %>%
+#'   sch_plan()
+#' sch_duration(sch) # 11
+#'
+#' @export
+sch_add_relations_tibble <- function(sch, rtb) {
+  return(
+    sch %>%
+      sch_add_relations(
+        from = rtb$from,
+        to = rtb$to,
+        type = ifelse(is.null(rtb$type), "FS", rtb$type),
+        lag = ifelse(is.null(rtb$lag), 0L, rtb$lag)
+      )
+  )
+}
+
+
 #' Has Any Relation
 #'
 #' A logical value that indicates if the schedule has any relation.
@@ -825,4 +867,65 @@ sch_is_redundant = function(sch, id_from, id_to) {
 
   succ <- sch_all_successors(sch, id_from, id_to)
   return(id_to %in% succ)
+}
+
+
+#' Evaluate Redundancy
+#'
+#' Evaluates redundancy of each relation and creates another column in
+#' relation tibble.
+#'
+#' @param sch Object Schedule
+#'
+#' @return Object Schedule redundancy column added.
+#'
+#' @examples
+#' atb <- tibble::tibble(
+#'   id        = 1:17,
+#'   name      = paste("a", as.character(1:17), sep=""),
+#'   duration  = c(1L,2L,2L,4L,3L,3L,3L,2L,1L,1L,2L,1L,1L,1L,1L,2L,1L)
+#' )
+#' rtb <- data.frame(
+#'   from = c(1L, 1L, 2L, 2L, 2L, 3L, 3L, 3L,  3L,  4L,  5L,  6L,
+#'            7L,  8L,  9L, 10L, 11L, 11L, 12L, 12L, 13L, 13L, 14L, 14L, 15L, 15L),
+#'   to   = c(2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 11L, 11L,
+#'            12L, 13L, 14L, 15L, 16L, 17L, 16L, 17L, 16L, 17L, 16L, 17L, 16L, 17L)
+#' )
+#' sch <- sch_new() %>%
+#'   sch_title("Project 1: Cost Information System") %>%
+#'   sch_reference("VANHOUCKE, Mario.
+#'       Integrated project management and control:
+#'       first comes the theory, then the practice.
+#'       Gent: Springer, 2014, p. 6") %>%
+#'   sch_add_activities_tibble(atb) %>%
+#'   sch_add_relations_tibble(rtb) %>%
+#'   sch_plan() %>%
+#'   sch_evaluate_redundancy()
+#'
+#' sch_duration(sch)  # 11L
+#'
+#' rtb <- sch_relations(sch)
+#' sum(rtb$redundant) # 0
+#'
+#' sch1 <- sch %>%
+#'   sch_add_relation(1L, 6L) %>%
+#'   sch_add_relation(3L, 16L) %>%
+#'   sch_add_relation(4L, 17L) %>%
+#'   sch_plan() %>%
+#'   sch_evaluate_redundancy()
+#'
+#' sch_duration(sch)  # 11L
+#'
+#' rtb <- sch_relations(sch1)
+#' sum(rtb$redundant) # 3L
+#'
+#' @export
+sch_evaluate_redundancy <- function(sch) {
+  rtb <- sch_relations(sch)
+  rtb$redundant <- FALSE
+  for(i in 1:sch_nr_relations(sch)) {
+    rtb$redundant[i] <- sch_is_redundant(sch, rtb$from[i], rtb$to[i])
+  }
+  sch$relations <- rtb
+  return(sch)
 }

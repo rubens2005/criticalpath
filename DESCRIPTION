@@ -1,6 +1,6 @@
 Package: criticalpath
 Title: An Implementation of the Critical Path Method
-Version: 0.2.0
+Version: 0.2.1.000
 Authors@R: c(
     person("Rubens Jose", "Rosa", role=c("aut", "cre"), email = "rubens@rubensjoserosa.com"),
     person("Marcos", "dos Santos", role="aut", email="marcosdossantos@ime.eb.br"),

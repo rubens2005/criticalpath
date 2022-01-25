@@ -89,3 +89,14 @@ test_that("Add activities works, with mean duration equal SIX", {
   expect_equal(sch_duration(sch), 9)
 })
 
+test_that("Add activities tibble.", {
+  atb <- tibble::tibble(
+    id        = 1:17,
+    name      = paste("a", as.character(1:17), sep=""),
+    duration  = c(1L,2L,2L,4L,3L,3L,3L,2L,1L,1L,2L,1L,1L,1L,1L,2L,1L)
+  )
+  sch <- sch_new() %>%
+    sch_add_activities_tibble(atb) %>%
+    sch_plan()
+  expect_equal(sch_duration(sch), 4L)
+})
