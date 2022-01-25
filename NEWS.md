@@ -1,5 +1,11 @@
 # criticalpath 0.2.0
 
+25/01/2022
+- New functions:
+  - Add Activities Tibble
+  - Add Relations Tibble
+  - Evaluate Redundancy
+
 09/01/2022
 - The package was transformed in functional.
 - It was create all function to work with schedule.
