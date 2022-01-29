@@ -1,4 +1,7 @@
-# criticalpath 0.2.0
+# criticalpath 0.2.1
+
+26/01/2022
+- Warn message from sch_add_relations_tibble function was corrected.
 
 25/01/2022
 - New functions:
@@ -6,6 +9,7 @@
   - Add Relations Tibble
   - Evaluate Redundancy
 
+# criticalpath 0.2.0
 09/01/2022
 - The package was transformed in functional.
 - It was create all function to work with schedule.

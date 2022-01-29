@@ -280,13 +280,25 @@ sch_add_relation <- function(sch, from, to, type = "FS", lag = 0L) {
 #'
 #' @export
 sch_add_relations_tibble <- function(sch, rtb) {
+  columns <- names(rtb)
+  if(any(columns == "type")) {
+    type <- rtb$type
+  } else {
+    type = "FS"
+  }
+  if(any(columns == "lag")) {
+    lag <- rtb$lag
+  } else {
+    lag = 0L
+  }
+
   return(
     sch %>%
       sch_add_relations(
         from = rtb$from,
         to = rtb$to,
-        type = ifelse(is.null(rtb$type), "FS", rtb$type),
-        lag = ifelse(is.null(rtb$lag), 0L, rtb$lag)
+        type = type,
+        lag = lag
       )
   )
 }

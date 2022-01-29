@@ -1,8 +1,24 @@
 ---
 title: "**`criticalpath`**: Método do Caminho Crítico em **R**"
 author: "Rubens José Rosa, Marcos dos Santos, Thiago Marques"
-date: 24/01/2022
-output: html_document
+date: 28/01/2022
+header-includes:
+- \usepackage{fancyhdr}
+- \usepackage{lipsum}
+- \pagestyle{fancy}
+- \fancyhead[CO,CE]{}
+- \fancyfoot[CO,CE]{(c) 2022 Rubens José Rosa - https://rubensjoserosa.com/}
+- \fancyfoot[LE,RO]{\thepage}
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+#  html_document:
+#    toc: true
+#    toc_depth: 2
+#    toc_float: true
+#    number_sections: true
 ---
 
 ```{r setup, include=FALSE}
@@ -13,396 +29,506 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introdução
 
-> O objetivo desse e-book é mostrar como utilizar o pacote `criticalpath`.
+O *Project Management Institue - PMI* é uma referência mundial em gerenciamento
+de projetos (mais informações no [Site](https://www.pmi.org/)).
+Ele define projeto como
+sendo "um esforço temporário empreendido para criar um produto, serviço ou
+resultado único", e complementa afirmando que "sua natureza temporária
+indica um início e um término definidos" [32]. Pela definição de projeto e o
+complemento, o tempo de execução do projeto é fundamental para o seu sucesso.
 
+Existem várias metodologias para calcular a duração do projeto, entre elas,
+o PMI cita o Método do Caminho Crítico - *Critical Path Method - CPM*.
+O CPM calcula a duração do projeto através da definição de suas atividades,
+a duração delas e a relação de precedência lógica (RPL) entre as mesmas.
 
+O pacote `criticalpath` é uma implementação do método do caminho crítico
+em **R**. Ele segue os passos do algoritmo do CPM conforme definido no
+Guia PMBOK [32] e também no livro de Mario Vanhoucke [3], outra referência
+mundia em estudos de cronograma de projetos.
 
+O **R** é um ambiente estatísticos utilizado para fazer análise de dados de
+vários tipos de experimentos. Uma das ferramentas do gerenciamento de projetos é
+o *Design of Experiment (DOE)*. Então, esse pacote foi criado para permitir que
+gerentes de projetos e pesquisadores possam fazer seus experimentos com o método
+do caminho crítico.
+
+> O objetivo deste texto é mostrar como utilizar o pacote `criticalpath` para
+criar cronogramas seguindo o Método do Caminho Crítico em **R**.
+
+Com este pacote e algumas funções do **R**, você pode calcular os seguintes
+parâmetros do CPM:
+
+- duração do cronograma;
+- data de início e término mais cedo;
+- data de início e término mais tarde;
+- caminho crítico;
+- atividades críticas;
+- folga total e folga livre;
+- gráfico de Gantt;
+- análise de cenários "E-se";
+- indicadores topológicos;
+
+O objetivo deste pacote é permitir que gerente de projetos e pesquisadores
+utilizem o método do caminho crítico em suas pesquisas para fazer experimentos
+com os parâmetros calculados pelo CPM, a fim de melhorar o desempenho dos
+projetos.
+
+Este documento é totalmente voltado ao pacote `criticalpath`. Também serão
+utilizados outros pacotes. Então, já vamos carregar todos eles aqui.
 
 ```{r}
 library(criticalpath)
+library(DiagrammeR)
+library(DiagrammeRsvg)
+library(png)
+library(rsvg)
 library(tibble)
 ```
 
-
-Para criar um cronograma, você deve fornecer um título, a referência sobre a origem sua origem (livro, artigo, empresa), a lista de atividades e a lista de relacionamentos.
-
-Com base nas informações fornecidas, o pacote `criticalpath` aplica o método do caminho crítico, calculando as informações relativas ao projeto.
-
-O objetivo deste texto é mostrar como se utiliza o pacote `criticalpath`, descrevendo suas propriedades e suas funções.
-
-
-# Formas de representar um cronograma
-
-
-Quando você vai criar um cronograma, normalmente já existe um esboço dele. Da mesma forma, na litaretura você vê várias formas de representar um cronograma.
-Aqui vamos mostrar algumas formas retirada da literatura, na sequência vamos ver como podemos criar cronogramas no **R**.
-
-
-> Fazer a tabela de atividades com suas predecessoras
-
-Essa representação é uma tabela, sendo que cada linha representa uma atividade, com identificador, nome, duração e lista de identificadores das atividades **predecessoras**.
-
-A ordem das linhas na tabela não importa para o pacote `criticalpath`, mas é importante manter uma ordem para o nosso entendimento, tanto do gerente de projeto, como das pessoas que irão visualizar o cronograma.
-
-
-
-> Fazer a tabela de atividade com suas sucessoras
-
-A única diferença entre esta representação e a anterior, é que aqui são mostradas a lista de identificadores das atividades sucessoras.
-
-Considerando que cada atividade aparece antes da sua sucessora, é importante destacar que após a criação de todo o cronograma, devem existir todas atividades com identificadores relacionadas na coluna sucessora.
-
-
-# Propriedade do cronograma
-
-FALAR DO SCH, que É UM ESPAÇO NA MEMÓRIA ONDE GUARDAMOS O CRONOGRAMA.
-
-Informações que podemos obter de um cronograma utilizando o pacote `criticalpath`.
-
-
-
-
-- **title:** O título ou nome do projeto que está sob análise. Esse título depende do usuário da classe, pois ele deve identificar um projeto real ou algum experimento. 
-Utilização:
-   - `sch_title(sch, "O Título")`: altera o título do projeto.
-   - `sch_title(sch)`: recupera o título do projeto.
-
-- **reference:** A referência da origem do projeto, por exemplo, um livro, um artigo uma corporação ou, se não puder ser identificada, não precisa colocar nada.
-   - `sch_reference(sch, "A referência.")`: altera a referência do projeto.
-   - `sch_reference(sch)`: recupera a referência do projeto.
-
-- **duration:** Um valor inteiro que indica a duração do projeto calculada pelo CPM. A duração e todos os outros valores do método do caminho crítico são calculados após a chamada à função `sch_plan(sch)`.
-   - `sch_duration(sch)`: recupera a duração do projeto.
-   
-
-
-
-
-# Propriedades das atividades
-
-As atividades são colocadas numa tabela, que no **R** é chamada de data-frame. Cada propriedade das atividades é colocada numa coluna do data-frame. Segue a descrição de cada uma delas.
-
-- `id`: Identificador da atividade. É um número inteiro que deve ser único em todo o cronograma: não pode haver duas atividades como o mesmo identificador.
-Esse identificador será utilizado para fazer o relacionamento entre as atividades. É obrigatório informar um identificador para a atividade.
-
-- `name`: Nome da atividade. Se não for informado, fica um string vazio.
-
-- `duration`: Duração da atividade. Seu formato deve ser um número inteiro, maior ou igual a zero. Ele é um número independente de unidade de tempo. O pacote `criticalpath` interpreta como período, que pode ser dias, horas, minutos ou segundos. Se não for informado, será zero.
-
-- `milestone`: Indica se a atividade é um marco ou não. Um marco (*milestone*) é uma atividade com duração zero. 
-  - `TRUE`: indica que é um marco;
-  - `FALSE`: indica que não é um marco.
-     
-- `critical`: Indica se a atividade é crítica ou não. Uma atividade é crítica se sua folga total é menor ou igual a zero. 
-  - `TRUE` indica que a atividade é crítica;
-  - `FALSE` indica que a atividade não é crítica.
-     
-- `ES` - Início mais cedo (_early start_): período de início mais cedo que uma atividade pode iniciar com a condição de que todas as suas predecessoras já tenham sido finalizadas.
-
-- `EF`: Término mais cedo (_early finish_): é a duração da atividade adicionada ao seu início mais cedo.
-
-- `LS`: Início mais tarde (_late start_): é o término mais tarde da atividade menos a sua duração.
-
-- `LF`: Término mais tarde (_late finish_): período de término mais tarde que uma atividade pode finalizar com a condição de que não se sobreponha às suas sucessoras.
-
-- `total_float`: folga total: Quantidade de períodos que uma atividade pode atrasar sem aumentar a duração do projeto.
-
-- `free_float`: folhga livre: Quantidade de períodos que uma atividade pode atrasar sem atrasar nenhuma atividade sucessora dela.
-
-- `progr_level`: nível progressivo: Ordem em que a atividade aparece no diagrama de rede, contada a partir das primeiras atividades. As atividades que não possuem predecessoras tem nível progressivel igual a um. O nível das outras atividades é o maior nível progressivo entre as suas predecessoras, mais um. O maior nível das atividades que não possuem sucessoras é chamada de `max_level`.
-
-- `regr_level`: nível regressivo: Ordem em que as atividades aparecem no digrama de rede, contada a partir das últimas atividades. O nível regressivo das atividades que não possuem sucessoras é igual ao `max_level`. O nível das outras atividades é menor valor do nível regressivo de suas sucessoras, menos um.
-
-- `topo_float`: Diferença entre o nível regressivo e o nível progressivo.
-
-
-
-
-# Propriedades dos relacionamentos
-
-Os relacionamentos são colocados numa tabela, que no **R** é chamada de data-frame. tibble com a relação de precedência entre as atividades. Ele é formado pelo identificador da atividade precessora e da sucessora, o tipo e o lag. Segue a descrição de cada uma das colunas do data-frame.
-
-- `from`: de: Identificador da atividade predecessora. Deve existir uma atividade com esse id.
-
-- `to`:para : Identificador da atividade sucessora. Deve existir uma atividade com esse id.
-
-- `type`: tipo: Define o tipo de relacionamento entre as atividades. Seus valores podem ser: FS, FF, SS. O relacionamento padrão é o FS (Término-Início).
-  - `FS`: Término-Início: A atividade sucessora só pode começar depois que a predecessora finalizar.
-  - `FF`: Término-Término: A atividade sucessora deve finalizar junto com a predecessora.
-  - `SS`: Início-Início: A atividade sucessora deve iniciar junto com a predecessora.
-  - `SF`: Início-Término: A atividade sucessora deve finalizar quando a predecessora iniciar.
-
-- `lag`: Intervalo de tempo que a atividade sucessora deve esperar, ou adiantar, para ser executada. Por exemplo, num relacionamento FS, com `lag = 4`, após a predecessora finalizar, a sucessora deve esperar 4 períodos. Em outras palavras, a atividade sucessora avança 4 períodos após o término da predecessora. Se o valor for negativo, a atividade sucessora antecipa seu início. No exemplo acima, se `lag = -4`, a atividade sucessora adiantaria em 4 períodos o seu início. Por padrão, `lag = 0`.
-
-
-
-# Relatórios em Rmarkdown
-
-- http://www.leg.ufpr.br/~fernandomayer/palestra/useR-2015/Rmarkdown-rautu.html
-- https://prdm0.github.io/aulas_computacional/relat%C3%B3rio-markdown-em-r.html
-
-# Introdução
-
-## Por que fazer isso em **R**?
-
-O **R** é um ambiente estatísticos utilizado para fazer análise de dados de vários tipos de experimentos. Uma das ferramentas do GERENCIAMENTO DE PROJETOS é o *Design of Experiment (DOE)*. Então, esse pacote foi criado para permitir que gerentes de projetos pesquisadores possam fazer seus experimentos com o método do caminho crítico.
-
-## Qual é o público alvo?
-
-> Pegar o público alvo do **Projetos no Prazo**.
-
-- O público alvo desse pacote são gerentes de projetos pesquisadores.
-- Também é público alvo os pesquisadores que já conhecem o **R** e desejam conhecer sobre o CPM e como fazer experimentos.
-
-## Pensamentos ainda
-
-Esse documento será uma mescla do vignette `criticalpath` e da minha dissertação.
-
-> Hum, talvez não misturar aqui coisas da minha dissertação!!!
-
-> Ao final da leitura e **prática** desse e-book, o gerente de projeto estará apto a criar cronogramas e aplicar o método do caminho crítico no `R` utilizando o pacote `criticalpath`.
-
-Para isso, é necessário possuir conhecimento em duas áreas diferentes:
-
-- gerenciamento do cronograma do projeto: atividades, relacionamentos e caminho crítco;
-- **R**: saber analisar dados com **R**.
-
-Aqui, vamos apenas falar sobre o método do caminho crítico. Não vamos falar sobre a área de gerenciamento de projetos em si.
-
-Como esse e-book pode resolver essa parada?
-
-    > Explicando sobre os dois temas, em capítulos separados.
-    
-      - Um capítulo sobre o **R**, o mínimo necessário
-      - Um capítulo sobre gerenciamento do cronograma
-      - Um capítulo, finalmente, sobre casos de uso do pacote `criticalpath`
-      - Fora esse capítulo que fala de todos os comandos do pacote.
-
-Outra forma de fazer seria mesclar os conceitos: exeplica uma parte do CPM, explica como aplicar o conceito em *R*.
-
-Poderia mostrar também vários estudos de caso retirados dos livros.
-
-Um cronograma é uma sequência de atividades que têm que ser executadas uma a uma.
-Para informar qual atividade vem antes e qual depois, é necessário criar relacionamento entre as atividades. Esses relacionamentos são criados através de números, aqui chamado de identificador da atividades (`id`). É o CPF da atividade. Dentro de um cronograma, não pode haver duas atividades como o mesmo `id`. Esse identificador pode ser sequencial ou totalmente aleatório, desde que ele identifique a qual atividade pertence.
-
-
-
-## Método do Caminho Crítico - Critical Path Method - CPM
-
-O pacote **criticalpath** é uma implementação orientada à objetos em **R** do
-método do caminho crítico (*Critical Path Method* - CPM), utilizando o pacote **R6**.
-O CPM é um método utilizado para estimar a duração mínima de um projeto e também calcular
-o quão flexível é a rede de atividades do cronograma. A flexibilidade é em termos do
-início mais cedo, término mais cedo, início mais tarde, término mais tarde, folga total
-e folga livre. Além disso, com esse pacote é possível quantificar a complexidade do
-diagrama de rede através dos indicadores topológicos. Finalmente, o **criticalpath**
-permite a análise de cenários "e-se", através da alteração da duração das atividades.
-
-Com este pacote e algumas funções do **R**, você pode calcular os seguintes parâmetros do CPM:
-
-- Duração do cronograma;
-- Data de início e término mais cedo;
-- Data de início e término mais tarde;
-- Caminho crítico;
-- Atividades críticas;
-- Folga total e folga livre;
-- Gráfico de Gantt, derivado da matrix de Gantt;
-- Análise de cenários "E-se";
-- Indicadores topológicos;
-
-O objetivo deste pacote é permitir que pesquisadores utilizem o método do caminho crítico
-em suas pesquisas para fazer experimentos com os parâmetros calculados pelo CPM.
-
-## Alguns experimentos que podem seer feitos
-
-
-- Ao sortear aleatoriamente a duração das atividades,
-  – como fica a aparência da curva S associada ao cronograma?
-  – qual a distribuição da duração do projeto
-  
-- Ao retirar aleatoriamente alguns relacionamentos do cronograma,
-  – como fica a curva S
-  – qual a distribuição da duração do projeto
-  
-- Qual é a principal diferença entre os dois experimentos acima?
-  – Ao sortear a duração das das atividades, não é necessário criar um novo cronograma.
-  – Ao sortear ligações para serem retiradas, é necessário criar um novo cronograma a cada nova estrutura sorteada, sem os relacionamentos sorteados.
-
-
-
-# O que é um cronograma?
-
-## Explicar é um diagrama de redes
-
-Explicar os conceitos utilizando um diagrama de redes já pronto. Depois mostra como criar um diagrama de rede.
-
-## Explicar o é que um modelo de cronograma
-
-Recorrer ao PMBOK para isso.
-
-> Isso aqui está virando a minha disseração.
-  > Acho até que é uma boa ideia. Colocar aqui todas as definições sobre gerenciamento do cronograma.
-  
-  Vamos ver! Isso acabará tendo tudo o que estava imaginando. Esse e-book é para ser algo a ser distribuído de graça.
+**Observação 1:** O pacote faz extenso uso de **pipes**, representandos pelos
+símbolos **`%>%`** e **`%<>%`**, desta forma, para facilitar a sua utilização,
+ele importou os pipes do pacote `magrittr`. Então, quando você carregar o
+pacote `criticalpath`, ele já carrega os pipes.
+
+**Observação 2:** Para instalar o pacote `criticalpath`, você tem duas opções:
+
+- Versão estável (CRAN): `install.packages("criticalpath")`
+
+- Versão em desenvolvimento (GitHub): 
+    - `install.packages("remotes")`
+    - `remotes::install_github("rubens2005/criticalpath")`
+
+# Opções para criar um cronograma
+
+## Introdução
+
+Para calcular o caminho crítico no **R**, a primeira coisa que precisamos saber
+é como representar um cronograma e como passar essa representação para o **R**.
+
+Um cronograma é representado por uma lista de atividades e uma lista de
+relacionamentos entre elas. Ele é identificado por um título com uma
+referência da sua origem.
+
+Para criar um cronograma, você deve fornecer um título, a referência sobre a
+sua origem (livro, artigo, empresa), a lista de atividades e a lista de
+relacionamentos. Após isso, é necessário planejar o cronograma, que nada mais é
+do que calcular o caminho crítico e todas as informações relativas ao projeto.
+
+A criação de um cronograma requer uma sequência de passos e cada passo tem uma
+função **R** associada. Primeiro vamos ver os passos:
+
+a) criar o cronograma;
+b) identificar o cronograma;
+c) adicionar as atividades;
+d) adicionar os relacionamentos;
+e) planejar o cronograma.
+
+Os passos (a), (c) e (e) são obrigatórios. Não tem como criar um cronograma sem
+eles. No passo (e) é onde ocorre o cálculo do caminho crítico. Os passos (b) e
+(d) são opcionais, mas é altamente recomendado que você identifique seu
+cronograma e que os relacionamentos entre as atividades sejam definidos, senão
+todas atividades serão planejadas para serem executadas em paralelo.
+
+
+Você tem cinco alternativas para criar um cronograma:
+
+1. criar o cronograma e adicionar cada atividade;
+2. criar o cronograma, adicionar cada atividade e cada relacionamento;
+3. criar o cronograma e adicionar cada atividade, ao mesmo tempo em que
+adiciona os relacionamentos dessa atividade com as outras;
+4. criar o cronograma, adicionar as atividades e os relacionamentos a partir de
+tibbles implícitos;
+5. criar o cronograma, adicionar as atividades e os relacionamentos a partir de
+tibbles explícitos.
+
+
+## Alternativas
+
+Vamos ver exemplos de códigos de cada uma dessas opções.
+Depois vamos descrever os detalhes delas.
+
+
+1. Criar o cronograma e adicionar cada atividade:
+
+```{r}
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades;
+  sch_add_activity(1L, "A", 6L) %>%
+  sch_add_activity(2L, "B", 5L) %>%
+  sch_add_activity(3L, "C", 8L) %>%
+  sch_add_activity(4L, "D", 9L) %>%
+  sch_add_activity(5L, "E", 4L) %>%
+  sch_add_activity(6L, "F", 3L) %>%
+# e. planejar o cronograma.
+  sch_plan()
+```
+
+2. Criar o cronograma, adicionar cada atividade e cada relacionamento:
+
+```{r}
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades;
+  sch_add_activity(1L, "A", 6L) %>%
+  sch_add_activity(2L, "B", 5L) %>%
+  sch_add_activity(3L, "C", 8L) %>%
+  sch_add_activity(4L, "D", 9L) %>%
+  sch_add_activity(5L, "E", 4L) %>%
+  sch_add_activity(6L, "F", 3L) %>%
+# d. adicionar os relacionamentos;
+  sch_add_relation(1L, 2L) %>%
+  sch_add_relation(1L, 3L) %>%
+  sch_add_relation(2L, 4L) %>%
+  sch_add_relation(3L, 4L) %>%
+  sch_add_relation(3L, 5L) %>%
+  sch_add_relation(4L, 6L) %>%
+  sch_add_relation(5L, 6L) %>%
+# e. planejar o cronograma.
+  sch_plan()
+```
+
+3. Criar o cronograma e adicionar cada atividade, ao mesmo tempo em que
+adiciona os relacionamentos dessa atividade com as outras:
+
+```{r}
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades; # d. adicionar os relacionamentos;
+  sch_add_activity(1L, "A", 6L, 2L, 3L) %>%
+  sch_add_activity(2L, "B", 5L, 4L) %>%
+  sch_add_activity(3L, "C", 8L, 4L, 5L) %>%
+  sch_add_activity(4L, "D", 9L, 6L) %>%
+  sch_add_activity(5L, "E", 4L, 6L) %>%
+  sch_add_activity(6L, "F", 3L) %>%
+# e. planejar o cronograma.
+  sch_plan()
+```
+
+4. Criar o cronograma, adicionar as atividades e os relacionamentos a partir de
+tibbles implícitos:
+
+```{r}
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades;
+  sch_add_activities(
+    id = c(1L, 2L, 3L, 4L, 5L, 6L),
+    name = c("A", "B", "C", "D", "E", "F"),
+    duration = c(6L, 5L, 8L, 9L, 4L, 3L)
+  ) %>%
+# d. adicionar os relacionamentos;
+  sch_add_relations(
+    from = c(1L, 1L, 2L, 3L, 3L, 4L, 5L),
+    to = c(2L, 3L, 4L, 4L, 5L, 6L, 6L)
+  ) %>%
+# e. planejar o cronograma.
+  sch_plan()
+```
+
+5. Criar o cronograma, adicionar as atividades e os relacionamentos a partir de
+tibbles explícitos.
+
+```{r}
+# Preparação: primeiro criar os tibbles
+atb <- tibble(
+  id = c(1L, 2L, 3L, 4L, 5L, 6L),
+  name = c("A", "B", "C", "D", "E", "F"),
+  duration = c(6L, 5L, 8L, 9L, 4L, 3L)
+)
+rtb <- tibble(
+  from = c(1L, 1L, 2L, 3L, 3L, 4L, 5L),
+  to = c(2L, 3L, 4L, 4L, 5L, 6L, 6L)
+)
+
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades;
+  sch_add_activities_tibble(atb) %>%
+# d. adicionar os relacionamentos;
+  sch_add_relations_tibble(rtb) %>%
+# e. planejar o cronograma.
+  sch_plan()
+```
+
+## Diagrama de rede
+
+Todos os exemplos mostrados aqui são do mesmo cronograma. Foi feito assim para
+que você possa comparar as diversas formas de criar os cronogramas. Vamos ver
+como é o diagrama de rede desse cronograma. O código abaixo fica como exemplo
+para a criação do diagrama de rede de qualquer cronograma, basta chamar a
+função com o cronograma desejado.
+
+```{r}
+criar_diagrama_de_rede <- function(sch) {
+  atb <- sch_activities(sch)
+  rtb <- sch_relations(sch)
+  ids <- atb$id
+
+  ndf <-
+    create_node_df(
+      n         = sch_nr_activities(sch),
+      label     = ids,
+      color     = "black",
+      fontcolor = "black",
+      shape     = ifelse(atb$milestone, "diamond","rect"),
+      fillcolor = ifelse(atb$critical, "#ff7555", "#6399ea"),
+    )
+
+
+  edf <-
+    create_edge_df(
+      from     = match(rtb$from, ids),
+      to       = match(rtb$to, ids),
+      rel      = rtb$type,
+      penwidth = ifelse(rtb$critical, "3", "1"),
+      color    = ifelse(rtb$critical, "#ff7555", "#6399ea"),
+      style    = "solid"
+    )
+
+  graph <-
+    create_graph(
+      nodes_df = ndf,
+      edges_df = edf
+    ) %>%
+    add_global_graph_attrs(
+      attr = "layout",
+      value = "dot",
+      attr_type = "graph"
+    ) %>%
+    add_global_graph_attrs(
+      attr = "rankdir",
+      value = "LR",
+      attr_type = "graph"
+    ) %>%
+    set_node_attrs(
+      node_attr = "fontname",
+      values = "Helvetica"
+    ) %>%
+    set_node_attrs(
+      node_attr = "fontsize",
+      values = "20"
+    )
+
+  graph
+}
+
+gerar_arquivo_do_diagrama <- function(sch) {
+  # Criar um arquivo temporário
+  out <- paste0(tempfile(), ".png")
+
+  # Gerar o diagrama dem PNG.
+  svg <- sch %>%
+    criar_diagrama_de_rede() %>%
+    generate_dot() %>%
+    grViz() %>%
+    export_svg() %>%
+    charToRaw() %>%
+    rsvg() %>%
+    writePNG(out)
+
+  return(out)
+}
+
+diagrama_original <- sch %>%
+  gerar_arquivo_do_diagrama()
+
+```
+\newpage
+
+------------------------------------
+
+![Diagrama de rede](`r diagrama_original`)
+
+------------------------------------
+
+O diagrama de rede mostra a Relação de Precedência Lógicas (RPL) entre as
+atividades. Por exemplo, para poder executar a atividade 4, é necessário
+finalizar antes as atividades 2 e 3, que depende do término da 1. Essa mesma
+lógica serve para todas as atividades.
+
+Em vermelho, está o caminho crítico, formado pelas atividades 1, 3, 4 e 6. A
+soma da duração dessas atividades é que determina a duração do projeto. Nenhum
+outro caminho dura mais que o crítico. Na verdade, essa é a definição de caminho
+crítico: é o caminho com a maior duração.
+
+Esse diagrama foi criado a partir das definições do cronograma feitas pelo
+pacote `criticalpath`. Vamos ver, então, como criar um cronograma.
 
 
 # Como criar um cronograma
 
-Você tem as seguintes alternativas para criar um cronograma:
-
-1. criar um cronograma vazio e adiconar atividades nele uma a uma;
-1. criar um cronograma vazio, adicionar as atividades e relacionamentos nele;
-1. Criar um cronograma vazio e incluir atividades nele ao mesmo tempo em que
-inclui os relacionamentos entre elas.
-1. Criar um cronograma a partir de um tibble com as atividades 
-e um tibble com os relacionamentos.
-
-Vamos discutir cada uma dessas alternativas.
+Agora vamos discutir cada uma das alternativas para criar o nosso cronograma.
 
 
-## Incluindo atividades em um cronograma
+## Criar o cronograma e adicionar cada atividade
 
-- `sch_add_activity(id, name, duration)`: inclui uma atividade em um cronograma.
 
-- `sch_add_activities(activities)` : inclui um tibble com as atividades no cronograma.
+- **Add Activity:** Adiciona uma atividade no cronograma.
+  - Utilização:
+     - `sch_add_activity(sch, id, name, duration)`
+         - **id:** Identificador da atividade. É um número inteiro que deve ser
+         único: não pode haver duas atividades como o mesmo identificador.
+         Esse identificador será utilizado para fazer o relacionamento entre as
+         atividades.
+         - **name:** Nome da atividade.
+         - **duration:** Duração da atividade. Seu formato deve ser um número
+         inteiro. Ele é um número independente de unidade de tempo. O pacote
+         `criticalpath` interpreta como período, que pode ser dias, horas,
+         minutos ou segundos. Deve ser um valor maior ou igual a zero.
 
-Utilização:
-
-- `sch_add_activity(id, name, duration)`
-- `sch_add_activities(activities)`
-
-Parâmetros:
-
-- `id`: Identificador da atividade. É um número inteiro que deve ser único:
-não pode haver duas atividades como o mesmo identificador.
-Esse identificador será utilizado para fazer o relacionamento entre as atividades.
-- `name`: Nome da atividade. Se não for informado, fica um string vazio.
-- `duration`: Duração da atividade. Seu formato deve ser um número inteiro.
-Ele é um número independente de unidade de tempo. O pacote `criticalpath` interpreta
-como período, que pode ser dias, horas, minutos ou segundos.
-Deve ser um valor maior ou igual a zero. Se não for informado, será zero.
-- `activities`: É um tibble com as atividades.
-Se não for informado, o cronograma será criado sem nenhuma atividade.
-A estrutura do tibble está definida no tópico [===>schedule_from_data_frame].
+Na seção [Criar o cronograma e adicionar cada atividade, ao mesmo tempo em que adiciona os relacionamentos dessa atividade com as outras] será mostrado a
+mesma função, mas com parâmetros adicionais.
 
 Exemplos:
 
-
 ```{r}
-# Atividades adicionadas uma a uma.
-sch <- sch_new() %>% 
-  sch_add_activity(1L, "Task 1", 5L) %>% 
-  sch_add_activity(2L, "Task 2", 6L) %>% 
-  sch_add_activity(3L, "Task 3", 8L) %>% 
-  sch_add_activity(4L, "Task 4", 6L) %>% 
-  sch_add_activity(5L, "Task 5", 9L) %>% 
-  sch_add_activity(6L, "Task 6", 3L) %>% 
-  sch_add_activity(7L, "Task 7", 4L) %>%
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades;
+  sch_add_activity(1L, "A", 6L) %>%
+  sch_add_activity(2L, "B", 5L) %>%
+  sch_add_activity(3L, "C", 8L) %>%
+  sch_add_activity(4L, "D", 9L) %>%
+  sch_add_activity(5L, "E", 4L) %>%
+  sch_add_activity(6L, "F", 3L) %>%
+# e. planejar o cronograma.
   sch_plan()
-  
-sch_duration(sch)
-sch_activities(sch)
 
-# Atividades incluídas de uma vez
-atb <- tibble(
-  id        = 1:17,
-  name      = paste("a", as.character(1:17), sep=""),
-  duration  = c(1L,2L,2L,4L,3L,3L,3L,2L,1L,1L,2L,1L,1L,1L,1L,2L,1L)
-)
-sch <- sch_new() %>% 
-  sch_add_activities_tibble(atb) %>% 
-  sch_plan()
 sch_duration(sch)
 sch_activities(sch)
 
 ```
 
 
-## Incluindo relacionamentos no cronograma
+## Criar o cronograma, adicionar cada atividade e cada relacionamento
 
 Um cronograma é formado por atividades e o relacionamento entre elas.
 Neste tópico vamos ver como fazemos o relacionamento entre as atividades.
 
-- sch_add_relation(from, to, type="FS", lag=0): 
-Inclui um relacionamento ao cronograma
-
-- sch_add_relations(relations) : 
-Inclui um tibble com vários relacionamentos entre as atividades.
-
-Modo de utilizar:
-
-- sch_add_relation(from, to, type="FS", lag=0)
-- sch_add_relations(relations)
-
-Parâmetros: 
-
-- `from`: Identificador da atividade predecessora. Deve existir uma atividade com esse id.
-- `to`: Identificador da atividade sucessora. Deve existir uma atividade com esse id.
-- `type`: Define o tipo de relacionamento entre as atividades.
-Seus valores podem ser: FS, FF, SS. O relacionamento padrão é o FS (Término-Início)
-
-  - **FS:** Término-Início: A atividade sucessora só pode começar depois que a predecessora finalizar.
-
-  - **FF:** Término-Término: A atividade sucessora deve finalizar junto com a predecessora.
-
-  - **SS:** Início-Início: A atividade sucessora deve iniciar junto com a predecessora.
-
-  - **SF:** Início-Término: A atividade sucessora deve finalizar quando ao predecessora iniciar.
-
-- `lag`: Período de tempo que a atividade sucessora deve esperar para ser executada.
-Por exemplo, num relacionamento FS, com `lag = 4`, após a predecessora finalizar, a sucessora deve esperar 4 períodos. Em outras palavras, a atividade sucessora avança 4 períodos após o término da predecessora.
-Se o valor for negativo, a atividade sucessora antecipa seu início. No exemplo acima, se `lag = -4`, a atividade sucessora adiantaria em 4 períodos o seu início. Por padrão, `lag = 0`
-
-- `relations`: tibble com a relação de precedência entre as atividades. Ele é formado pelo identificador da atividade precessora e da sucessora, o tipo e o lag. Sua estrutura já foi explicada em [schedule_from_data_frame](kkk).
+- **Add Relation:** Adiciona no cronograma um relacionamento entre duas
+atividades.
+- Utilização:
+     - `sch_add_relation(from, to, type="FS", lag=0)`
+         - **from:** Identificador da atividade predecessora. Deve existir uma
+         atividade com esse identificador.
+         - **to:** Identificador da atividade sucessora. Deve existir uma
+         atividade com esse identificador.
+         - **type:** Tipo do relacionamento entre as atividades. Seus valores
+         podem ser: FS, FF, SS, SF. O relacionamento padrão é o FS.
+             - `FS`: Término-Início: A atividade sucessora só pode começar
+             depois que a predecessora finalizar.
+             - `FF`: Término-Término: A atividade sucessora deve finalizar junto
+             com a predecessora.
+             - `SS`: Início-Início: A atividade sucessora deve iniciar junto com
+             a predecessora.
+             - `SF`: Início-Término: A atividade sucessora deve finalizar quando
+             ao predecessora iniciar.
+         - **lag:** Período de tempo que a atividade sucessora deve esperar para
+         ser executada. Por exemplo, num relacionamento FS, com `lag = 4`, após
+         a predecessora finalizar, a sucessora deve esperar 4 períodos. Em
+         outras palavras, a atividade sucessora avança 4 períodos após o término
+         da predecessora. Se o valor for negativo, a atividade sucessora
+         antecipa seu início. No exemplo acima, se `lag = -4`, a atividade
+         sucessora adiantaria em 4 períodos o seu início. Por padrão, `lag = 0`.
 
 Exemplos:
 
 ```{r}
-# Primeiro, cria um cronograma vazio.
-sch <- sch_new() %>% 
-  sch_title("Project 3: Old Carriage House Renovation") %>% 
-  sch_reference(
-  "VANHOUCKE, Mario. Integrated project management and control:
-  first comes the theory, then the practice. Gent: Springer, 2014, p. 11") %>% 
-# Segundo, inclui atividades nele.
-  sch_add_activity( 1L, "a1" , 2L) %>% 
-  sch_add_activity( 2L, "a2" , 2L) %>% 
-  sch_add_activity( 3L, "a3" , 4L) %>% 
-  sch_add_activity( 4L, "a4" , 3L) %>% 
-  sch_add_activity( 5L, "a5" , 4L) %>% 
-  sch_add_activity( 6L, "a6" , 1L) %>% 
-  sch_add_activity( 7L, "a7" , 1L) %>% 
-  sch_add_activity( 8L, "a8" , 1L) %>% 
-  sch_add_activity( 9L, "a9" , 1L) %>% 
-  sch_add_activity(10L, "a10", 1L) %>% 
-  sch_add_activity(11L, "a11", 3L) %>% 
-  sch_add_activity(12L, "a12", 2L) %>% 
-  sch_add_activity(13L, "a13", 1L) %>% 
-  sch_add_activity(14L, "a14", 1L) %>% 
-  sch_add_activity(15L, "a15", 2L) %>% 
-  sch_add_activity(16L, "a16", 1L) %>% 
-  sch_add_activity(17L, "a17", 1L) %>% 
-# Finalmente, incluir os relacionamento entre as atividades.
-  sch_add_relation(  1L,  2L) %>% 
-  sch_add_relation(  2L,  3L) %>% 
-  sch_add_relation(  3L,  4L) %>% 
-  sch_add_relation(  4L,  5L) %>% 
-  sch_add_relation(  5L,  6L) %>% 
-  sch_add_relation(  6L,  7L) %>% 
-  sch_add_relation(  6L,  8L) %>% 
-  sch_add_relation(  6L,  9L) %>% 
-  sch_add_relation(  7L, 10L) %>% 
-  sch_add_relation(  8L, 10L) %>% 
-  sch_add_relation(  9L, 10L) %>% 
-  sch_add_relation( 10L, 11L) %>% 
-  sch_add_relation( 10L, 13L) %>% 
-  sch_add_relation( 11L, 12L) %>% 
-  sch_add_relation( 12L, 15L) %>% 
-  sch_add_relation( 13L, 14L) %>% 
-  sch_add_relation( 14L, 15L) %>% 
-  sch_add_relation( 15L, 16L) %>% 
-  sch_add_relation( 16L, 17L) %>%
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades;
+  sch_add_activity(1L, "A", 6L) %>%
+  sch_add_activity(2L, "B", 5L) %>%
+  sch_add_activity(3L, "C", 8L) %>%
+  sch_add_activity(4L, "D", 9L) %>%
+  sch_add_activity(5L, "E", 4L) %>%
+  sch_add_activity(6L, "F", 3L) %>%
+# d. adicionar os relacionamentos;
+  sch_add_relation(1L, 2L) %>%
+  sch_add_relation(1L, 3L) %>%
+  sch_add_relation(2L, 4L) %>%
+  sch_add_relation(3L, 4L) %>%
+  sch_add_relation(3L, 5L) %>%
+  sch_add_relation(4L, 6L) %>%
+  sch_add_relation(5L, 6L) %>%
+# e. planejar o cronograma.
+  sch_plan()
+
+sch_duration(sch)
+sch_relations(sch)
+```
+
+
+## Criar o cronograma e adicionar cada atividade, ao mesmo tempo em que adiciona os relacionamentos dessa atividade com as outras
+
+- **Add Activity:** Adiciona uma atividade no cronograma. Tem também a opção de
+já adicionar os relacionamentos que a atividade possui.
+- Utilização:
+     - `sch_add_activity(sch, id, name, duration, ..., direction = "succ")`
+         - **id:** Identificador da atividade. É um número inteiro que deve ser
+         único: não pode haver duas atividades como o mesmo identificador.
+         Esse identificador será utilizado para fazer o relacionamento entre as
+         atividades.
+         - **name:** Nome da atividade.
+         - **duration:** Duração da atividade. Seu formato deve ser um número
+         inteiro. Ele é um número independente de unidade de tempo. O pacote
+         `criticalpath` interpreta como período, que pode ser dias, horas,
+         minutos ou segundos. Deve ser um valor maior ou igual a zero.
+         - "...": Um conjunto de identificadores das atividades que terão um
+         relacionamento com a nova atividade.
+         - **direction:** Indica a direção do relacionamento que a atividade
+         terá com os outros indentificadores informados:
+             - `succ`: o conjunto de identificadores serão sucessoras da nova
+             atividade;
+             - `pred`: o conjunto de identifidadores serão predecessoras da nova
+             atividade.
+             
+A função descrita aqui é a mesma de
+[Criar o cronograma e adicionar cada atividade]. A diferença é que aqui foram
+mostrados mais parâmetros.
+             
+         
+Exemplos:
+
+```{r}
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades; # d. adicionar os relacionamentos;
+  sch_add_activity(1L, "A", 6L, 2L, 3L) %>%
+  sch_add_activity(2L, "B", 5L, 4L) %>%
+  sch_add_activity(3L, "C", 8L, 4L, 5L) %>%
+  sch_add_activity(4L, "D", 9L, 6L) %>%
+  sch_add_activity(5L, "E", 4L, 6L) %>%
+  sch_add_activity(6L, "F", 3L) %>%
+# e. planejar o cronograma.
   sch_plan()
 
 sch_duration(sch)
@@ -411,47 +537,73 @@ sch_relations(sch)
 ```
 
 
-## Incluindo atividades e relacionamentos ao mesmo tempo
+## Criar o cronograma, adicionar as atividades e os relacionamentos a partir de tibbles implícitos
 
-Incluir uma atividade no cronograma ao mesmo tempo em que inclui seus relacionamentos.
+Tanto as atividades como os relacionamentos podem ser adicionados ao cronograma
+a partir de tibbles implícitos. Eles são implícitos, pois a criação dos tibbles
+é feita por uma função, não diretamente por nós.
 
-Utilização:
-
-- sch_add_activity(id, name, duration, relations_id=c(), direction="succ")
-
-Parâmetros:
-
-- `id`: Identificador da atividade. É um número que deve ser único em todo o cronograma.
-Ele será utilizado para fazer os relacionamentos entre as atividades.
-- `name`: Nome da atividade.
-- `duration`: Duração da atividade. Deve ser um número inteiro, maior ou igual a zero, sem unidade de tempo.
-- `relations_id`: Um vetor de identificadores das atividades que serão relacionadas com a atividade que está sendo incluída. O vetor pode ser uma lista de identificadores sucessoras ou identificadores predecessoras.
-- `direction`: Indica a direção do relacionamento: "succ" or "pred".
-  - **succ:** o vetor `relations_id` contém a lista a lista de sucessoras da atividade.
-  - **pred:** o vetor `relations_id` contém a lista a lista de predecessoras da atividade.
+- **Add Activities:** Combina vários vetores com as informações sobre as 
+atividades  num tibble para adicioná-las ao cronograma.
+- Utilização:
+     - `sch_add_activities(sch, id, name, duration)`
+         - **id:** Identificador da atividade. É um número inteiro que deve ser
+         único: não pode haver duas atividades como o mesmo identificador.
+         Esse identificador será utilizado para fazer o relacionamento entre as
+         atividades.
+         - **name:** Nome da atividade.
+         - **duration:** Duração da atividade. Seu formato deve ser um número
+         inteiro. Ele é um número independente de unidade de tempo. O pacote
+         `criticalpath` interpreta como período, que pode ser dias, horas,
+         minutos ou segundos. Deve ser um valor maior ou igual a zero.
+     
+- **Add Relations:** Combina vários vetores num tibble para criar o 
+relacionamento entre as atividades e os adiciona ao cronograma.
+- Utilização:
+     - `sch_add_relations(from, to, type="FS", lag = 0)`
+         - **from:** Vetor de identificadores da atividade predecessora. Deve
+         existir uma
+         atividade com esse identificador.
+         - **to:** Identificador da atividade sucessora. Deve existir uma
+         atividade com esse identificador.
+         - **type:** Tipo do relacionamento entre as atividades. Seus valores
+         podem ser: FS, FF, SS, SF. O relacionamento padrão é o FS.
+             - `FS`: Término-Início: A atividade sucessora só pode começar
+             depois que a predecessora finalizar.
+             - `FF`: Término-Término: A atividade sucessora deve finalizar junto
+             com a predecessora.
+             - `SS`: Início-Início: A atividade sucessora deve iniciar junto com
+             a predecessora.
+             - `SF`: Início-Término: A atividade sucessora deve finalizar quando
+             ao predecessora iniciar.
+         - **lag:** Período de tempo que a atividade sucessora deve esperar para
+         ser executada. Por exemplo, num relacionamento FS, com `lag = 4`, após
+         a predecessora finalizar, a sucessora deve esperar 4 períodos. Em
+         outras palavras, a atividade sucessora avança 4 períodos após o término
+         da predecessora. Se o valor for negativo, a atividade sucessora
+         antecipa seu início. No exemplo acima, se `lag = -4`, a atividade
+         sucessora adiantaria em 4 períodos o seu início. Por padrão, `lag = 0`.
 
 Exemplos:
 
 ```{r}
-# Cria um cronograma
-sch <- sch_new() %>% 
-  sch_title("Fictitious Project Example") %>% 
-  sch_reference("VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18") %>% 
-# Incluir as atividades e seus relacionamentos nele.
-  sch_add_activity(  1L, "a1" , 0L, 2L,3L,4L) %>% 
-  sch_add_activity(  2L, "a2" , 4L, 5L) %>% 
-  sch_add_activity(  3L, "a3" , 9L, 10L) %>% 
-  sch_add_activity(  4L, "a4" , 1L, 6L) %>% 
-  sch_add_activity(  5L, "a5" , 4L, 9L) %>% 
-  sch_add_activity(  6L, "a6" , 5L, 7L) %>% 
-  sch_add_activity(  7L, "a7" , 1L, 8L,11L) %>% 
-  sch_add_activity(  8L, "a8" , 7L, 12L) %>% 
-  sch_add_activity(  9L, "a9" , 8L, 12L) %>% 
-  sch_add_activity( 10L, "a10", 3L, 12L) %>% 
-  sch_add_activity( 11L, "a11", 3L, 12L) %>% 
-  sch_add_activity( 12L, "a12", 0L) %>% 
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades;
+  sch_add_activities(
+    id = c(1L, 2L, 3L, 4L, 5L, 6L),
+    name = c("A", "B", "C", "D", "E", "F"),
+    duration = c(6L, 5L, 8L, 9L, 4L, 3L)
+  ) %>%
+# d. adicionar os relacionamentos;
+  sch_add_relations(
+    from = c(1L, 1L, 2L, 3L, 3L, 4L, 5L),
+    to = c(2L, 3L, 4L, 4L, 5L, 6L, 6L)
+  ) %>%
+# e. planejar o cronograma.
   sch_plan()
 
 sch_duration(sch)
@@ -460,506 +612,744 @@ sch_relations(sch)
 ```
 
 
-
-## Criando um cronograma a partir de tibbles [schedule_from_data_frame]
-
-O comando `sch_new(activities, relations)` cria um cronograma a partir de um tibble de atividades e de outro tibble com os relacionamento entre elas.
-Após a criação, o pacote *criticalpath* aplica o método do caminho crítico.
-
-É possível criar um cronograma vazio, sem nenhuma atividade e sem nenhum relacionamento com o comando `sch_new()`. Neste caso, é possível incluir atividades com o comando `add_activity` e relacionamentos com o comando `add_relation` methods.
-
-Parâmetros:
-
-- `activities`: tibble com as atividades. Se ele não for informado, o cronograma será criado sem nenhuma atividade.
-
-Sua estrutura é formada pelos seguintes campos:
-
-  - **id:** Identificador da atividade. É um número inteiro que deve ser único:
-não pode haver duas atividades como o mesmo identificador.
-Esse identificador será utilizado para fazer o relacionamento entre as atividades. 
-  - **name:** Nome da atividade. Se não for informado, fica um string vazio.
-  - **duration:** Duração da atividade. Seu formato deve ser um número inteiro.
-Ele é um número independente de unidade de tempo. O pacote `criticalpath` interpreta
-como período, que pode ser dias, horas, minutos ou segundos.
-Deve ser um valor maior ou igual a zero. Se não for informado, será zero.
+## Criar o cronograma, adicionar as atividades e os relacionamentos a partir de tibbles explícitos
 
 
-- `relations`: tibble com a relação de precedência entre as atividades. Ele é formado pelo identificador da atividade precessora, pelo identificador da atividade sucessora, o tipo e o lag. Segue a descrição destes elementos:
-  - **from:** Identificador da atividade predecessora. Deve existir uma atividade com esse id.
-  - **to:**  Identificador da atividade sucessora. Deve existir uma atividade com esse id.
-  - **type:** Define o tipo de relacionamento entre as atividades.
-Seus valores podem ser: FS, FF, SS. O relacionamento padrão é o FS (Término-Início).
-      - **FS:** Término-Início: 
-      A atividade sucessora só pode começar depois que a predecessora finalizar.
-      - **FF:** Término-Término: 
-      A atividade sucessora deve finalizar junto com a predecessora.
-      - **SS:** Início-Início: 
-      A atividade sucessora deve iniciar junto com a predecessora.
-      - **SF:** Início-Término: 
-      A atividade sucessora deve finalizar quando ao predecessora iniciar.
+Tanto as atividades como os relacionamentos podem ser adicionados ao cronograma
+a partir de tibbles explícitos. Eles são explícitos, pois nós mesmo os criamos,
+antes de chamar a função responsáveis por adicioná-los ao cronograma.
 
-  - **lag:** Período de tempo que a atividade sucessora deve esperar para ser executada.
-Por exemplo, num relacionamento FS, com `lag = 4`, após a predecessora finalizar, a sucessora deve esperar 4 períodos. Em outras palavras, a atividade sucessora avança 4 períodos após o término da predecessora.
-Se o valor for negativo, a atividade sucessora antecipa seu início. No exemplo acima, se `lag = -4`, a atividade sucessora adiantaria em 4 períodos o seu início. Por padrão, `lag = 0`
+- **Add Activities Tibble:** Adiciona um tibble com as informações das 
+atividades. A estrutura do tibble está descrita logo abaixo.
+- Utilização:
+     - `sch_add_activities_tibble(sch, atb)`
+         - **id:** Identificador da atividade. É um número inteiro que deve ser
+         único: não pode haver duas atividades como o mesmo identificador.
+         Esse identificador será utilizado para fazer o relacionamento entre as
+         atividades.
+         - **name:** Nome da atividade.
+         - **duration:** Duração da atividade. Seu formato deve ser um número
+         inteiro. Ele é um número independente de unidade de tempo. O pacote
+         `criticalpath` interpreta como período, que pode ser dias, horas,
+         minutos ou segundos. Deve ser um valor maior ou igual a zero.
+     
+- **Add Relations:** Adiciona um tibble com as informações dos 
+relacionamentos entre as atividades. A estrutura do tibble está descrita logo
+abaixo.
+- Utilização:
+     - `sch_add_relations(from, to, type="FS", lag = 0)`
+         - **from:** Vetor de identificadores da atividade predecessora. Deve
+         existir uma
+         atividade com esse identificador.
+         - **to:** Identificador da atividade sucessora. Deve existir uma
+         atividade com esse identificador.
+         - **type:** Tipo do relacionamento entre as atividades. Seus valores
+         podem ser: FS, FF, SS, SF. O relacionamento padrão é o FS.
+             - `FS`: Término-Início: A atividade sucessora só pode começar
+             depois que a predecessora finalizar.
+             - `FF`: Término-Término: A atividade sucessora deve finalizar junto
+             com a predecessora.
+             - `SS`: Início-Início: A atividade sucessora deve iniciar junto com
+             a predecessora.
+             - `SF`: Início-Término: A atividade sucessora deve finalizar quando
+             ao predecessora iniciar.
+         - **lag:** Período de tempo que a atividade sucessora deve esperar para
+         ser executada. Por exemplo, num relacionamento FS, com `lag = 4`, após
+         a predecessora finalizar, a sucessora deve esperar 4 períodos. Em
+         outras palavras, a atividade sucessora avança 4 períodos após o término
+         da predecessora. Se o valor for negativo, a atividade sucessora
+         antecipa seu início. No exemplo acima, se `lag = -4`, a atividade
+         sucessora adiantaria em 4 períodos o seu início. Por padrão, `lag = 0`.
 
+
+Exemplos:
 
 ```{r}
-
-# Cria um cronograma vazio
-sch <- sch_new()
-###########sch_duration(sch)
-sch_activities(sch)
-sch_relations(sch)
-
-# Cria um tibble com as atividades.
+# Preparação: primeiro criar os tibbles
 atb <- tibble(
-  id        = 1:17,
-  name      = paste("a", as.character(1:17), sep=""),
-  duration  = c(1L,2L,2L,4L,3L,3L,3L,2L,1L,1L,2L,1L,1L,1L,1L,2L,1L)
+  id = c(1L, 2L, 3L, 4L, 5L, 6L),
+  name = c("A", "B", "C", "D", "E", "F"),
+  duration = c(6L, 5L, 8L, 9L, 4L, 3L)
+)
+rtb <- tibble(
+  from = c(1L, 1L, 2L, 3L, 3L, 4L, 5L),
+  to = c(2L, 3L, 4L, 4L, 5L, 6L, 6L)
 )
 
-# Cria um data com os relacionamentos entre as atividades.
-rtb <- data.frame(
-  from = c(1L, 1L, 2L, 2L, 2L, 3L, 3L, 3L,  3L,  4L,  5L,  6L,
-           7L,  8L,  9L, 10L, 11L, 11L, 12L, 12L, 13L, 13L, 14L, 14L, 15L, 15L),
-  to   = c(2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 11L, 11L,
-           12L, 13L, 14L, 15L, 16L, 17L, 16L, 17L, 16L, 17L, 16L, 17L, 16L, 17L)
-)
-# Cria um cronograma com os tibbles das atividades e dos relacionamentos.
-sch <- sch_new() %>% 
-  sch_title("Project 1: Cost Information System") %>% 
-  sch_reference("VANHOUCKE, Mario.
-    Integrated project management and control:
-    first comes the theory, then the practice.
-    Gent: Springer, 2014, p. 6") %>% 
-  sch_add_activities_tibble(atb) %>% 
-  sch_add_relations_tibble(rtb) %>% 
+# a. criar o cronograma;
+sch <- sch_new() %>%
+# b. identificar o cronograma;
+  sch_title("Cronograma Exemplo") %>%
+  sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+# c. adicionar as atividades;
+  sch_add_activities_tibble(atb) %>%
+# d. adicionar os relacionamentos;
+  sch_add_relations_tibble(rtb) %>%
+# e. planejar o cronograma.
   sch_plan()
 
 sch_duration(sch)
 sch_activities(sch)
 sch_relations(sch)
+```
+
+
+## Cronograma exemplo
+
+Como vamos fazer diversos testes neste documento, vou criar uma função
+para criar / recriar o nosso cronograma exemplo. Também vou criar uma função
+para retornar um cronograma vazio, sem atividades e sem relacionamentos.
+É claro que nesse cronograma o caminho crítico não pode ser calculado.
+
+```{r}
+cronograma_exemplo <- function() {
+  out <- sch_new() %>%
+    sch_title("Cronograma Exemplo") %>%
+    sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>") %>%
+    sch_add_activities(
+      id = c(1L, 2L, 3L, 4L, 5L, 6L),
+      name = c("A", "B", "C", "D", "E", "F"),
+      duration = c(6L, 5L, 8L, 9L, 4L, 3L)
+    ) %>%
+    sch_add_relations(
+      from = c(1L, 1L, 2L, 3L, 3L, 4L, 5L),
+      to = c(2L, 3L, 4L, 4L, 5L, 6L, 6L)
+    ) %>%
+    sch_plan()
+  return(out)
+}
+
+cronograma_vazio <- function() {
+  out <- sch_new() %>%
+    sch_title("Cronograma Exemplo") %>%
+    sch_reference("ROSA, Rubens José. (2022) <https://rubensjoserosa.com>")
+  return(out)
+}
+
 ```
 
 
 # Como recuperar informações do cronograma
 
-## Título, referência e duração do cronograma
+Após a criação de um cronograma, é possível recuperar várias informações dele,
+como o título, a referência e a duração. Segue a descrição de cada uma delas.
+
+- **title:** O título ou nome do projeto que está sob análise. Esse título
+depende do usuário da classe, pois ele deve identificar um projeto real ou algum
+experimento do próprio usuário.
+- Utilização:
+     - `sch_title(sch, "O Título")`: altera o título do projeto.
+     - `sch_title(sch)`: recupera o título do projeto.
+
+- **reference:** A referência da origem do projeto, por exemplo, um livro, um
+artigo, uma corporação ou, se não puder ser identificada, não precisa colocar
+nada.
+- Utilização:
+     - `sch_reference(sch, "Uma nova referência.")`: altera a referência do
+     projeto.
+     - `sch_reference(sch)`: recupera a referência do projeto.
+
+- **duration:** Um valor inteiro que indica a duração do projeto calculada pelo
+CPM. A duração e todos os outros valores do método do caminho crítico são
+calculados após a chamada à função `sch_plan(sch)`, por isso, ela não pode ser
+alterada.
+- Utilização:
+     - `sch_duration(sch)`: recupera a duração do projeto.
 
 
-Após a criação de um cronograma, é possível recuperar várias informações dele.
-
-- **title:** O título ou nome do projeto que está sob análise. Esse título depende do usuário da classe, pois ele deve identificar um projeto real ou algum experimento. 
-Utilização:
-
-   - `sch_title <- "A title"` : altera o título do projeto.
-   - `sch_title` : recupera o título do projeto.
-
-- **reference:** A referência da origem do projeto, por exemplo, um livro, um artigo uma corporação ou, se for confidencial, nada.
-   - `sch_reference <- "A reference"`: altera a referência do projeto.
-   - `sch_title`: recupera a referência do projeto.
-
-- **duration:** Um valor inteiro que indica a duração do projeto calculada pelo CPM. Cada vez que é incluída uma atividade ou um relacionamento no projeto, a duração e todos os outros valores do método do caminho crítico são calculados.
-   - `sch_duration`: recupera a duração do projeto.
-   
 Exemplos:
 
+
+**Consultando e alterando o título do cronograma**
+
 ```{r}
-# Cria um cronograma
-sch <- sch_new() %>% 
-  sch_title("Fictitious Project Example") %>% 
-  sch_reference("VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18") %>% 
-# Incluir as atividades e seus relacionamentos nele.
-  sch_add_activity(  1L, "a1" , 0L, 2L,3L,4L) %>% 
-  sch_add_activity(  2L, "a2" , 4L, 5L) %>% 
-  sch_add_activity(  3L, "a3" , 9L, 10L) %>% 
-  sch_add_activity(  4L, "a4" , 1L, 6L) %>% 
-  sch_add_activity(  5L, "a5" , 4L, 9L) %>% 
-  sch_add_activity(  6L, "a6" , 5L, 7L) %>% 
-  sch_add_activity(  7L, "a7" , 1L, 8L,11L) %>% 
-  sch_add_activity(  8L, "a8" , 7L, 12L) %>% 
-  sch_add_activity(  9L, "a9" , 8L, 12L) %>% 
-  sch_add_activity( 10L, "a10", 3L, 12L) %>% 
-  sch_add_activity( 11L, "a11", 3L, 12L) %>% 
-  sch_add_activity( 12L, "a12", 0L) %>% 
-  sch_plan()
-# Consulta os dados do projeto
+sch <- cronograma_exemplo()
+
 sch_title(sch)
-sch_reference(sch)
-sch_duration(sch)
+
+sch %<>%
+  sch_title("Novo título")
+sch_title(sch)
 ```
 
 
-# Como recuperar as propriedades das atividades
-
-
-## Propriedades das atividades
-
-O cronograma possui diversas informações sobre as atividades. 
-Após incluir as atividades, você precisa saber quantas foram incluídas, quando cada uma delas está planejada para iniciar ou finalizar. Esta seção explica como você pode recuperar essas e outras informações.
-
-- **Has Any Activity:** Valor lógico que indica se o cronograma possui ou não alguma atividade. 
-  - `TRUE`: indica que o cronograma tem pelo menos uma atividade;
-  - `FALSE`: indica que o cronograma não possui nenhuma atividade.
-  - Utilização: `sch_has_any_activity`
-
-- **Number of Activities:** Indica o número de atividades e o cronograma possui.
-   - Utilização: `sch_nr_activities`
-
-- **Get activity:** Recupera uma atividade de acordo com o seu identificador. A estrutura retornada será explicada no próximo tópico.
-   - Utilização: `sch_get_activity(id)`
-
-- **Activities:** Retorna um tibble com todas as atividades do cronograma, ordenadas pelo identificador, do menor para o maior. Estas são as principais informações calculadas pelo `criticalpath`. O tibble possui a seguinte estrutura:
-
-   - **id:** Identificador da atividade.
-   - **name:** Nome da atividade.
-   - **duration:** A duração da atividades.
-   - **milestone:** Indica se a atividade é um marco ou não. Um marco (*milestone*) é uma atividade com duração zero. 
-     - `TRUE`: indica que é um marco;
-     - `FALSE`: indica que não é um marco.
-     
-   - **critical:** Indica se a atividade é crítica ou não. Uma atividade é crítica se sua folga total é menor ou igual a zero. 
-     - `TRUE` indica que a atividade é crítica;
-     - `FALSE` indica que a atividade não é crítica.
-     
-   - **ES:** Início mais cedo: período de início mais cedo que uma atividade pode iniciar com a condição de que todas as suas predecessoras já tenham finalizadas.
-   - **EF:** Término mais cedo: é o início mais cedo mais a duração da atividade.
-   - **LS:** Início mais tarde: é o término mais tarde menos a duração da atividade.
-   - **LF:** Término mais tarde: período de término mais tarde que uma atividade pode finalizar com a condição de que não se sobreponha às suas sucessoras.
-   - **total_float:** Quantidade de períodos que uma atividade pode atrasar sem aumentar a duração do projeto.
-   - **free_float:** Quantidade de períodos que uma atividade pode atrasar sem atrasar nenhuma atividade sucessora dela.
-   - **progr_level:** Ordem em que a atividade aparece no diagrama de rede, contada a partir das primeiras atividades. As atividades que não possuem predecessoras tem nível progressivel igual a um. O nível das outras atividades é o maior nível entre as suas predecessoras, mais um. O maior nível das atividades que não possuem sucessoras é chamada de `max_level`.
-   - **regr_level:** Ordem em que as atividades aparecem no digrama de rede, contada a partir das últimas atividades. O nível regressivo das atividades que não possuem sucessoras é igual ao `max_level`. O nível das outras atividades é menor valor do nível regressivo de suas sucessoras, menos um.
-   - **topo_float:** Diferença entre o nível regressivo e o nível progressivo.
-
-- Utilização: 
-    - `sch_activities`
-    - `sch_get_activity(id)`
+**Consultando e alterando a referência do cronograma**
 
 ```{r}
-# Create a schedule
-sch <- sch_new() %>% 
-  sch_title("Fictitious Project Example") %>% 
-  sch_reference("VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18")
+sch <- cronograma_exemplo()
+
+sch_reference(sch)
+
+sch %<>%
+  sch_reference("Nova referência (2022).")
+sch_reference(sch)
+```
+
+**Consultando e "alterando" a duração do cronograma**
+
+```{r}
+sch <- cronograma_exemplo()
+
+sch_duration(sch)
+
+# A duração do cronograma só é alterada quando inclui uma nova atividade nele
+# Vou adicionar a atividade 7L, tendo a 6L como predecessora.
+sch %<>%
+  sch_add_activity(7L, "G", 10L, 6L, direction = "pred") %>%
+  sch_plan()
+
+sch_duration(sch)
+
+# Vou adicionar a atividade 8L, tendo a 1L como sucessora.
+sch %<>%
+  sch_add_activity(8L, "H", 10L, 1L) %>%
+  sch_plan()
+
+sch_duration(sch)
+
+```
+
+
+# Como recuperar as informações das atividades
+
+O cronograma possui diversas informações sobre as atividades. Após incluir as
+atividades, você precisa saber quantas foram incluídas, quando cada uma delas
+está planejada para iniciar ou finalizar. Esta seção explica como você pode
+recuperar essas e outras informações.
+
+## O cronograma possui alguma atividade? Quantas?
+
+- **Has Any Activity:** Valor lógico que indica se o cronograma possui ou não
+alguma atividade.
+     - `TRUE`: indica que o cronograma tem pelo menos uma atividade;
+     - `FALSE`: indica que o cronograma não possui nenhuma atividade.
+- Utilização:
+     - `sch_has_any_activity(sch)`
+
+- **Number of Activities:** Indica o número de atividades que o cronograma
+possui.
+- Utilização:
+     - `sch_nr_activities(sch)`
+
+
+Exemplos:
+
+```{r}
+sch <- cronograma_vazio()
 
 sch_has_any_activity(sch)  # FALSE
 sch_nr_activities(sch)     # 0
 
-# Add activities and relations to it.
-sch %<>% 
-  sch_add_activity(  1L, "a1" , 0L, 2L,3L,4L) %>% 
-  sch_add_activity(  2L, "a2" , 4L, 5L) %>% 
-  sch_add_activity(  3L, "a3" , 9L, 10L) %>% 
-  sch_add_activity(  4L, "a4" , 1L, 6L) %>% 
-  sch_add_activity(  5L, "a5" , 4L, 9L) %>% 
-  sch_add_activity(  6L, "a6" , 5L, 7L) %>% 
-  sch_add_activity(  7L, "a7" , 1L, 8L,11L) %>% 
-  sch_add_activity(  8L, "a8" , 7L, 12L) %>% 
-  sch_add_activity(  9L, "a9" , 8L, 12L) %>% 
-  sch_add_activity( 10L, "a10", 3L, 12L) %>% 
-  sch_add_activity( 11L, "a11", 3L, 12L) %>% 
-  sch_add_activity( 12L, "a12", 0L)
+sch <- cronograma_exemplo()
 
 sch_has_any_activity(sch)  # TRUE
-sch_nr_activities(sch)     # 12
+sch_nr_activities(sch)     # 6
 
-sch_get_activity(sch, 10L)
-sch_activities(sch)
 ```
 
-Observação: Nesse cronograma não foi chamado a função `sch_plan(sch)` porque o
-objetivo não fazer nenhum cálculo do CPM.
+## Recuperando uma atividade ou todas as atividades
 
-## Matrix de Gantt (Gráfico de Gantt)
 
-Cria uma matriz que representa o gráfico de Gantt do projeto. Na matriz, Um `1` indica que a atividade esta planejada para ser executada no período. Zero `0` indica que ela não está sendo executada.
+As atividades são colocadas numa tabela, que no **R** é chamada de data-frame.
+Um tipo especial de data-frame são os tibbles. As atividades e os
+relacionamentos entre elas estão nos tibbles.
 
-As linhas representam atividades e as colunas o período de execução do projeto. Então, o número de colunas é igual à duração do projeto.
+Cada propriedade das atividades é colocada numa coluna do tibble. Segue as
+funções para recuperar as informações das atividades e a descrição de cada uma
+delas.
 
-Utilização:
+- **Get activity:** Recupera uma atividade de acordo com o seu identificador. A
+estrutura retornada será explicada no próximo tópico.
+- Utilização:
+     - `sch_get_activity(sch, id)`
+     - **id**: Identificador da atividade a ser recuperada.
 
-- `sch_gantt_matrix()`: Retorna a matriz de Gantt.
+- **Activities:** Retorna um tibble com todas as atividades do cronograma,
+na ordem em que elas foram incluídas. Estas são as principais informações
+calculadas pelo `criticalpath`.
+- Utilização:
+     - `sch_get_activities(sch)`
 
-- `sch_xy_gantt_matrix(gantt=NULL)`: Transforma a matriz de Gantt em coordenadas ordenadas (x, y) e peso um. Cada ponto maior que zero na matriz torna-se uma coordenada (x, y).
+  - O tibble possui a seguinte estrutura:
+
+     - **id:** Identificador da atividade. É um número inteiro que deve ser
+     único em todo o cronograma: não pode haver duas atividades como o mesmo
+     identificador.Esse identificador será utilizado para fazer o relacionamento
+     entre as atividades. É obrigatório informar um identificador para a
+     atividade.
+
+     - **name:** Nome da atividade.
+
+     - **duration:** Duração da atividade. Seu formato deve ser um número
+     inteiro, maior ou igual a zero. Ele é um número independente de unidade de
+     tempo. O pacote `criticalpath` interpreta como período, que pode ser dias,
+     horas, minutos ou segundos.
+
+     - **milestone:** Indica se a atividade é um marco ou não.
+     Um marco (*milestone*) é uma atividade com duração zero.
+         - `TRUE`: indica que é um marco;
+         - `FALSE`: indica que não é um marco.
+
+     - **critical:** Indica se a atividade é crítica ou não.
+     Uma atividade é crítica se sua folga total é menor ou igual a zero.
+         - `TRUE` indica que a atividade é crítica;
+         - `FALSE` indica que a atividade não é crítica.
+
+     - **early_start:** Início mais cedo: período de início mais cedo que uma
+     atividade pode iniciar com a condição de que todas as suas predecessoras já
+     tenham finalizadas.
+
+     - **early_finish:** Término mais cedo: é o início mais cedo mais a duração
+     da atividade.
+
+     - **late_start:** Início mais tarde: é o término mais tarde da atividade
+     menos a sua duração.
+
+     - **late_finish:** Término mais tarde: período de término mais tarde que
+     uma atividade pode finalizar com a condição de que não se sobreponha às
+     suas sucessoras.
+
+     - **total_float:** Folga total: Quantidade de períodos que uma atividade
+     pode atrasar sem aumentar a duração do projeto.
+
+     - **free_float:** Folga livre: Quantidade de períodos que uma atividade
+     pode atrasar sem atrasar nenhuma atividade sucessora dela.
+
+     - **progr_level:** Nível progressivo: Ordem em que a atividade aparece no
+     diagrama de rede, contada a partir das primeiras atividades. As atividades
+     que não possuem predecessoras tem nível progressivel igual a um. O nível
+     das outras atividades é o maior nível entre as suas predecessoras, mais um.
+     O maior nível das atividades que não possuem sucessoras é chamada de
+     `max_level`.
+
+     - **regr_level:** Nível regressivo: Ordem em que as atividades aparecem no
+     digrama de rede, contada a partir das últimas atividades. O nível
+     regressivo das atividades que não possuem sucessoras é igual ao
+     `max_level`. O nível das outras atividades é menor valor do nível
+     regressivo de suas sucessoras, menos um.
+
+     - **topo_float:** Folga topológica: Diferença entre o nível regressivo e o
+     nível progressivo.
 
 Exemplos:
 
+**Recuperando uma ou todas atividades**
+
 ```{r}
-atb <- tibble(
-  id        = c( 1L,  2L,  3L,  4L),
-  name      = c("A", "B", "C", "D"),
-  duration  = c( 2L,  3L,  1L,  2L)
-)
-rtb <- tibble(
-  from = c(1L, 2L, 4L, 4L),
-  to   = c(3L, 3L, 1L, 2L)
-)
-sch <- sch_new() %>% 
-  sch_title("A project") %>% 
-  sch_reference("From criticalpath") %>% 
-  sch_add_activities_tibble(atb) %>% 
-  sch_add_relations_tibble(rtb) %>% 
-  sch_plan()
+sch <- cronograma_exemplo()
+
+sch_get_activity(sch, 1L) %>%
+  str()
+
+sch_get_activity(sch, 5L) %>%
+  str()
+
+sch_activities(sch) %>%
+  str()
+```
+
+## Como mudar a duração das atividades
+
+Uma das ferramentas e técnicas do gerenciamento de cronogramas é a análise
+"E-se?". Essa funcionalidade do pacote `criticalpath` permite fazer justamente a
+análise "E-se?" através da alteração da duração de todas as atividades ao mesmo.
+A forma implementada aqui é mais rápida do que criar todo o cronograma
+novamente.
+
+**Atenção:** O vetor com as novas durações das atividades deve estar ordenados
+pela ordem de inclusão das atividades.
+
+- Utilização:
+     - `sch_change_durations(sch, new_durations)`
+
+```{r}
+sch <- cronograma_exemplo()
+
+#Project duration
+sch_duration(sch) # 26
+
+#Activities duration
+sch_activities(sch)$duration
+
+new_durations <- c(1L,2L,5L, 4L,3L, 2L)
+sch %<>%
+  sch_change_activities_duration(new_durations)
+
+#Project duration
+sch_duration(sch) # 12
+
+#Activities duration
+sch_activities(sch)$duration
+
+```
+
+
+
+## Matriz de Gantt (Gráfico de Gantt)
+
+Cria uma matriz que representa o gráfico de Gantt do projeto. Na matriz, Um `1`
+indica que a atividade está planejada para ser executada no período. Zero `0`
+indica que ela não está planejada.
+
+As linhas representam atividades e as colunas o período de execução do projeto.
+Então, o número de linhas é igual à quantidade de atividades e o número de
+colunas é igual à duração do projeto.
+
+- Utilização:
+     - `sch_gantt_matrix(sch)`: Retorna a matriz de Gantt.
+
+     - `sch_xy_gantt_matrix(gantt)`: Transforma a matriz de Gantt em coordenadas
+     ordenadas (x, y) e peso um. Cada ponto maior que zero na matriz torna-se
+     uma coordenada (x, y).
+
+**Exemplos:**
+
+```{r}
+sch <- cronograma_exemplo()
 
 gantt <- sch_gantt_matrix(sch)
 gantt
 
 # Qual é o esforço total no período?
-colSums(gantt) # 1 1 2 2 1 1
+colSums(gantt)
 
 # Qual é a duração de cada uma das atividades?
-rowSums(gantt) # 2 3 1 2
+rowSums(gantt)
 
 # Como criar uma Curva S?
-cumsum(colSums(gantt))
-plot(cumsum(colSums(gantt)), type="l", lwd=3)
+curva_s <- cumsum(colSums(gantt))
+curva_s
+plot(curva_s, type="l", lwd=3)
+
+
 xyw <- sch_xy_gantt_matrix(sch)
 xyw
 plot(xyw[, 1:2])
 ```
 
 
-# Como mudar a duração das atividades
-
-Uma das ferramentas e técnicas do gerenciamento de cronogramas é a análise "E-se?". Essa funcionalidade do pacote `criticalpath` permite fazer justamente a análise "E-se?" através da alteração da duração de todas as atividades ao mesmo. A forma implementada aqui é mais rápida do que criar todo o cronograma novamente.
-
-**Atenção:** O vetor com as novas durações das atividades deve estar ordenados
-pela ordem de inclusão das atividades.
-
-- **Utilização:** `sch_change_durations(new_durations)`
-
-```{r}
-atb <- tibble(
-  id        = 1:17,
-  name      = paste("a", as.character(1:17), sep=""),
-  duration  = c(1L,1L,3L,2L, 2L,2L,2L,1L, 4L,5L,3L,3L, 4L,5L,1L,5L,2L)
-)
-
-rtb <- tibble(
-  from = c(1L, 2L, 3L, 3L, 4L, 5L, 6L, 7L, 8L,  8L, 8L,
-    8L,  8L,  9L, 10L, 11L, 12L, 13L, 13L, 14L, 14L, 15L, 15L),
-  to   = c(2L, 3L, 4L, 6L, 5L, 8L, 7L, 8L, 9L, 10L, 11L,
-   12L, 13L, 14L, 14L, 14L, 14L, 14L, 15L, 16L, 17L, 16L, 17L)
-)
-
-sch <- sch_new() %>% 
-  sch_title("Project 2: Patient Transport System") %>% 
-  sch_reference(
-    "VANHOUCKE, Mario. Integrated project management and control:
-    first comes the theory, then the practice. Gent: Springer, 2014, p. 9") %>% 
-  sch_add_activities_tibble(atb) %>% 
-  sch_add_relations_tibble(rtb) %>% 
-  sch_plan()
-  
-#Project duration
-sch_duration(sch) # 25
-#Activities duration
-sch_activities(sch)$duration
-
-new_durations <- c(1L,2L,5L, 4L,3L, 2L,1L, 5L, 3L,5L,5L,3L,4L, 2L,1L, 2L,4L)
-sch %<>%
-  sch_change_activities_duration(new_durations)
-
-#Project duration
-sch_duration(sch) # 31
-#Activities duration
-sch_activities(sch)$duration
-
-```
 
 
-# Como recuperar as propriedades dos relacionamentos
+# Como recuperar as informações dos relacionamentos
 
-Vimos, anteriormente, as propriedades das atividades disponíveis. Agora iremos estudar as propriedadas dos relacionamentos. Na sequência, veremos como recuperar os predecessores e os sucessores de uma atividade, ainda saber se um relacionamento é redundante ou não.
+Vimos, anteriormente, as propriedades das atividades disponíveis. Agora iremos
+estudar as propriedadas dos relacionamentos. Na sequência, veremos como
+recuperar os predecessores e os sucessores de uma atividade, ainda saber se um
+relacionamento é redundante ou não.
 
-## Propriedades dos relacionamentos
 
-Existem vários métodos sobre os relacionamentos que você pode utilizar para recuperar informações sobre eles. Após incluir atividades e relacionamentos num cronogram, você pode querer saber quantos relacionamentos o cronograma possui ou então, quais desses relacionamentos pertencem ao caminho crítico. Vamos às explicações dessas propriedades.
+## O cronograma possui algum relacionamento? Quantos?
 
-- **Has Any Relation:** Valor lógico que indica se o cronograma possui algum relacionamento ou não.
-  - `TRUE`: indica que o cronograma tem pelo menos um relacionamento;
-  - `FALSE`: indica que o cronograma não possui nenhum relacionamento.
-  - Utilização: `sch_has_any_relation`
+Existem vários métodos sobre os relacionamentos que você pode utilizar para
+recuperar informações sobre eles. Após incluir atividades e relacionamentos num
+cronogram, você pode querer saber quantos relacionamentos o cronograma possui ou
+então, quais desses relacionamentos pertencem ao caminho crítico. Vamos às
+explicações dessas propriedades.
 
-- **Number of Relations:** Informa o número de relacionamentos que o cronograma possui.
-   - Utilização: `sch_nr_relations`
 
-- **Relations:** Retorna um tibble com todas os relacionamentos do cronograma, obedecendo a ordem topológica entre eles. A ordem topológica obedece a relação de precedência do diagrama de rede delas. Esta é a outra principal informação calculada pelo CPM. O tibble tem a seguinte estrutura:
-   - **from:** Identificador da atividade predecessora da relação.
-   - **to:** identificador da atividade sucessora da relação.
-   - **type:** Tipo do relacionamento entre as atividades. Seu valor pode ser: FS, FF, SS, SF, conforme já descrito anteriormente.
-   - **lag:** Período de tempo entre atividade predecessora e a sucessora.
-   - **critical:** Indica se o relacionamento é crítico ou não. Um relacionamento é crítico se ele for formado por duas atividades críticas.
-     - `TRUE`: indica que o relacionamento é crítico;
-     - `FALSE`: indica que o relacionamento não é crítico.
-   - **ord:** É a ordem em que os relacionamentos foram incluídos no cronograma.
-   - **i_from:** Índice da atividade predecessora lá no tibble de atividades.
-   - **i_to:** Índice da atividade sucessora lá no tibble de atividades.
+- **Has Any Relation:** Valor lógico que indica se o cronograma possui algum
+relacionamento ou não.
+    - `TRUE`: indica que o cronograma tem pelo menos um relacionamento;
+    - `FALSE`: indica que o cronograma não possui nenhum relacionamento.
+  - Utilização:
+       -`sch_has_any_relation(sch)`
 
-   - Utilização: `sch_relations`
+- **Number of Relations:** Informa o número de relacionamentos que o cronograma
+possui.
+- Utilização:
+     - `sch_nr_relations(sch)`
+
+Exemplos:
 
 ```{r}
-# Criar um cronograma
-sch <- sch_new() %>% 
-  sch_title("Fictitious Project Example") %>% 
-  sch_reference("VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18") 
+sch <- cronograma_vazio()
 
 sch_has_any_relation(sch)  # FALSE
 sch_nr_relations(sch)      # 0
 
-# Inclui atividades e relacionamentos no cronograma.
-sch %<>% 
-  sch_add_activity(  1L, "a1" , 0L, 2L,3L,4L) %>% 
-  sch_add_activity(  2L, "a2" , 4L, 5L) %>% 
-  sch_add_activity(  3L, "a3" , 9L, 10L) %>% 
-  sch_add_activity(  4L, "a4" , 1L, 6L) %>% 
-  sch_add_activity(  5L, "a5" , 4L, 9L) %>% 
-  sch_add_activity(  6L, "a6" , 5L, 7L) %>% 
-  sch_add_activity(  7L, "a7" , 1L, 8L,11L) %>% 
-  sch_add_activity(  8L, "a8" , 7L, 12L) %>% 
-  sch_add_activity(  9L, "a9" , 8L, 12L) %>% 
-  sch_add_activity( 10L, "a10", 3L, 12L) %>% 
-  sch_add_activity( 11L, "a11", 3L, 12L) %>% 
-  sch_add_activity( 12L, "a12", 0L)
+sch <- cronograma_exemplo()
 
 sch_has_any_relation(sch)  # TRUE
-sch_nr_relations(sch)      # 14
+sch_nr_relations(sch)      # 7
+```
 
-sch_relations(sch)
+
+## Recuperando os relacionamentos
+
+A relação de precedência lógicas entre as atividades está guardada num tibble.
+Ele é formado pelo identificador da atividade precessora e da sucessora, o tipo
+e o lag. Segue a descrição de cada uma das colunas do tibble.
+
+
+- **Relations:** Retorna um tibble com todas os relacionamentos do cronograma,
+obedecendo a ordem topológica entre eles. A ordem topológica obedece a relação
+de precedência do diagrama de rede delas. Esta é a outra principal informação
+calculada pelo CPM.
+- Utilização:
+     - `sch_relations(sch)`
+
+- O tibble possui a seguinte estrutura:
+
+     - **from:** Identificador da atividade predecessora da relação. Deve
+     existir uma atividade com esse identificador.
+
+     - **to:** identificador da atividade sucessora da relação. Deve existir
+     uma atividade com esse identificador.
+
+     - **type:** Tipo do relacionamento entre as atividades. Seu valor pode ser:
+     FS, FF, SS, SF, significando:
+       - `FS`: Término-Início: A atividade sucessora só pode começar depois que
+       a predecessora finalizar.
+       - `FF`: Término-Término: A atividade sucessora deve finalizar junto com a
+       predecessora.
+       - `SS`: Início-Início: A atividade sucessora deve iniciar junto com a
+       predecessora.
+       - `SF`: Início-Término: A atividade sucessora deve finalizar quando a
+       predecessora iniciar.
+
+     - **lag:** Intervalo de tempo que a atividade sucessora deve esperar, ou
+     adiantar, para ser executada. Por exemplo, num relacionamento FS, com
+     `lag = 4`, após a predecessora finalizar, a sucessora deve esperar 4
+     períodos. Em outras palavras, a atividade sucessora avança 4 períodos após
+     o término da predecessora. Se o valor for negativo, a atividade sucessora
+     antecipa seu início. No exemplo acima, se `lag = -4`, a atividade sucessora
+     adiantaria em 4 períodos o seu início. Por padrão, `lag = 0`.
+
+     - **critical:** Indica se o relacionamento é crítico ou não. Um
+     relacionamento só é crítico se ele for formado por duas atividades
+     críticas.
+        - `TRUE`: indica que o relacionamento é crítico;
+        - `FALSE`: indica que o relacionamento não é crítico.
+
+     - **ord:** É a ordem em que os relacionamentos foram incluídos no
+     cronograma.
+
+     - **i_from:** Índice da atividade predecessora lá no tibble de atividades.
+
+     - **i_to:** Índice da atividade sucessora lá no tibble de atividades.
+
+```{r}
+sch <- cronograma_exemplo()
+
+sch_relations(sch) %>%
+  str()
 ```
 
 
 ## Atividades predecessoras e sucessoras
 
-Um cronograma é formado por atividades e o relacionamento entre elas. Isso significa que cada atividade pode ter zero, um ou mais predecessoras e sucessoras. Além disso, uma relação pode ser redundante. Os próximos comandos mostram como recuperar essas informações do cronograma.
+Um cronograma é formado por atividades e pelo relacionamento entre elas. Isso
+significa que cada atividade pode ter zero, uma ou mais predecessoras, o mesmo 
+ocorrendo para suas sucessoras. Além disso, uma relação pode ser redundante. Os
+próximos comandos mostram como recuperar essas informações do cronograma.
 
-- **All Successors:** Lista todas as sucessoras diretas e indiretas de uma atividade.
-   - Utilização: `sch_all_successors(id, ign_to=NULL)`
+
+- **Successors:** Lista as sucessoras diretas de uma atividade.
+ - Utilização: 
+      - `sch_successors(sch, id)`
      - **id**: Identificador da atividade a ser inspecionada.
-     - **ign_to**: Relação a ser ignorada na listagem: id -> ign_to. Atividades que pertencem a essa relação serão ignoradas.
 
-- **All Predecessors:** Lista todas as predecessoras diretas e indiretas de uma atividade.
-   - Utilização: `sch_all_predecessors(id, ign_from=NULL)`
+- **All Successors:** Lista todas as sucessoras diretas e indiretas de uma
+atividade.
+ - Utilização: 
+      - `sch_all_successors(sch, id, ign_to = NULL)`
      - **id**: Identificador da atividade a ser inspecionada.
-     - **ign_from**: Relação a ser ignorada na listagem: ign_from -> id. Atividades que pertencem a essa relação serão ignoradas.
+     - **ign_to**: Relação a ser ignorada na listagem: `id -> ign_to`.
+     Atividades que pertencem a essa relação serão ignoradas. Ele é opcional.
 
-- **Is Redundant:** Verifica se a relação entre duas atividades é redundante. Uma relação `A->C` é redudante se existirem as seguintes relações: `A->C, A->, B->C`. Ela retorna um valor lógico.
-   - Utilização: `sch_is_redundant(id_from, id_to)`
-     - **id_from**: identificar da atividade predecessora.
-     - **id_to**: identificar da atividade sucessora.
-   - Retorno:
+- **Predecessors:** Lista as predecessoras diretas de uma atividade.
+ - Utilização: 
+      - `sch_predecessors(sch, id, ign_from = NULL)`
+     - **id**: Identificador da atividade a ser inspecionada.
+
+- **All Predecessors:** Lista todas as predecessoras diretas e indiretas de uma
+atividade.
+ - Utilização: 
+      - `sch_all_predecessors(sch, id, ign_from = NULL)`
+     - **id**: Identificador da atividade a ser inspecionada.
+     - **ign_from**: Relação a ser ignorada na listagem: `ign_from -> id`.
+     Atividades que pertencem a essa relação serão ignoradas. Ele é opcional.
+
+- **Is Redundant:** Verifica se a relação entre duas atividades é redundante.
+Uma relação `A->C` é redudante se existirem as seguintes relações:
+`A->B, B->C, A->C`. Ela retorna um valor lógico.
      - `TRUE`: se o relacionamento é redundante;
      - `FALSE`: se o relacionamento não é redundante.
+ - Utilização: 
+      - `sch_is_redundant(sch, id_from, id_to)`
+     - **id_from**: identificador da atividade predecessora.
+     - **id_to**: identificador da atividade sucessora.
+
+- **Evaluate Redundancy:** Avalia a redundância de todas as atividades e cria
+uma nova coluna no tibble de relacionamentos. Essa operação não é feita
+automaticamente, você deve chamá-la quando achar necessário.
+ - Utilização: 
+      - `sch_evaluate_redundancy(sch)`
+
+
+\newpage
+
+Exemplos: Para esses exemplos é bom ter o digrama de rede na cabeça, ou melhor,
+visível. Então, vou mostrá-lo aqui novamente.
+
+------------------------------------
+
+![Diagrama de rede](`r diagrama_original`)
+
+------------------------------------
+
+**Sucessoras das atividades**
 
 ```{r}
-# Criar o cronograma
-sch <- sch_new() %>% 
-  sch_title("Fictitious Project Example") %>% 
-  sch_reference("VANHOUCKE, Mario. Measuring time:
-  improving project performance using earned value management.
-  Gent: Springer, 2009, p. 18") %>% 
-# Incluir atividades e relacionamentos no cronograma
-  sch_add_activity(  2L, "a2" , 4L, 5L, 12L) %>% 
-  sch_add_activity(  3L, "a3" , 9L, 10L) %>% 
-  sch_add_activity(  4L, "a4" , 1L, 6L) %>% 
-  sch_add_activity(  5L, "a5" , 4L, 9L) %>% 
-  sch_add_activity(  6L, "a6" , 5L, 7L) %>% 
-  sch_add_activity(  7L, "a7" , 1L, 8L,11L) %>% 
-  sch_add_activity(  8L, "a8" , 7L, 12L) %>% 
-  sch_add_activity(  9L, "a9" , 8L, 12L) %>% 
-  sch_add_activity( 10L, "a10", 3L, 12L) %>% 
-  sch_add_activity( 11L, "a11", 3L, 12L) %>% 
-  sch_add_activity( 12L, "a12", 0L) %>% 
-  sch_plan()
+sch <- cronograma_exemplo()
 
-sch_all_successors(sch, 2) # 5, 9, 12
-sch_all_successors(sch, 7) # 8, 11, 12
-sch_all_successors(sch, 10) # 12
+sch_successors(sch, 2) # 4
+sch_successors(sch, 3) # 4, 5
+sch_successors(sch, 4) # 6
 
-sch_all_predecessors(sch, 2) # nothing
-sch_all_predecessors(sch, 7) # 6, 4
-sch_all_predecessors(sch, 10) # 3
+sch_all_successors(sch, 2) # 4, 6
+sch_all_successors(sch, 3) # 4, 5, 6
+sch_all_successors(sch, 4) # 6
 
-sch_is_redundant(sch, 2, 5)  #FALSE
-sch_is_redundant(sch, 2, 12) #TRUE
+```
+
+**Predecessoras das atividades**
+
+```{r}
+sch <- cronograma_exemplo()
+
+sch_predecessors(sch, 1) # Nenhum
+sch_predecessors(sch, 3) # 1
+sch_predecessors(sch, 4) # 2, 3
+
+sch_all_predecessors(sch, 1) # Nenhum
+sch_all_predecessors(sch, 3) # 1
+sch_all_predecessors(sch, 4) # 1, 2, 3
 
 ```
 
 
 
-# Como recupearar as propriedades topológicas
-
-## Indicadores topológicos
-
-Mostra informações sobre a estrutura da rede. Eles podem ser de quatro tipos:
-
-**SP Serial or Parallel:** Mostra o quão próximo é uma rede de ser sequencial ou paralela. 
-A medida que uma rede se torna serial, o SP aumenta, até chegar em um, quanto ela é totalmente sequencial.
-
-   - Utilização:
-
-   `sch_topoi_sp()`
-
-**AD Activity Distribution:** Mede a distribuição das atividades em seus níveis. Se o AD é aproximadamente igual a zero, a quantidade de atividades de cada nível não é distribuída uniformemente.
-
-   - Utilização:
-   
-   `sch_topoi_ad()`
-
-**LA Length of Arcs:** Mede a presença de arcos longos, baseados na diferença entre o nível progressivel da atividade predecessora e a sua sucessora. Se o LA é aproximadamente igual a zero, o nível progressivo entre as atividades é o mais longe possível. De outro modo, se o LA é igual a um, a distância entre as relações é um.
-
-   - Utilização: 
-   
-   `sch_topoi_la()`
-
-**TF Topological Float Indicator:** Mede a folga topológica entre cada atividade. Se TF for igual a zero, não existe folga entre as atividades. Se o TF igual a um, existem folgas entre as atividades e elas podem ser deslocadas sem afetar suas atividades sucessoras.
-
-   - Utilização: 
-   
-   `sch_topoi_tf()`
+**Avaliação da redundância**
 
 ```{r}
-# Cria um cronograma
-sch <- sch_new() %>% 
-  sch_title("Fictitious Project Example") %>% 
-  sch_reference("VANHOUCKE, Mario. Measuring time:
-    improving project performance using earned value management.
-    Gent: Springer, 2009, p. 18") %>% 
-# Inclui atividades e o relacionamento entre elas.
-  sch_add_activity( 1L, "a1" , 0L, 2L,3L,4L) %>% 
-  sch_add_activity( 2L, "a2" , 4L, 5L) %>% 
-  sch_add_activity( 3L, "a3" , 9L, 10L) %>% 
-  sch_add_activity( 4L, "a4" , 1L, 6L) %>% 
-  sch_add_activity( 5L, "a5" , 4L, 9L) %>% 
-  sch_add_activity( 6L, "a6" , 5L, 7L) %>% 
-  sch_add_activity( 7L, "a7" , 1L, 8L,11L) %>% 
-  sch_add_activity( 8L, "a8" , 7L, 12L) %>% 
-  sch_add_activity( 9L, "a9" , 8L, 12L) %>% 
-  sch_add_activity(10L, "a10", 3L, 12L) %>% 
-  sch_add_activity(11L, "a11", 3L, 12L) %>% 
-  sch_add_activity(12L, "a12", 0L) %>% 
+sch <- cronograma_exemplo()
+
+sch_duration(sch) # 26
+sch_is_redundant(sch, 2, 4)  #FALSE
+
+sch %<>%
+  sch_add_relation(2L, 6L) %>%
   sch_plan()
 
-sch_topoi_sp(sch)
-sch_topoi_ad(sch)
-sch_topoi_la(sch)
-sch_topoi_tf(sch)
+sch_duration(sch) # 26, ainda, pois a ligação é redundante.
+sch_is_redundant(sch, 2, 6) #TRUE
+
+sch %<>%
+  sch_evaluate_redundancy()
+
+# A última coluna da tabela indica que existe apenas um relacionamento
+# redudante, justamente o 2->6, que foi o que nós incluímos.
+sch_relations(sch)
+
 ```
 
 
-# Conclusão
+# Como recupearar Indicadores topológicos
 
-Bom, foi uma grande jornada, mas valeu a pena!
+Os indicadores topológicos mostram informações sobre a estrutura da rede. Eles
+podem ser de quatro tipos:
+
+- **SP Serial or Parallel:** Mostra o quão próximo é uma rede de ser sequencial
+ou paralela. À medida que a rede se torna serial, o SP aumenta, até chegar em
+um, quando ela é totalmente sequencial. À medida que a rede se torna paralela,
+o SP diminui, até chegar zero, quando ela é totalmente paralela.
+ - Utilização:
+      - `sch_topoi_sp(sch)`
+
+- **AD Activity Distribution:** Mede a distribuição das atividades em seus
+níveis. Se o AD é aproximadamente igual a zero, a quantidade de atividades
+de cada nível não é distribuída uniformemente. Se ele for aproxidamente igual
+a um, cada nível possui uma distribuição mais uniforme, como se todas as 
+atividades possuíssem a mesma quantidade de sucessoras.
+ - Utilização:
+      - `sch_topoi_ad(sch)`
+
+- **LA Length of Arcs:** Mede a presença de arcos longos, baseados na diferença
+entre o nível progressivel da atividade predecessora e a sua sucessora. Se o LA
+é aproximadamente igual a zero, o nível progressivo entre as atividades é o mais
+longe possível. De outro modo, se o LA é igual a um, a distância entre as
+relações é um.
+ - Utilização:
+      - `sch_topoi_la(sch)`
+
+- **TF Topological Float Indicator:** Mede a folga topológica entre cada
+atividade. Se TF for igual a zero, não existe folga entre as atividades. Se o TF
+igual a um, existem folgas entre as atividades e elas podem ser deslocadas sem
+afetar suas atividades sucessoras.
+ - Utilização:
+      - `sch_topoi_tf(sch)`
+
+```{r}
+sch <- cronograma_exemplo()
+
+sch_topoi_sp(sch) # 0.6
+sch_topoi_ad(sch) # 0.6666667
+sch_topoi_la(sch) # 0.6666667
+sch_topoi_tf(sch) # 0
+
+```
+
+Para verificar a mudança nos indicadores topológicos, vamos alterar o cronograma
+incluindo algumas atividades e relacionamentos.
+
+```{r}
+sch <- cronograma_exemplo() %>%
+  sch_add_activity(7L, "G", 3L) %>%
+  sch_add_activity(8L, "G", 4L) %>%
+  sch_add_relation(1L, 7L) %>%
+  sch_plan()
+
+sch_duration(sch)
+
+sch_topoi_sp(sch) # 0.4285714
+sch_topoi_ad(sch) # 0.3333333
+sch_topoi_la(sch) # 0.25
+sch_topoi_tf(sch) # 0.4166667
+
+arquivo <- sch %>%
+  gerar_arquivo_do_diagrama()
+
+```
+
+O novo diagrama ficou no seguinte formato:
+
+------------------------------------
+
+![Diagrama de rede](`r arquivo`)
+
+------------------------------------
+
+Como os indicadores topológicos refletem o formato da estrutura do cronograma
+[20], as alterações feitas no diagrama de rede alterarm os seus valores.
+Mais informações sobre indicadores topológicos podem ser encontradas em [20]
+e [36].
+
 
 # Referências
 
-Csardi, G. & Nepusz, T. (2005).
+Segue aqui algumas referências utilizadas neste documento.
+Para referências completas, você pode acessar o site
+[Análise de Cronogramas](https://rubensjoserosa.com/bibliografia).
+
+
+
+Bache, S. & Wickham, H. (2022).
+**magrittr:** A Forward-Pipe Operator for R.
+[Magrittr Tidy Verse](https://magrittr.tidyverse.org),
+[Magrittr GitHub](https://github.com/tidyverse/magrittr).
+
+Csardi, G. &  Nepusz, T. (2005).
 The Igraph Software Package for Complex Network Research.
 *InterJournal*. Complex Systems. 1695.
 [Article](https://www.researchgate.net/publication/221995787_The_Igraph_Software_Package_for_Complex_Network_Research) / [igraph](https://igraph.org/)
@@ -973,9 +1363,11 @@ Project Management Institute (2017).
 **PMI Lexicon of Project Management Terms:** Version 3.2.
 [PMI Lexicon](https://www.pmi.org/pmbok-guide-standards/lexicon)
 
-Rosa, Rubens Jose; Santos, Marcos dos; Marques, Thiago (2021). **criticalpath**: An
-  Implementation of the Critical Path Method. R package version 0.0.0.9010.
-  [https://rubensjoserosa.com/criticalpath](https://rubensjoserosa.com/criticalpath).
+Rosa, Rubens Jose; Santos, Marcos dos; Marques, Thiago (2022).
+**criticalpath**: An Implementation of the Critical Path Method.
+R package version 0.2.1.
+[https://rubensjoserosa.com/criticalpath](https://rubensjoserosa.com/criticalpath),
+[https://github.com/rubens2005/criticalpath](https://github.com/rubens2005/criticalpath)
 
 
 Vanhoucke, M. (2009) **Measuring Time**:
@@ -992,4 +1384,81 @@ Vanhoucke, M. (2014) **Integrated Project Management and Control**:
 First Comes the Theory, then the Practice.
 Springer International Publishing Switzerland.
 [doi://10.1007/978-3-319-04331-9](https://doi.org/10.1007/978-3-319-04331-9)
+
+
+# Autores do pacote `criticalpath`
+
+\newpage
+
+## Rubens José Rosa
+
+**E-mail**: rubens@rubensjoserosa.com
+
+**Site**: [https://rubensjoserosa.com/](https://rubensjoserosa.com/)
+
+![Rubens José rosa](images/rubens-jose-rosa.jpg){width=40%}
+
+Mestre em Gestão da Informação (UFPR), Especialista em Gerenciamento de Projetos
+(FGV), Especialista em Linguagem Java (Universidade Positivo), Especialista em
+Desenvolvimento Web (PUCPR), Bacharel em Processamento de Dados (UEPG).
+Experiência profissional de 20 anos na Copel, como Analista de Sistemas na
+Superintendência de Tecnologia da Informação e, desde 2012, como Analista de 
+Gestão Estratégica, atuando no Escritório de Projetos Corporativos – EPC e no
+Sistema de Gestão Estratégica.
+
+
+\newpage
+
+## Marcos dos Santos
+
+**E-mail**: marcosdossantos@ime.eb.br
+
+**Site**:
+[https://casadapesquisaoperacional.com/](https://casadapesquisaoperacional.com/)
+
+![Marcos dos Santos](images/marcos-dos-santos.jpeg){width=40%}
+
+
+Capitão de Fragata da Marinha do Brasil, com 28 de anos de carreira. Há 11 anos
+trabalha como pesquisador do Centro de Análises de Sistemas Navais (CASNAV)
+assessorando a Alta Administração Naval em processos decisórios de elevada
+complexidade. Possui curso de Altos Estudos Militares pela Escola de Guerra 
+Naval (EGN). É Pesquisador de pós-doutorado em Ciências e Tecnologias Espaciais
+pelo Instituto Tecnológico de Aeronáutica (ITA). Doutor em Sistemas, Apoio à 
+Decisão e Logística pela Universidade Federal Fluminense (UFF). Mestre em 
+Pesquisa Operacional pela COPPE UFRJ. É Professor de Matemática Avançada do 
+Instituto Militar de Engenharia (IME). Também faz parte do corpo docente do 
+curso de Data Science e Analytics da Universidade de São Paulo (USP). Faz parte
+da Diretoria da Sociedade Brasileira de Pesquisa Operacional (SOBRAPO). Possui
+mais de 500 pesquisas publicadas, dentre artigos científicos, capítulos de
+livros, patentes, registros de softwares, códigos no CRAN e outros trabalhos
+técnicos.
+
+
+\newpage
+
+## Thiago Marques
+
+**E-mail**: profestathimarques@gmail.com
+
+**Site**: [http://estatidados.com.br/](http://estatidados.com.br/)
+
+![Thiago Marques](images/thiago-marques.jpeg){width=50%}
+
+Estatístico pela federal do IBGE, a ENCE (Escola Nacional de Ciências
+Estatísticas ), entusiasta na disseminação da Estatística e possui larga
+experiência na atuação em Estatística no mercado, tendo passado por grandes
+centros universitários, multinacionais de consultoria, pelo IBRE/FGV ( Instituto
+Brasileiro de Economia ) e pelo IBGE ( Instituto Brasileiro de Geografia e
+Estatística ), Foi professor da pós de ciências de dados do SENAC RJ e da 
+UNISUAM e é o criador do maior canal de Estatística, Ciência de dados da América
+Latina! O chamado EstaTiDados :). Atualmente é Consultor em Análise Estatística
+no IBGE e professor na sua Comunidade de Estatística, na Casa da Pesquisa
+Operacional e  professor da MBA em Ciência de dados da UNIFOR, MBA em Ciência de
+dados da Farias Brito, da pós-graduação em BI com ênfase em Ciências de dados do
+ICEV e da MBA em Data Science e Analytics da USP, realiza palestras e
+treinamentos para capacitação em Estatística, Apoio a tomada de decisão,
+Pesquisa Operacional, R e Ciência de dados.
+
+
 
