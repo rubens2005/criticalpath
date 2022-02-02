@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.27)  29 JAN 2022 11:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.27)  29 JAN 2022 21:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -471,12 +471,12 @@ LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 1
 (c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [2] [3] [4] [5] [6] [7]
-<C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254434d02ee6.png, id=210, 326.21875pt x 123.46124pt>
-File: C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254434d02ee6.png Graphic file (type png)
-<use C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254434d02ee6.png>
-Package pdftex.def Info: C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254434d02ee6.png  used on input line 555.
+<C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee872862d69.png, id=210, 326.21875pt x 123.46124pt>
+File: C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee872862d69.png Graphic file (type png)
+<use C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee872862d69.png>
+Package pdftex.def Info: C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee872862d69.png  used on input line 555.
 (pdftex.def)             Requested size: 326.23784pt x 123.46844pt.
-[8 <c:/Users/Rubens Rosa/AppData/Local/Temp/Rtmp6rrdW0/file254434d02ee6.png>] [9]
+[8 <c:/Users/Rubens Rosa/AppData/Local/Temp/RtmpOA7rZX/file3ee872862d69.png>] [9]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 22.48878pt, for example:
@@ -509,9 +509,9 @@ File: criticalpath-metodo-do-caminho-critico-em-r_files/figure-latex/unnamed-chu
 Package pdftex.def Info: criticalpath-metodo-do-caminho-critico-em-r_files/figure-latex/unnamed-chunk-20-2.pdf  used on input line 1728.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [23 <./criticalpath-metodo-do-caminho-critico-em-r_files/figure-latex/unnamed-chunk-20-2.pdf>] [24] [25] [26]
-File: C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254434d02ee6.png Graphic file (type png)
-<use C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254434d02ee6.png>
-Package pdftex.def Info: C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254434d02ee6.png  used on input line 2025.
+File: C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee872862d69.png Graphic file (type png)
+<use C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee872862d69.png>
+Package pdftex.def Info: C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee872862d69.png  used on input line 2025.
 (pdftex.def)             Requested size: 326.23784pt x 123.46844pt.
 [27]
 
@@ -530,10 +530,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.80502pt}.
 
 [29]
-<C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254436c63209.png, id=340, 326.21875pt x 190.7125pt>
-File: C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254436c63209.png Graphic file (type png)
-<use C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254436c63209.png>
-Package pdftex.def Info: C:/Users/RUBENS~1/AppData/Local/Temp/Rtmp6rrdW0/file254436c63209.png  used on input line 2231.
+<C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee825fb1a21.png, id=340, 326.21875pt x 190.7125pt>
+File: C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee825fb1a21.png Graphic file (type png)
+<use C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee825fb1a21.png>
+Package pdftex.def Info: C:/Users/RUBENS~1/AppData/Local/Temp/RtmpOA7rZX/file3ee825fb1a21.png  used on input line 2231.
 (pdftex.def)             Requested size: 326.23286pt x 190.72075pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -542,7 +542,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.38004pt}.
 
-[30 <c:/Users/Rubens Rosa/AppData/Local/Temp/Rtmp6rrdW0/file254436c63209.png>]
+[30 <c:/Users/Rubens Rosa/AppData/Local/Temp/RtmpOA7rZX/file3ee825fb1a21.png>]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 2287.
 [31]
@@ -576,7 +576,7 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  68i,11n,77p,827b,528s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}<c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro10.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb><c:/Users/Rubens Rosa/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtto10.pfb>
-Output written on criticalpath-metodo-do-caminho-critico-em-r.pdf (34 pages, 1578882 bytes).
+Output written on criticalpath-metodo-do-caminho-critico-em-r.pdf (34 pages, 1578886 bytes).
 PDF statistics:
  478 PDF objects out of 1000 (max. 8388607)
  402 compressed objects within 5 object streams
