@@ -10,11 +10,13 @@ sch_evaluate_redundancy(sch)
 \item{sch}{Object Schedule}
 }
 \value{
-Object Schedule redundancy column added.
+Object Schedule redundancy column added. Or the Schedule without any
+modification, is trere is no relation in it.
 }
 \description{
 Evaluates redundancy of each relation and creates another column in
-relation tibble.
+relation tibble. If the schedule does not have any relation, this function do
+nothing.
 }
 \examples{
 atb <- tibble::tibble(

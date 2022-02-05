@@ -885,11 +885,13 @@ sch_is_redundant = function(sch, id_from, id_to) {
 #' Evaluate Redundancy
 #'
 #' Evaluates redundancy of each relation and creates another column in
-#' relation tibble.
+#' relation tibble. If the schedule does not have any relation, this function do
+#' nothing.
 #'
 #' @param sch Object Schedule
 #'
-#' @return Object Schedule redundancy column added.
+#' @return Object Schedule redundancy column added. Or the Schedule without any
+#' modification, is trere is no relation in it.
 #'
 #' @examples
 #' atb <- tibble::tibble(
@@ -933,11 +935,13 @@ sch_is_redundant = function(sch, id_from, id_to) {
 #'
 #' @export
 sch_evaluate_redundancy <- function(sch) {
-  rtb <- sch_relations(sch)
-  rtb$redundant <- FALSE
-  for(i in 1:sch_nr_relations(sch)) {
-    rtb$redundant[i] <- sch_is_redundant(sch, rtb$from[i], rtb$to[i])
+  if(sch_nr_relations(sch) > 0) {
+    rtb <- sch_relations(sch)
+    rtb$redundant <- FALSE
+    for(i in 1:sch_nr_relations(sch)) {
+      rtb$redundant[i] <- sch_is_redundant(sch, rtb$from[i], rtb$to[i])
+    }
+    sch$relations <- rtb
   }
-  sch$relations <- rtb
   return(sch)
 }

@@ -59,3 +59,26 @@ test_that("Redundant relations are identified.", {
   expect_false(sch_is_redundant(sch, 11, 12))
 
 })
+
+test_that("Do nothing when there is no ralation.", {
+  sch <- sch_new() %>%
+    sch_title("Fictitious Project Example") %>%
+    sch_reference("VANHOUCKE, Mario. Measuring time:
+  improving project performance using earned value management.
+  Gent: Springer, 2009, p. 18") %>%
+    sch_add_activity( 1L, "a1" , 0L) %>%
+    sch_add_activity( 2L, "a2" , 4L) %>%
+    sch_add_activity( 3L, "a3" , 9L) %>%
+    sch_add_activity( 4L, "a4" , 1L) %>%
+    sch_add_activity( 5L, "a5" , 4L) %>%
+    sch_add_activity( 6L, "a6" , 5L) %>%
+    sch_add_activity( 7L, "a7" , 1L) %>%
+    sch_add_activity( 8L, "a8" , 7L) %>%
+    sch_add_activity( 9L, "a9" , 8L) %>%
+    sch_add_activity(10L, "a10", 3L) %>%
+    sch_add_activity(11L, "a11", 3L) %>%
+    sch_add_activity(12L, "a12", 0L)
+
+  expect_error(sch_is_redundant(sch, 1, 2))
+  expect_silent(sch_evaluate_redundancy(sch))
+})
